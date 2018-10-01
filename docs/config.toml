@@ -1,0 +1,15 @@
+baseURL = "https://promhippie.github.io/hcloud_exporter/"
+languageCode = "en-us"
+title = "HetznerCloud Exporter"
+
+[blackfriday]
+  angledQuotes = true
+  fractions = false
+  plainIDAnchors = true
+  smartlists = true
+  extensions = ["hardLineBreak"]
+
+[params]
+  author = "Thomas Boerger"
+  description = "Export HetznerCloud metrics for Prometheus"
+  keywords = "prometheus, exporter, hetzner, cloud"

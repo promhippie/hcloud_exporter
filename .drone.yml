@@ -1,0 +1,284 @@
+workspace:
+  base: /srv/app
+  path: src/github.com/promhippie/hcloud_exporter
+
+branches:
+  - master
+
+pipeline:
+  cache-restore:
+    image: plugins/s3-cache:1
+    pull: true
+    secrets: [ cache_s3_endpoint, cache_s3_access_key, cache_s3_secret_key ]
+    restore: true
+    when:
+      local: false
+
+  app-prepare:
+    image: webhippie/golang:edge
+    pull: true
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/srv/app
+      - TAGS=
+    commands:
+      - make clean
+      - make retool
+      - make sync
+      - make generate
+
+  app-vet:
+    image: webhippie/golang:edge
+    pull: true
+    group: cli
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/srv/app
+      - TAGS=
+    commands:
+      - make vet
+
+  app-check:
+    image: webhippie/golang:edge
+    pull: true
+    group: cli
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/srv/app
+      - TAGS=
+    commands:
+      - make megacheck
+
+  app-lint:
+    image: webhippie/golang:edge
+    pull: true
+    group: cli
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/srv/app
+      - TAGS=
+    commands:
+      - make lint
+
+  app-test:
+    image: webhippie/golang:edge
+    pull: true
+    group: cli
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/srv/app
+      - TAGS=
+    commands:
+      - make test
+
+  app-build:
+    image: webhippie/golang:edge
+    pull: true
+    group: cli
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/srv/app
+      - TAGS=
+    commands:
+      - make build
+
+  app-windows:
+    image: karalabe/xgo-latest:latest
+    pull: true
+    group: release
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/srv/app
+      - TAGS=
+    commands:
+      - make release-dirs release-windows
+    when:
+      event: [ push, tag ]
+
+  app-linux:
+    image: karalabe/xgo-latest:latest
+    pull: true
+    group: release
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/srv/app
+      - TAGS=
+    commands:
+      - make release-dirs release-linux
+    when:
+      event: [ push, tag ]
+
+  app-darwin:
+    image: karalabe/xgo-latest:latest
+    pull: true
+    group: release
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/srv/app
+      - TAGS=
+    commands:
+      - make release-dirs release-darwin
+    when:
+      event: [ push, tag ]
+
+  app-finish:
+    image: webhippie/golang:edge
+    pull: true
+    environment:
+      - CGO_ENABLED=0
+      - GOPATH=/srv/app
+      - TAGS=
+    commands:
+      - make release-copy release-check
+    when:
+      event: [ push, tag ]
+
+  app-gpgsign:
+    image: plugins/gpgsign:1
+    pull: true
+    secrets: [ gpgsign_key, gpgsign_passphrase ]
+    detach_sign: true
+    files:
+      - dist/release/*
+    excludes:
+      - dist/release/*.sha256
+    when:
+      event: [ push, tag ]
+
+  docker-amd64:
+    image: plugins/docker:17.05
+    pull: true
+    group: docker
+    secrets: [ docker_username, docker_password ]
+    repo: promhippie/hcloud-exporter
+    dockerfile: docker/Dockerfile.linux.amd64
+    auto_tag: true
+    auto_tag_suffix: linux-amd64
+    when:
+      event: [ push, tag ]
+
+  docker-i386:
+    image: plugins/docker:17.05
+    pull: true
+    group: docker
+    secrets: [ docker_username, docker_password ]
+    repo: promhippie/hcloud-exporter
+    dockerfile: docker/Dockerfile.linux.i386
+    auto_tag: true
+    auto_tag_suffix: linux-i386
+    when:
+      event: [ push, tag ]
+
+  docker-arm64v8:
+    image: plugins/docker:17.05
+    pull: true
+    group: docker
+    secrets: [ docker_username, docker_password ]
+    repo: promhippie/hcloud-exporter
+    dockerfile: docker/Dockerfile.linux.arm64v8
+    auto_tag: true
+    auto_tag_suffix: linux-arm64v8
+    when:
+      event: [ push, tag ]
+
+  docker-arm32v7:
+    image: plugins/docker:17.05
+    pull: true
+    group: docker
+    secrets: [ docker_username, docker_password ]
+    repo: promhippie/hcloud-exporter
+    dockerfile: docker/Dockerfile.linux.arm32v7
+    auto_tag: true
+    auto_tag_suffix: linux-arm32v7
+    when:
+      event: [ push, tag ]
+
+  docker-arm32v6:
+    image: plugins/docker:17.05
+    pull: true
+    group: docker
+    secrets: [ docker_username, docker_password ]
+    repo: promhippie/hcloud-exporter
+    dockerfile: docker/Dockerfile.linux.arm32v6
+    auto_tag: true
+    auto_tag_suffix: linux-arm32v6
+    when:
+      event: [ push, tag ]
+
+  docker-manifests:
+    image: plugins/manifest:1
+    pull: true
+    secrets: [ docker_username, docker_password ]
+    spec: manifest.tmpl
+    auto_tag: true
+    ignore_missing: true
+    when:
+      event: [ push, tag ]
+
+  docker-microbadger:
+    image: plugins/webhook:1
+    pull: true
+    secrets:
+      - source: microbadger_token
+        target: plugin_urls
+    when:
+      event: [ push, tag ]
+
+  cache-rebuild:
+    image: plugins/s3-cache:1
+    pull: true
+    secrets: [ cache_s3_endpoint, cache_s3_access_key, cache_s3_secret_key ]
+    rebuild: true
+    mount:
+      - _tools
+      - vendor
+    when:
+      local: false
+      event: [ push ]
+
+  cache-flush:
+    image: plugins/s3-cache:1
+    pull: true
+    secrets: [ cache_s3_endpoint, cache_s3_access_key, cache_s3_secret_key ]
+    flush: true
+    flush_age: 14
+    when:
+      local: false
+      event: [ push ]
+
+  docs-build:
+    image: webhippie/hugo:latest
+    pull: true
+    commands:
+      - make docs
+    when:
+      local: false
+      event: [ push ]
+
+  docs-publish:
+    image: plugins/gh-pages:1
+    pull: true
+    secrets: [ github_username, github_password ]
+    pages_directory: docs/public/
+    temporary_base: tmp/
+    when:
+      local: false
+      event: [ push ]
+
+  github-release:
+    image: plugins/github-release:1
+    pull: true
+    secrets: [ github_token ]
+    files:
+      - dist/release/*
+    when:
+      event: [ tag ]
+
+  notify-matrix:
+    image: plugins/matrix:1
+    pull: true
+    secrets: [ matrix_roomid, matrix_username, matrix_password ]
+    when:
+      local: false
+      event: [ push, tag ]
+      status: [ changed, failure ]

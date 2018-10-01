@@ -1,0 +1,12 @@
+# escape=`
+FROM microsoft/nanoserver:10.0.14393.2430
+
+LABEL maintainer="Thomas Boerger <thomas@webhippie.de>" `
+  org.label-schema.name="HetznerCloud Exporter" `
+  org.label-schema.vendor="Thomas Boerger" `
+  org.label-schema.schema-version="1.0"
+
+ENTRYPOINT ["c:\\hcloud_exporter.exe"]
+CMD ["server"]
+
+COPY bin/hcloud_exporter.exe c:\hcloud_exporter.exe

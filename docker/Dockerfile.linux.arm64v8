@@ -1,0 +1,17 @@
+FROM webhippie/alpine:latest AS build
+RUN apk add --no-cache ca-certificates mailcap
+
+FROM scratch
+
+LABEL maintainer="Thomas Boerger <thomas@webhippie.de>" \
+  org.label-schema.name="HetznerCloud Exporter" \
+  org.label-schema.vendor="Thomas Boerger" \
+  org.label-schema.schema-version="1.0"
+
+ENTRYPOINT ["/usr/bin/hcloud_exporter"]
+CMD ["server"]
+
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=build /etc/mime.types /etc/
+
+COPY dist/binaries/hcloud_exporter-*-linux-arm64 /usr/bin/hcloud_exporter
