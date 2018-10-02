@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>HetznerCloud Exporter</title>
+    <link>https://promhippie.github.io/hcloud_exporter/</link>
+    <description>Recent content on HetznerCloud Exporter</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 May 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://promhippie.github.io/hcloud_exporter/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Getting Started</title>
+      <link>https://promhippie.github.io/hcloud_exporter/getting-started/</link>
+      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://promhippie.github.io/hcloud_exporter/getting-started/</guid>
+      <description> Installation Configuration </description>
+    </item>
+    
+    <item>
+      <title>Usage</title>
+      <link>https://promhippie.github.io/hcloud_exporter/usage/</link>
+      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://promhippie.github.io/hcloud_exporter/usage/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Building</title>
+      <link>https://promhippie.github.io/hcloud_exporter/building/</link>
+      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://promhippie.github.io/hcloud_exporter/building/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>License</title>
+      <link>https://promhippie.github.io/hcloud_exporter/license/</link>
+      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://promhippie.github.io/hcloud_exporter/license/</guid>
+      <description>This project is licensed under the Apache 2.0 license. For the license of the used libraries you have to check the respective sources.</description>
+    </item>
+    
+  </channel>
+</rss>
