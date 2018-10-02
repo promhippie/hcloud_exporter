@@ -42,7 +42,7 @@ func NewGeneralCollector(version string, revision string, buildDate string, goVe
 		BuildInfo: prometheus.NewDesc(
 			"hcloud_build_info",
 			"A metric with a constant '1' value labeled by version, revision, and branch from which the exporter was built.",
-			[]string{"verison", "revision", "builddate", "goversion"},
+			[]string{"version", "revision", "builddate", "goversion"},
 			nil,
 		),
 	}
