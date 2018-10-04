@@ -53,6 +53,17 @@
   version = "v1.2.0"
 
 [[projects]]
+  digest = "1:a9068b604470e3e760a51c974f2e6150eb99a1eea1e862d8b1e6c695655206aa"
+  name = "github.com/hetznercloud/hcloud-go"
+  packages = [
+    "hcloud",
+    "hcloud/schema",
+  ]
+  pruneopts = "UT"
+  revision = "6ff899c25535e0712de9f8f19bafc9a5717603c3"
+  version = "v1.9.0"
+
+[[projects]]
   digest = "1:ecd9aa82687cf31d1585d4ac61d0ba180e42e8a6182b85bd785fcca8dfeefc1b"
   name = "github.com/joho/godotenv"
   packages = ["."]
@@ -143,6 +154,7 @@
     "github.com/go-chi/chi",
     "github.com/go-kit/kit/log",
     "github.com/go-kit/kit/log/level",
+    "github.com/hetznercloud/hcloud-go/hcloud",
     "github.com/joho/godotenv",
     "github.com/oklog/run",
     "github.com/prometheus/client_golang/prometheus",
