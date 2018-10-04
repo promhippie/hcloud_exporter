@@ -33,7 +33,7 @@ func NewImageCollector(logger log.Logger, client *hcloud.Client, failures *prome
 	labels := []string{"id", "name", "type", "server", "flavor", "version"}
 	return &ImageCollector{
 		client:   client,
-		logger:   logger,
+		logger:   log.With(logger, "collector", "image"),
 		failures: failures,
 		duration: duration,
 		timeout:  timeout,

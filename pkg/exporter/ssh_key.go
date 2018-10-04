@@ -29,7 +29,7 @@ func NewSSHKeyCollector(logger log.Logger, client *hcloud.Client, failures *prom
 	labels := []string{"id", "name", "fingerprint"}
 	return &SSHKeyCollector{
 		client:   client,
-		logger:   logger,
+		logger:   log.With(logger, "collector", "ssh_key"),
 		failures: failures,
 		duration: duration,
 		timeout:  timeout,

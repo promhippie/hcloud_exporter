@@ -29,7 +29,7 @@ func NewFloatingIPCollector(logger log.Logger, client *hcloud.Client, failures *
 	labels := []string{"id", "server", "location", "type", "ip"}
 	return &FloatingIPCollector{
 		client:   client,
-		logger:   logger,
+		logger:   log.With(logger, "collector", "floating_ip"),
 		failures: failures,
 		duration: duration,
 		timeout:  timeout,

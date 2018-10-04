@@ -19,7 +19,7 @@ type ServerCollector struct {
 	duration *prometheus.HistogramVec
 	timeout  time.Duration
 
-	Up              *prometheus.Desc
+	Running         *prometheus.Desc
 	Created         *prometheus.Desc
 	IncludedTraffic *prometheus.Desc
 	OutgoingTraffic *prometheus.Desc
@@ -38,12 +38,12 @@ func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prom
 	labels := []string{"id", "name", "datacenter"}
 	return &ServerCollector{
 		client:   client,
-		logger:   logger,
+		logger:   log.With(logger, "collector", "server"),
 		failures: failures,
 		duration: duration,
 		timeout:  timeout,
 
-		Up: prometheus.NewDesc(
+		Running: prometheus.NewDesc(
 			"hcloud_server_running",
 			"If 1 the server is running, 0 otherwise",
 			labels,
@@ -108,7 +108,7 @@ func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prom
 
 // Describe sends the super-set of all possible descriptors of metrics collected by this Collector.
 func (c *ServerCollector) Describe(ch chan<- *prometheus.Desc) {
-	ch <- c.Up
+	ch <- c.Running
 	ch <- c.Created
 	ch <- c.IncludedTraffic
 	ch <- c.OutgoingTraffic
@@ -145,22 +145,24 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 
 	for _, server := range servers {
+		var (
+			running float64
+		)
+
 		labels := []string{
 			strconv.Itoa(server.ID),
 			server.Name,
 			server.Datacenter.Name,
 		}
 
-		var up float64
-
 		if server.Status == "running" {
-			up = 1.0
+			running = 1.0
 		}
 
 		ch <- prometheus.MustNewConstMetric(
-			c.Up,
+			c.Running,
 			prometheus.GaugeValue,
-			up,
+			running,
 			labels...,
 		)
 
