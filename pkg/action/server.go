@@ -30,15 +30,15 @@ func Server(cfg *config.Config, logger log.Logger) error {
 		"go", version.GoVersion,
 	)
 
+	client := hcloud.NewClient(
+		hcloud.WithToken(
+			cfg.Target.Token,
+		),
+	)
+
 	var gr run.Group
 
 	{
-		client := hcloud.NewClient(
-			hcloud.WithToken(
-				cfg.Target.Token,
-			),
-		)
-
 		server := &http.Server{
 			Addr:         cfg.Server.Addr,
 			Handler:      handler(cfg, logger, client),
