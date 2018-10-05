@@ -78,6 +78,34 @@ func main() {
 				EnvVars:     []string{"HCLOUD_EXPORTER_TOKEN"},
 				Destination: &cfg.Target.Token,
 			},
+			&cli.BoolFlag{
+				Name:        "collector.floating-ips",
+				Value:       true,
+				Usage:       "Enable collector for floating IPs",
+				EnvVars:     []string{"HCLOUD_EXPORTER_COLLECTOR_FLOATING_IPS"},
+				Destination: &cfg.Collector.FloatingIPs,
+			},
+			&cli.BoolFlag{
+				Name:        "collector.images",
+				Value:       true,
+				Usage:       "Enable collector for images",
+				EnvVars:     []string{"HCLOUD_EXPORTER_COLLECTOR_IMAGES"},
+				Destination: &cfg.Collector.Images,
+			},
+			&cli.BoolFlag{
+				Name:        "collector.servers",
+				Value:       true,
+				Usage:       "Enable collector for servers",
+				EnvVars:     []string{"HCLOUD_EXPORTER_COLLECTOR_SERVERS"},
+				Destination: &cfg.Collector.Servers,
+			},
+			&cli.BoolFlag{
+				Name:        "collector.ssh-keys",
+				Value:       true,
+				Usage:       "Enable collector for SSH keys",
+				EnvVars:     []string{"HCLOUD_EXPORTER_COLLECTOR_SSH_KEYS"},
+				Destination: &cfg.Collector.SSHKeys,
+			},
 		},
 		Action: func(c *cli.Context) error {
 			logger := setupLogger(cfg)
