@@ -1,6 +1,7 @@
 baseURL = "https://promhippie.github.io/hcloud_exporter/"
 languageCode = "en-us"
 title = "HetznerCloud Exporter"
+pygmentsUseClasses = true
 
 [blackfriday]
   angledQuotes = true

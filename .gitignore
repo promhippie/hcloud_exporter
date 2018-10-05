@@ -29,5 +29,6 @@ coverage.out
 /vendor
 /bin
 /dist
+/docs/public
 
 .envrc
