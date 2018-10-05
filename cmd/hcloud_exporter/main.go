@@ -52,7 +52,7 @@ func main() {
 			},
 			&cli.StringFlag{
 				Name:        "web.address",
-				Value:       "0.0.0.0:9108",
+				Value:       "0.0.0.0:9501",
 				Usage:       "Address to bind the metrics server",
 				EnvVars:     []string{"HCLOUD_EXPORTER_WEB_ADDRESS"},
 				Destination: &cfg.Server.Addr,
