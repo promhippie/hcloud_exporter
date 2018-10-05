@@ -22,11 +22,20 @@ type Target struct {
 	Timeout time.Duration
 }
 
+// Collector defines the collector specific configuration.
+type Collector struct {
+	FloatingIPs bool
+	Images      bool
+	Servers     bool
+	SSHKeys     bool
+}
+
 // Config is a combination of all available configurations.
 type Config struct {
-	Server Server
-	Logs   Logs
-	Target Target
+	Server    Server
+	Logs      Logs
+	Target    Target
+	Collector Collector
 }
 
 // Load initializes a default configuration struct.

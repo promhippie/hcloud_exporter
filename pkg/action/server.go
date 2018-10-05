@@ -111,37 +111,45 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	requestDuration := exporter.RequestDuration()
 	r.MustRegister(requestDuration)
 
-	r.MustRegister(exporter.NewFloatingIPCollector(
-		logger,
-		client,
-		requestFailures,
-		requestDuration,
-		cfg.Target.Timeout,
-	))
+	if cfg.Collector.FloatingIPs {
+		r.MustRegister(exporter.NewFloatingIPCollector(
+			logger,
+			client,
+			requestFailures,
+			requestDuration,
+			cfg.Target.Timeout,
+		))
+	}
 
-	r.MustRegister(exporter.NewImageCollector(
-		logger,
-		client,
-		requestFailures,
-		requestDuration,
-		cfg.Target.Timeout,
-	))
+	if cfg.Collector.Images {
+		r.MustRegister(exporter.NewImageCollector(
+			logger,
+			client,
+			requestFailures,
+			requestDuration,
+			cfg.Target.Timeout,
+		))
+	}
 
-	r.MustRegister(exporter.NewServerCollector(
-		logger,
-		client,
-		requestFailures,
-		requestDuration,
-		cfg.Target.Timeout,
-	))
+	if cfg.Collector.Servers {
+		r.MustRegister(exporter.NewServerCollector(
+			logger,
+			client,
+			requestFailures,
+			requestDuration,
+			cfg.Target.Timeout,
+		))
+	}
 
-	r.MustRegister(exporter.NewSSHKeyCollector(
-		logger,
-		client,
-		requestFailures,
-		requestDuration,
-		cfg.Target.Timeout,
-	))
+	if cfg.Collector.SSHKeys {
+		r.MustRegister(exporter.NewSSHKeyCollector(
+			logger,
+			client,
+			requestFailures,
+			requestDuration,
+			cfg.Target.Timeout,
+		))
+	}
 
 	mux.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, cfg.Server.Path, http.StatusMovedPermanently)
