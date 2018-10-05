@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="syntax.css" />
+
 <style type="text/css">
 	body,
 	div,
@@ -148,13 +150,12 @@
 		color: #d54e21;
 	}
 
-	code,
-	cite {
-		background-color: #F0F2F4;
-		border-radius: 3px;
-		color: #000;
-		font: monospace;
-		padding: 2px 7px;
+	.highlight pre {
+		padding: 10px;
+	}
+
+	.highlight {
+		margin-bottom: 4%;
 	}
 
 	a {
@@ -210,6 +211,14 @@
 		-webkit-column-gap: 20px;
 		-moz-column-gap: 20px;
 		column-gap: 20px;
+	}
+
+	dl dt {
+		font-weight: bold;
+	}
+
+	dl dd {
+		padding-left: 10px;
 	}
 
 	@media screen and (min-width: 500px) {
