@@ -6,7 +6,7 @@ LABEL maintainer="Thomas Boerger <thomas@webhippie.de>" `
   org.label-schema.vendor="Thomas Boerger" `
   org.label-schema.schema-version="1.0"
 
+EXPOSE 9501
 ENTRYPOINT ["c:\\hcloud_exporter.exe"]
-CMD ["server"]
 
 COPY bin/hcloud_exporter.exe c:\hcloud_exporter.exe
