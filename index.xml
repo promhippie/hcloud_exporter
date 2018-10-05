@@ -17,16 +17,8 @@
       <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
       
       <guid>https://promhippie.github.io/hcloud_exporter/getting-started/</guid>
-      <description> Installation Configuration </description>
-    </item>
-    
-    <item>
-      <title>Usage</title>
-      <link>https://promhippie.github.io/hcloud_exporter/usage/</link>
-      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://promhippie.github.io/hcloud_exporter/usage/</guid>
-      <description></description>
+      <description>Installation We won&amp;rsquo;t cover further details how to properly setup Prometheus itself, we will only cover some basic setup based on docker-compose. But if you want to run this exporter without docker-compose you should be able to adopt that to your needs.
+First of all we need to prepare a configuration for Prometheus that includes the exporter as a target based on a static host mapping which is just the docker-compose container name, e.</description>
     </item>
     
     <item>
@@ -35,7 +27,8 @@
       <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
       
       <guid>https://promhippie.github.io/hcloud_exporter/building/</guid>
-      <description></description>
+      <description>As this project is built with Go you need to install Go first. The installation of Go is out of the scope of this document, please follow the official documentation. After the installation of Go you need to get the sources:
+go get -d github.com/promhippie/hcloud_exporter cd $GOPATH/src/github.com/promhippie/hcloud_exporter All required tool besides Go itself are bundled or getting automatically installed within the GOPATH. We are using retool to keep the used tools consistent and dep to manage the dependencies.</description>
     </item>
     
     <item>
