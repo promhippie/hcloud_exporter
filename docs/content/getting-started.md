@@ -11,71 +11,29 @@ We won't cover further details how to properly setup [Prometheus](https://promet
 
 First of all we need to prepare a configuration for [Prometheus](https://prometheus.io) that includes the exporter as a target based on a static host mapping which is just the [docker-compose](https://docs.docker.com/compose/) container name, e.g. `hcloud-exporter`.
 
-{{< highlight txt >}}
-global:
-  scrape_interval: 1m
-  scrape_timeout: 10s
-  evaluation_interval: 1m
-
-scrape_configs:
-- job_name: hcloud
-  static_configs:
-  - targets:
-    - hcloud-exporter:9501
-{{< / highlight >}}
+{{< gist tboerger 8ed41e53a046f9cf247459753ec1937f "prometheus.yml" >}}
 
 After preparing the configuration we need to create the `docker-compose.yml` within the same folder, this `docker-compose.yml` starts a simple [Prometheus](https://prometheus.io) instance together with the exporter. Don't forget to update the exporter envrionment variables with the required credentials.
 
-{{< highlight txt >}}
-version: '2'
-
-volumes:
-  prometheus:
-
-services:
-  prometheus:
-    image: prom/prometheus:v2.4.3
-    restart: always
-    ports:
-      - 9090:9090
-    volumes:
-      - prometheus:/prometheus
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-
-  hcloud-exporter:
-    image: promhippie/hcloud-exporter:latest
-    restart: always
-    environment:
-      - HCLOUD_EXPORTER_LOG_PRETTY=true
-      - HCLOUD_EXPORTER_TOKEN=uDgX6TkZVGx7c94jPAff5cfJdym9MLekiveDgN7Oq5dyOXxl4Uu9qkpcC1muILGW
-{{< / highlight >}}
+{{< gist tboerger 8ed41e53a046f9cf247459753ec1937f "docker-compose.yml" >}}
 
 Since our `latest` Docker tag always refers to the `master` branch of the Git repository you should always use some fixed version. You can see all available tags at our [DockerHub repository](https://hub.docker.com/r/promhippie/hcloud-exporter/tags/), there you will see that we also provide a manifest, you can easily start the exporter on various architectures without any change to the image name. You should apply a change like this to the `docker-compose.yml`:
 
-{{< highlight diff >}}
-  hcloud-exporter:
--   image: promhippie/hcloud-exporter:latest
-+   image: promhippie/hcloud-exporter:0.1.0
-    restart: always
-    environment:
-      - HCLOUD_EXPORTER_LOG_PRETTY=true
-      - HCLOUD_EXPORTER_TOKEN=uDgX6TkZVGx7c94jPAff5cfJdym9MLekiveDgN7Oq5dyOXxl4Uu9qkpcC1muILGW
-{{< / highlight >}}
+{{< gist tboerger 8ed41e53a046f9cf247459753ec1937f "tag.diff" >}}
 
 If you want to access the exporter directly you should bind it to a local port, otherwise only [Prometheus](https://prometheus.io) will have access to the exporter. For debugging purpose or just to discover all available metrics directly you can apply this change to your `docker-compose.yml`, after that you can access it directly at [http://localhost:9501/metrics](http://localhost:9501/metrics):
 
-{{< highlight diff >}}
-  hcloud-exporter:
-    image: promhippie/hcloud-exporter:latest
-    restart: always
-+   ports:
-+     - 127.0.0.1:9501:9501
-    environment:
-      - HCLOUD_EXPORTER_LOG_PRETTY=true
-      - HCLOUD_EXPORTER_TOKEN=uDgX6TkZVGx7c94jPAff5cfJdym9MLekiveDgN7Oq5dyOXxl4Uu9qkpcC1muILGW
-{{< / highlight >}}
+{{< gist tboerger 8ed41e53a046f9cf247459753ec1937f "port.diff" >}}
 
-That's all, the exporter should be up and running. Have fun with it and hopefully you will gather interesting metrics and never run into issues.
+Finally the exporter should be configured fine, let's start this stack with [docker-compose](https://docs.docker.com/compose/), you just need to execute `docker-compose up` within the directory where you have stored the `prometheus.yml` and `docker-compose.yml`.
+
+{{< gist tboerger 8ed41e53a046f9cf247459753ec1937f "output.log" >}}
+
+That's all, the exporter should be up and running. Have fun with it and hopefully you will gather interesting metrics and never run into issues. You can access the exporter at [http://localhost:9501/metrics](http://localhost:9501/metrics) and [Prometheus](https://prometheus.io) at [http://localhost:9090](http://localhost:9090). Below you can see the [Prometheus](https://prometheus.io) targets and some simple query:
+
+{{< figure src="targets.png" title="Prometheus targets including HetznerCloud exporter" >}}
+
+{{< figure src="query.png" title="Prometheus query based on HetznerCloud exporter" >}}
 
 ## Kubernetes
 
