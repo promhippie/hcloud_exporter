@@ -10,11 +10,9 @@
 
 An exporter for [Prometheus](https://prometheus.io/) that collects metrics from [Hetzner Cloud](https://console.hetzner.cloud).
 
-
 ## Install
 
 You can download prebuilt binaries from our [GitHub releases](https://github.com/promhippie/hcloud_exporter/releases), or you can use our Docker images published on [Docker Hub](https://hub.docker.com/r/promhippie/hcloud_exporter/tags/). If you need further guidance how to install this take a look at our [documentation](https://promhippie.github.io/hcloud_exporter/#getting-started).
-
 
 ## Development
 
@@ -39,29 +37,24 @@ make build
 ./bin/hcloud_exporter -h
 ```
 
-
 ## Security
 
 If you find a security issue please contact thomas@webhippie.de first.
-
 
 ## Contributing
 
 Fork -> Patch -> Push -> Pull Request
 
-
 ## Authors
 
 * [Thomas Boerger](https://github.com/tboerger)
-
 
 ## License
 
 Apache-2.0
 
-
 ## Copyright
 
-```
+```console
 Copyright (c) 2018 Thomas Boerger <thomas@webhippie.de>
 ```

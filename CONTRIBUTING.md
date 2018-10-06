@@ -2,7 +2,6 @@
 
 Welcome! Our community focuses on helping others and making this project the best it can be. We gladly accept contributions and encourage you to get involved!
 
-
 ## Bug reports
 
 Please search the issues on the issue tracker with a variety of keywords to ensure your bug is not already reported.
@@ -13,13 +12,11 @@ The burden is on you to convince us that it is actually a bug in our project. Th
 
 Please be kind, remember that this project comes at no cost to you, and you're getting free help.
 
-
 ## Check for assigned people
 
 We are using Github Issues for submitting known issues (e.g. bugs, features, etc.). Some issues will have someone assigned, meaning that there's already someone that takes responsability for fixing said issue. This is not done to discourage contributions, rather to not step in the work that has already been done by the assignee. If you want to work on a known issue with someone already assigned to it, please consider contacting the assignee first (e.g. by mentioning the assignee in a new comment on the specific issue). This way you can contribute with ideas, or even with code if the assignee decides that you can step in.
 
 If you plan to work on a non assigned issue, please add a comment on the issue to prevent duplicated work.
-
 
 ## Minor improvements and new tests
 
@@ -27,29 +24,25 @@ Submit pull requests at any time for minor changes or new tests. Make sure to wr
 
 Your pull request may be thoroughly reviewed. This is because if we accept the PR, we also assume responsibility for it, although we would prefer you to help maintain your code after it gets merged.
 
-
 ## Mind the Style
 
 We believe that in order to have a healthy codebase we need to abide to a certain code style. We use `gofmt` with Go and `eslint` with Javscript for this matter, which are tools that has proved to be useful. So, before submitting your Pull Request, make sure that `gofmt` and if viable `eslint` are passing for you.
 
 Finally, note that `gofmt` and if viable `eslint` are called on the CI system. This means that your Pull Request will not be merged until the changes are approved.
 
-
 ## Update the Changelog
 
 We keep a changelog in the `CHANGELOG.md` file. This is useful to understand what has changed between each version. When you implement a new feature, or a fix for an issue, please also update the `CHANGELOG.md` file accordingly. We don't follow a strict style for the changelog, just try to be consistent with the rest of the file.
-
 
 ## Sign your work
 
 The sign-off is a simple line at the end of the explanation for the patch. Your signature certifies that you wrote the patch or otherwise have the right to pass it on as an open-source patch. The rules are pretty simple: If you can certify [DCO](DCO), then you just add a line to every git commit message:
 
-```
+```console
 Signed-off-by: Joe Smith <joe.smith@example.com>
 ```
 
 Please use your real name, we really dislike pseudonyms or anonymous contributions. We are in the opensource world without secrets. If you set your `user.name` and `user.email` git configs, you can sign your commit automatically with `git commit -s`.
-
 
 ## Collaborator status
 
@@ -62,11 +55,9 @@ Collaborator status may be removed for inactive users from time to time as we se
 
 **Reviewing pull requests:** Please help submit and review pull requests as you are able! We would ask that every pull request be reviewed by at least one collaborator who did not open the pull request before merging. This will help ensure high code quality as new collaborators are added to the project.
 
-
 ## Vulnerabilities
 
 If you've found a vulnerability that is serious, please email to thomas@webhippie.de. If it's not a big deal, a pull request will probably be faster.
-
 
 ## Thank you
 
