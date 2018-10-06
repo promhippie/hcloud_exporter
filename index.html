@@ -402,65 +402,49 @@
 
 <p>First of all we need to prepare a configuration for <a href="https://prometheus.io">Prometheus</a> that includes the exporter as a target based on a static host mapping which is just the <a href="https://docs.docker.com/compose/">docker-compose</a> container name, e.g. <code>hcloud-exporter</code>.</p>
 
-<div class="highlight"><pre class="chroma"><code class="language-txt" data-lang="txt">global<span class="o">:</span>
-  scrape_interval<span class="o">:</span> <span class="mi">1</span>m
-  scrape_timeout<span class="o">:</span> <span class="mi">10</span>s
-  evaluation_interval<span class="o">:</span> <span class="mi">1</span>m
-
-scrape_configs<span class="o">:</span>
-- job_name<span class="o">:</span> hcloud
-  static_configs<span class="o">:</span>
-  - targets<span class="o">:</span>
-    - hcloud-exporter<span class="o">:</span><span class="mi">9501</span></code></pre></div>
+<script src="//gist.github.com/tboerger/8ed41e53a046f9cf247459753ec1937f.js?file=prometheus.yml"></script>
 
 <p>After preparing the configuration we need to create the <code>docker-compose.yml</code> within the same folder, this <code>docker-compose.yml</code> starts a simple <a href="https://prometheus.io">Prometheus</a> instance together with the exporter. Don&rsquo;t forget to update the exporter envrionment variables with the required credentials.</p>
 
-<div class="highlight"><pre class="chroma"><code class="language-txt" data-lang="txt">version<span class="o">:</span> <span class="err">&#39;</span><span class="mi">2</span><span class="err">&#39;</span>
-
-volumes<span class="o">:</span>
-  prometheus<span class="o">:</span>
-
-services<span class="o">:</span>
-  prometheus<span class="o">:</span>
-    image<span class="o">:</span> <span class="s">prom/prometheus:v2.4.3
-</span><span class="s"></span>    restart<span class="o">:</span> always
-    ports<span class="o">:</span>
-      - <span class="mi">9090</span><span class="o">:</span><span class="mi">9090</span>
-    volumes<span class="o">:</span>
-      - prometheus<span class="o">:</span>/prometheus
-      - <span class="p">.</span>/prometheus<span class="p">.</span>yml<span class="o">:</span>/etc/prometheus/prometheus<span class="p">.</span>yml
-
-  hcloud-exporter<span class="o">:</span>
-    image<span class="o">:</span> <span class="s">promhippie/hcloud-exporter:latest
-</span><span class="s"></span>    restart<span class="o">:</span> always
-    environment<span class="o">:</span>
-      - HCLOUD_EXPORTER_LOG_PRETTY<span class="o">=</span>true
-      - HCLOUD_EXPORTER_TOKEN<span class="o">=</span>uDgX6TkZVGx7c94jPAff5cfJdym9MLekiveDgN7Oq5dyOXxl4Uu9qkpcC1muILGW</code></pre></div>
+<script src="//gist.github.com/tboerger/8ed41e53a046f9cf247459753ec1937f.js?file=docker-compose.yml"></script>
 
 <p>Since our <code>latest</code> Docker tag always refers to the <code>master</code> branch of the Git repository you should always use some fixed version. You can see all available tags at our <a href="https://hub.docker.com/r/promhippie/hcloud-exporter/tags/">DockerHub repository</a>, there you will see that we also provide a manifest, you can easily start the exporter on various architectures without any change to the image name. You should apply a change like this to the <code>docker-compose.yml</code>:</p>
 
-<div class="highlight"><pre class="chroma"><code class="language-diff" data-lang="diff">  hcloud-exporter:
-<span class="gd">-   image: promhippie/hcloud-exporter:latest
-</span><span class="gd"></span><span class="gi">+   image: promhippie/hcloud-exporter:0.1.0
-</span><span class="gi"></span>    restart: always
-    environment:
-      - HCLOUD_EXPORTER_LOG_PRETTY=true
-      - HCLOUD_EXPORTER_TOKEN=uDgX6TkZVGx7c94jPAff5cfJdym9MLekiveDgN7Oq5dyOXxl4Uu9qkpcC1muILGW
-</code></pre></div>
+<script src="//gist.github.com/tboerger/8ed41e53a046f9cf247459753ec1937f.js?file=tag.diff"></script>
 
 <p>If you want to access the exporter directly you should bind it to a local port, otherwise only <a href="https://prometheus.io">Prometheus</a> will have access to the exporter. For debugging purpose or just to discover all available metrics directly you can apply this change to your <code>docker-compose.yml</code>, after that you can access it directly at <a href="http://localhost:9501/metrics">http://localhost:9501/metrics</a>:</p>
 
-<div class="highlight"><pre class="chroma"><code class="language-diff" data-lang="diff">  hcloud-exporter:
-    image: promhippie/hcloud-exporter:latest
-    restart: always
-<span class="gi">+   ports:
-</span><span class="gi">+     - 127.0.0.1:9501:9501
-</span><span class="gi"></span>    environment:
-      - HCLOUD_EXPORTER_LOG_PRETTY=true
-      - HCLOUD_EXPORTER_TOKEN=uDgX6TkZVGx7c94jPAff5cfJdym9MLekiveDgN7Oq5dyOXxl4Uu9qkpcC1muILGW
-</code></pre></div>
+<script src="//gist.github.com/tboerger/8ed41e53a046f9cf247459753ec1937f.js?file=port.diff"></script>
 
-<p>That&rsquo;s all, the exporter should be up and running. Have fun with it and hopefully you will gather interesting metrics and never run into issues.</p>
+<p>Finally the exporter should be configured fine, let&rsquo;s start this stack with <a href="https://docs.docker.com/compose/">docker-compose</a>, you just need to execute <code>docker-compose up</code> within the directory where you have stored the <code>prometheus.yml</code> and <code>docker-compose.yml</code>.</p>
+
+<script src="//gist.github.com/tboerger/8ed41e53a046f9cf247459753ec1937f.js?file=output.log"></script>
+
+<p>That&rsquo;s all, the exporter should be up and running. Have fun with it and hopefully you will gather interesting metrics and never run into issues. You can access the exporter at <a href="http://localhost:9501/metrics">http://localhost:9501/metrics</a> and <a href="https://prometheus.io">Prometheus</a> at <a href="http://localhost:9090">http://localhost:9090</a>. Below you can see the <a href="https://prometheus.io">Prometheus</a> targets and some simple query:</p>
+
+<figure>
+    
+        <img src="targets.png" />
+    
+    
+    <figcaption>
+        <h4>Prometheus targets including HetznerCloud exporter</h4>
+        
+    </figcaption>
+    
+</figure>
+
+<figure>
+    
+        <img src="query.png" />
+    
+    
+    <figcaption>
+        <h4>Prometheus query based on HetznerCloud exporter</h4>
+        
+    </figcaption>
+    
+</figure>
 
 <h2 id="kubernetes">Kubernetes</h2>
 
