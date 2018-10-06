@@ -83,7 +83,7 @@ pipeline:
       - make build
 
   app-windows:
-    image: karalabe/xgo-latest:latest
+    image: karalabe/xgo-1.10:latest
     pull: true
     group: release
     environment:
@@ -96,7 +96,7 @@ pipeline:
       event: [ push, tag ]
 
   app-linux:
-    image: karalabe/xgo-latest:latest
+    image: karalabe/xgo-1.10:latest
     pull: true
     group: release
     environment:
@@ -109,7 +109,7 @@ pipeline:
       event: [ push, tag ]
 
   app-darwin:
-    image: karalabe/xgo-latest:latest
+    image: karalabe/xgo-1.10:latest
     pull: true
     group: release
     environment:
