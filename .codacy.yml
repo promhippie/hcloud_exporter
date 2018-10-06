@@ -2,3 +2,4 @@ exclude_paths:
   - _tools/**
   - vendor/**
   - docs/content/**
+  - docs/archetypes/**
