@@ -68,7 +68,7 @@ func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prom
 			nil,
 		),
 		IngoingTraffic: prometheus.NewDesc(
-			"hcloud_server_incming_traffic_bytes",
+			"hcloud_server_incoming_traffic_bytes",
 			"Ingoing traffic to the server in bytes",
 			labels,
 			nil,
