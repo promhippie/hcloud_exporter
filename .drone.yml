@@ -15,7 +15,7 @@ pipeline:
       local: false
 
   app-prepare:
-    image: webhippie/golang:edge
+    image: webhippie/golang:1.10
     pull: true
     environment:
       - CGO_ENABLED=0
@@ -28,7 +28,7 @@ pipeline:
       - make generate
 
   app-vet:
-    image: webhippie/golang:edge
+    image: webhippie/golang:1.10
     pull: true
     group: cli
     environment:
@@ -39,7 +39,7 @@ pipeline:
       - make vet
 
   app-check:
-    image: webhippie/golang:edge
+    image: webhippie/golang:1.10
     pull: true
     group: cli
     environment:
@@ -50,7 +50,7 @@ pipeline:
       - make megacheck
 
   app-lint:
-    image: webhippie/golang:edge
+    image: webhippie/golang:1.10
     pull: true
     group: cli
     environment:
@@ -61,7 +61,7 @@ pipeline:
       - make lint
 
   app-test:
-    image: webhippie/golang:edge
+    image: webhippie/golang:1.10
     pull: true
     group: cli
     environment:
@@ -72,7 +72,7 @@ pipeline:
       - make test
 
   app-build:
-    image: webhippie/golang:edge
+    image: webhippie/golang:1.10
     pull: true
     group: cli
     environment:
@@ -122,7 +122,7 @@ pipeline:
       event: [ push, tag ]
 
   app-finish:
-    image: webhippie/golang:edge
+    image: webhippie/golang:1.10
     pull: true
     environment:
       - CGO_ENABLED=0
