@@ -1,6 +1,7 @@
 NAME := hcloud_exporter
 IMPORT := github.com/promhippie/$(NAME)
 DIST := dist
+SHELL := bash
 
 ifeq ($(OS), Windows_NT)
 	EXECUTABLE := $(NAME).exe
