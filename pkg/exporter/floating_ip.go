@@ -88,7 +88,7 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 			name,
 			ip.HomeLocation.Name,
 			string(ip.Type),
-			string(ip.IP),
+			ip.IP.String(),
 		}
 
 		ch <- prometheus.MustNewConstMetric(
