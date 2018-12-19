@@ -2,7 +2,7 @@
 
 <html id="html" lang="en-us">
 	<head>
-	<meta name="generator" content="Hugo 0.39" />
+	<meta name="generator" content="Hugo 0.46" />
 		<meta http-equiv="content-type" content="text/html;charset=utf-8">
 		<meta name="viewport" content="width=device-width"/>
 
@@ -563,21 +563,21 @@
 
 				<p>As this project is built with Go you need to install Go first. The installation of Go is out of the scope of this document, please follow the <a href="https://golang.org/doc/install">official documentation</a>. After the installation of Go you need to get the sources:</p>
 
-<div class="highlight"><pre class="chroma"><code class="language-txt" data-lang="txt">go get -d github<span class="p">.</span><span class="s">com/promhippie/hcloud_exporter
-</span><span class="s"></span>cd <span class="err">$</span>GOPATH/src/github<span class="p">.</span>com/promhippie/hcloud_exporter</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-txt" data-lang="txt">go get -d github.com/promhippie/hcloud_exporter
+cd $GOPATH/src/github.com/promhippie/hcloud_exporter</code></pre></div>
 
 <p>All required tool besides Go itself are bundled or getting automatically installed within the <code>GOPATH</code>. We are using <a href="https://github.com/twitchtv/retool">retool</a> to keep the used tools consistent and <a href="https://github.com/golang/dep">dep</a> to manage the dependencies. All commands to build this project are part of our <code>Makefile</code>.</p>
 
-<div class="highlight"><pre class="chroma"><code class="language-txt" data-lang="txt"><span class="c"># install retool</span>
+<div class="highlight"><pre class="chroma"><code class="language-txt" data-lang="txt"># install retool
 make retool
 
-<span class="c"># sync dependencies</span>
+# sync dependencies
 make sync
 
-<span class="c"># generate code</span>
+# generate code
 make generate
 
-<span class="c"># build binary</span>
+# build binary
 make build</code></pre></div>
 
 <p>Finally you should have the binary within the <code>bin/</code> folder now, give it a try with <code>./bin/hcloud_exporter -h</code> to see all available options.</p>
