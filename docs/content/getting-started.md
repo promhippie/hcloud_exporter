@@ -109,7 +109,7 @@ hcloud_server_included_traffic_bytes
 hcloud_server_outgoing_traffic_bytes
 : Outgoing traffic from the server in bytes
 
-hcloud_server_incming_traffic_bytes
+hcloud_server_incoming_traffic_bytes
 : Ingoing traffic to the server in bytes
 
 hcloud_server_cores
