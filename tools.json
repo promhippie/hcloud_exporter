@@ -5,7 +5,7 @@
       "Commit": "45be32ba4708aad5e2aa8c86f9432c4c4c1f8da2"
     },
     {
-      "Repository": "github.com/golang/lint/golint",
+      "Repository": "golang.org/x/lint/golint",
       "Commit": "06c8688daad7faa9da5a0c2f163a3d14aac986ca"
     },
     {
