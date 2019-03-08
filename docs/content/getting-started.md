@@ -65,6 +65,9 @@ HCLOUD_EXPORTER_COLLECTOR_FLOATING_IPS
 HCLOUD_EXPORTER_COLLECTOR_IMAGES
 : Enable collector for images, defaults to `true`
 
+HCLOUD_EXPORTER_COLLECTOR_PRICING
+: Enable collector for pricing information, defaults to `true`
+
 HCLOUD_EXPORTER_COLLECTOR_SERVERS
 : Enable collector for servers, defaults to `true`
 
@@ -96,6 +99,18 @@ hcloud_image_created_timestamp
 
 hcloud_image_deprecated_timestamp
 : Timestamp when the image will be deprecated, 0 if not deprecated
+
+hcloud_pricing_floating_ip
+: The cost of one floating IP per month
+
+hcloud_pricing_image
+: The cost of an image per GB/month
+
+hcloud_pricing_server_backup
+: Will increase base server costs by specific percentage if server backups are enabled
+
+hcloud_pricing_traffic
+: The cost of additional traffic per TB
 
 hcloud_server_running
 : If 1 the server is running, 0 otherwise

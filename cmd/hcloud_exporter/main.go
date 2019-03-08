@@ -93,6 +93,13 @@ func main() {
 				Destination: &cfg.Collector.Images,
 			},
 			&cli.BoolFlag{
+				Name:        "collector.pricing",
+				Value:       true,
+				Usage:       "Enable collector for pricing",
+				EnvVars:     []string{"HCLOUD_EXPORTER_COLLECTOR_PRICING"},
+				Destination: &cfg.Collector.Pricing,
+			},
+			&cli.BoolFlag{
 				Name:        "collector.servers",
 				Value:       true,
 				Usage:       "Enable collector for servers",

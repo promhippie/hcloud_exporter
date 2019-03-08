@@ -131,6 +131,16 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 		))
 	}
 
+	if cfg.Collector.Pricing {
+		r.MustRegister(exporter.NewPricingCollector(
+			logger,
+			client,
+			requestFailures,
+			requestDuration,
+			cfg.Target.Timeout,
+		))
+	}
+
 	if cfg.Collector.Servers {
 		r.MustRegister(exporter.NewServerCollector(
 			logger,

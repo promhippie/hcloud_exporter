@@ -26,6 +26,7 @@ type Target struct {
 type Collector struct {
 	FloatingIPs bool
 	Images      bool
+	Pricing     bool
 	Servers     bool
 	SSHKeys     bool
 }
