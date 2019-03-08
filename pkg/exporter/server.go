@@ -37,6 +37,7 @@ func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prom
 	failures.WithLabelValues("server").Add(0)
 
 	labels := []string{"id", "name", "datacenter"}
+	pricingLabels := append(labels, "vat")
 	return &ServerCollector{
 		client:   client,
 		logger:   log.With(logger, "collector", "server"),
@@ -101,13 +102,13 @@ func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prom
 		PriceHourly: prometheus.NewDesc(
 			"hcloud_server_price_hourly",
 			"Price of the server billed hourly in €",
-			labels,
+			pricingLabels,
 			nil,
 		),
 		PriceMonthly: prometheus.NewDesc(
 			"hcloud_server_price_monthly",
 			"Price of the server billed monthly in €",
-			labels,
+			pricingLabels,
 			nil,
 		),
 	}
@@ -235,24 +236,43 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 			labels...,
 		)
 
+		labelsNet := append(labels, "net")
+		labelsGross := append(labels, "gross")
+
 		for _, pricing := range server.ServerType.Pricings {
 			if server.Datacenter.Location.Name == pricing.Location.Name {
-				hourly, _ := strconv.ParseFloat(pricing.Hourly.Net, 64)
+				hourlyNet, _ := strconv.ParseFloat(pricing.Hourly.Net, 64)
+				hourlyGross, _ := strconv.ParseFloat(pricing.Hourly.Gross, 64)
 
 				ch <- prometheus.MustNewConstMetric(
 					c.PriceHourly,
 					prometheus.GaugeValue,
-					hourly,
-					labels...,
+					hourlyNet,
+					labelsNet...,
 				)
 
-				monthly, _ := strconv.ParseFloat(pricing.Monthly.Net, 64)
+				ch <- prometheus.MustNewConstMetric(
+					c.PriceHourly,
+					prometheus.GaugeValue,
+					hourlyGross,
+					labelsGross...,
+				)
+
+				monthlyNet, _ := strconv.ParseFloat(pricing.Monthly.Net, 64)
+				monthlyGross, _ := strconv.ParseFloat(pricing.Monthly.Gross, 64)
 
 				ch <- prometheus.MustNewConstMetric(
 					c.PriceMonthly,
 					prometheus.GaugeValue,
-					monthly,
-					labels...,
+					monthlyNet,
+					labelsNet...,
+				)
+
+				ch <- prometheus.MustNewConstMetric(
+					c.PriceMonthly,
+					prometheus.GaugeValue,
+					monthlyGross,
+					labelsGross...,
 				)
 			}
 		}
