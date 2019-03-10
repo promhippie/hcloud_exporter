@@ -136,6 +136,9 @@ hcloud_server_memory_bytes
 hcloud_server_disk_bytes
 : Server disk in bytes
 
+hcloud_server_backup
+: If 1 server backups are enabled, 0 otherwise
+
 hcloud_server_price_hourly
 : Price of the server billed hourly in €
 

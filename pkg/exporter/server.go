@@ -27,6 +27,7 @@ type ServerCollector struct {
 	Cores           *prometheus.Desc
 	Memory          *prometheus.Desc
 	Disk            *prometheus.Desc
+	Backup          *prometheus.Desc
 	PriceHourly     *prometheus.Desc
 	PriceMonthly    *prometheus.Desc
 }
@@ -91,6 +92,12 @@ func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prom
 			labels,
 			nil,
 		),
+		Backup: prometheus.NewDesc(
+			"hcloud_server_backup",
+			"If 1 server backups are enabled, 0 otherwise",
+			labels,
+			nil,
+		),
 		PriceHourly: prometheus.NewDesc(
 			"hcloud_server_price_hourly",
 			"Price of the server billed hourly in €",
@@ -116,6 +123,7 @@ func (c *ServerCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.Cores
 	ch <- c.Memory
 	ch <- c.Disk
+	ch <- c.Backup
 	ch <- c.PriceHourly
 	ch <- c.PriceMonthly
 }
@@ -212,6 +220,18 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 			c.Disk,
 			prometheus.GaugeValue,
 			float64(server.ServerType.Disk*1024*1024),
+			labels...,
+		)
+
+		backupEnabled := 0.0
+		if server.BackupWindow != "" {
+			backupEnabled = 1.0
+		}
+
+		ch <- prometheus.MustNewConstMetric(
+			c.Backup,
+			prometheus.GaugeValue,
+			backupEnabled,
 			labels...,
 		)
 
