@@ -477,6 +477,9 @@
 <dt>HCLOUD_EXPORTER_COLLECTOR_IMAGES<br /></dt>
 <dd>Enable collector for images, defaults to <code>true</code><br />
 <br /></dd>
+<dt>HCLOUD_EXPORTER_COLLECTOR_PRICING<br /></dt>
+<dd>Enable collector for pricing information, defaults to <code>true</code><br />
+<br /></dd>
 <dt>HCLOUD_EXPORTER_COLLECTOR_SERVERS<br /></dt>
 <dd>Enable collector for servers, defaults to <code>true</code><br />
 <br /></dd>
@@ -512,6 +515,18 @@
 <dt>hcloud_image_deprecated_timestamp<br /></dt>
 <dd>Timestamp when the image will be deprecated, 0 if not deprecated<br />
 <br /></dd>
+<dt>hcloud_pricing_floating_ip<br /></dt>
+<dd>The cost of one floating IP per month<br />
+<br /></dd>
+<dt>hcloud_pricing_image<br /></dt>
+<dd>The cost of an image per GB/month<br />
+<br /></dd>
+<dt>hcloud_pricing_server_backup<br /></dt>
+<dd>Will increase base server costs by specific percentage if server backups are enabled<br />
+<br /></dd>
+<dt>hcloud_pricing_traffic<br /></dt>
+<dd>The cost of additional traffic per TB<br />
+<br /></dd>
 <dt>hcloud_server_running<br /></dt>
 <dd>If 1 the server is running, 0 otherwise<br />
 <br /></dd>
@@ -535,6 +550,9 @@
 <br /></dd>
 <dt>hcloud_server_disk_bytes<br /></dt>
 <dd>Server disk in bytes<br />
+<br /></dd>
+<dt>hcloud_server_backup<br /></dt>
+<dd>If 1 server backups are enabled, 0 otherwise<br />
 <br /></dd>
 <dt>hcloud_server_price_hourly<br /></dt>
 <dd>Price of the server billed hourly in €<br />
