@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.0] - 2019-03-11
+
+### Added
+
+* Added new metric `hcloud_pricing_floating_ip`
+* Added new metric `hcloud_pricing_image`
+* Added new metric `hcloud_pricing_server_backup`
+* Added new metric `hcloud_pricing_traffic`
+* Added new metric `hcloud_server_backup`
+
+### Fixed
+
+* Fixed import path for golint command
+
 ## [0.1.1] - 2018-12-19
 
 ### Fixed
