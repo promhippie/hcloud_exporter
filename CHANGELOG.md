@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.0] - 2019-03-12
+
+### Added
+
+* Added a `vat` label (`gross` or `net`) to the `hcloud_server_price` metric. Depending on the setup this can be a breaking change and it may be necessary to adjust some dashboards and alerting rules.
+
 ## [0.2.0] - 2019-03-11
 
 ### Added
