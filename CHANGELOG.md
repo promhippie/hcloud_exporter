@@ -6,6 +6,7 @@ The following sections list the changes for unreleased.
 
  * Chg #25: Drop darwin/386 release builds
  * Chg #24: Refactor build tools and project structure
+ * Chg #21: Add collector for volumes
 
 ## Details
 
@@ -22,6 +23,13 @@ The following sections list the changes for unreleased.
    already got within our GitHub exporter.
 
    https://github.com/promhippie/hcloud_exporter/issues/24
+
+ * Change #21: Add collector for volumes
+
+   We have added a new optional collector, which is disabled by default, to gather metrics about
+   the volumes part of the configured Hetzner Cloud project.
+
+   https://github.com/promhippie/hcloud_exporter/issues/21
 
 
 # Changelog for 1.0.0
