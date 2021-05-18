@@ -9,6 +9,7 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/hetznercloud/hcloud-go/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/promhippie/hcloud_exporter/pkg/config"
 )
 
 // FloatingIPCollector collects metrics about the floating IPs.
@@ -17,14 +18,16 @@ type FloatingIPCollector struct {
 	logger   log.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
-	timeout  time.Duration
+	config   config.Target
 
 	Active *prometheus.Desc
 }
 
 // NewFloatingIPCollector returns a new FloatingIPCollector.
-func NewFloatingIPCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, timeout time.Duration) *FloatingIPCollector {
-	failures.WithLabelValues("floating_ip").Add(0)
+func NewFloatingIPCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *FloatingIPCollector {
+	if failures != nil {
+		failures.WithLabelValues("floating_ip").Add(0)
+	}
 
 	labels := []string{"id", "server", "location", "type", "ip"}
 	return &FloatingIPCollector{
@@ -32,7 +35,7 @@ func NewFloatingIPCollector(logger log.Logger, client *hcloud.Client, failures *
 		logger:   log.With(logger, "collector", "floating_ip"),
 		failures: failures,
 		duration: duration,
-		timeout:  timeout,
+		config:   cfg,
 
 		Active: prometheus.NewDesc(
 			"hcloud_floating_ip_active",
@@ -43,6 +46,13 @@ func NewFloatingIPCollector(logger log.Logger, client *hcloud.Client, failures *
 	}
 }
 
+// Metrics simply returns the list metric descriptors for generating a documentation.
+func (c *FloatingIPCollector) Metrics() []*prometheus.Desc {
+	return []*prometheus.Desc{
+		c.Active,
+	}
+}
+
 // Describe sends the super-set of all possible descriptors of metrics collected by this Collector.
 func (c *FloatingIPCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.Active
@@ -50,7 +60,7 @@ func (c *FloatingIPCollector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect is called by the Prometheus registry when collecting metrics.
 func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
-	ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
+	ctx, cancel := context.WithTimeout(context.Background(), c.config.Timeout)
 	defer cancel()
 
 	now := time.Now()

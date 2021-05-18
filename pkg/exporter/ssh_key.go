@@ -9,6 +9,7 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/hetznercloud/hcloud-go/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/promhippie/hcloud_exporter/pkg/config"
 )
 
 // SSHKeyCollector collects metrics about the SSH keys.
@@ -17,14 +18,16 @@ type SSHKeyCollector struct {
 	logger   log.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
-	timeout  time.Duration
+	config   config.Target
 
 	Key *prometheus.Desc
 }
 
 // NewSSHKeyCollector returns a new SSHKeyCollector.
-func NewSSHKeyCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, timeout time.Duration) *SSHKeyCollector {
-	failures.WithLabelValues("ssh_key").Add(0)
+func NewSSHKeyCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *SSHKeyCollector {
+	if failures != nil {
+		failures.WithLabelValues("ssh_key").Add(0)
+	}
 
 	labels := []string{"id", "name", "fingerprint"}
 	return &SSHKeyCollector{
@@ -32,7 +35,7 @@ func NewSSHKeyCollector(logger log.Logger, client *hcloud.Client, failures *prom
 		logger:   log.With(logger, "collector", "ssh_key"),
 		failures: failures,
 		duration: duration,
-		timeout:  timeout,
+		config:   cfg,
 
 		Key: prometheus.NewDesc(
 			"hcloud_ssh_key",
@@ -43,6 +46,13 @@ func NewSSHKeyCollector(logger log.Logger, client *hcloud.Client, failures *prom
 	}
 }
 
+// Metrics simply returns the list metric descriptors for generating a documentation.
+func (c *SSHKeyCollector) Metrics() []*prometheus.Desc {
+	return []*prometheus.Desc{
+		c.Key,
+	}
+}
+
 // Describe sends the super-set of all possible descriptors of metrics collected by this Collector.
 func (c *SSHKeyCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.Key
@@ -50,7 +60,7 @@ func (c *SSHKeyCollector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect is called by the Prometheus registry when collecting metrics.
 func (c *SSHKeyCollector) Collect(ch chan<- prometheus.Metric) {
-	ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
+	ctx, cancel := context.WithTimeout(context.Background(), c.config.Timeout)
 	defer cancel()
 
 	now := time.Now()
