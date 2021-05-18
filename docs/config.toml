@@ -3,6 +3,9 @@ languageCode = "en-us"
 title = "HetznerCloud Exporter"
 pygmentsUseClasses = true
 
+[markup.goldmark.renderer]
+  unsafe = true
+
 [blackfriday]
   angledQuotes = true
   fractions = false
