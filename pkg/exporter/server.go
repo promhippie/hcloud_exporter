@@ -9,6 +9,7 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/hetznercloud/hcloud-go/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/promhippie/hcloud_exporter/pkg/config"
 )
 
 // ServerCollector collects metrics about the servers.
@@ -17,7 +18,7 @@ type ServerCollector struct {
 	logger   log.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
-	timeout  time.Duration
+	config   config.Target
 
 	Running         *prometheus.Desc
 	Created         *prometheus.Desc
@@ -33,8 +34,10 @@ type ServerCollector struct {
 }
 
 // NewServerCollector returns a new ServerCollector.
-func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, timeout time.Duration) *ServerCollector {
-	failures.WithLabelValues("server").Add(0)
+func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *ServerCollector {
+	if failures != nil {
+		failures.WithLabelValues("server").Add(0)
+	}
 
 	labels := []string{"id", "name", "datacenter"}
 	pricingLabels := append(labels, "vat")
@@ -43,7 +46,7 @@ func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prom
 		logger:   log.With(logger, "collector", "server"),
 		failures: failures,
 		duration: duration,
-		timeout:  timeout,
+		config:   cfg,
 
 		Running: prometheus.NewDesc(
 			"hcloud_server_running",
@@ -114,6 +117,23 @@ func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prom
 	}
 }
 
+// Metrics simply returns the list metric descriptors for generating a documentation.
+func (c *ServerCollector) Metrics() []*prometheus.Desc {
+	return []*prometheus.Desc{
+		c.Running,
+		c.Created,
+		c.IncludedTraffic,
+		c.OutgoingTraffic,
+		c.IngoingTraffic,
+		c.Cores,
+		c.Memory,
+		c.Disk,
+		c.Backup,
+		c.PriceHourly,
+		c.PriceMonthly,
+	}
+}
+
 // Describe sends the super-set of all possible descriptors of metrics collected by this Collector.
 func (c *ServerCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.Running
@@ -131,7 +151,7 @@ func (c *ServerCollector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect is called by the Prometheus registry when collecting metrics.
 func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
-	ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
+	ctx, cancel := context.WithTimeout(context.Background(), c.config.Timeout)
 	defer cancel()
 
 	now := time.Now()

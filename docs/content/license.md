@@ -1,6 +1,6 @@
 ---
 title: "License"
-date: 2018-05-02T00:00:00+00:00
+date: 2020-10-28T00:00:00+00:00
 anchor: "license"
 weight: 30
 ---

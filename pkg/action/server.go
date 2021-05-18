@@ -8,15 +8,15 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/hetznercloud/hcloud-go/hcloud"
 	"github.com/oklog/run"
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
 	"github.com/promhippie/hcloud_exporter/pkg/exporter"
+	"github.com/promhippie/hcloud_exporter/pkg/middleware"
 	"github.com/promhippie/hcloud_exporter/pkg/version"
 )
 
@@ -24,15 +24,19 @@ import (
 func Server(cfg *config.Config, logger log.Logger) error {
 	level.Info(logger).Log(
 		"msg", "Launching HetznerCloud Exporter",
-		"version", version.Version,
+		"version", version.String,
 		"revision", version.Revision,
-		"date", version.BuildDate,
-		"go", version.GoVersion,
+		"date", version.Date,
+		"go", version.Go,
 	)
 
 	client := hcloud.NewClient(
 		hcloud.WithToken(
 			cfg.Target.Token,
+		),
+		hcloud.WithApplication(
+			"hcloud_exporter",
+			version.String,
 		),
 	)
 
@@ -43,7 +47,7 @@ func Server(cfg *config.Config, logger log.Logger) error {
 			Addr:         cfg.Server.Addr,
 			Handler:      handler(cfg, logger, client),
 			ReadTimeout:  5 * time.Second,
-			WriteTimeout: 10 * time.Second,
+			WriteTimeout: cfg.Server.Timeout,
 		}
 
 		gr.Add(func() error {
@@ -92,87 +96,110 @@ func Server(cfg *config.Config, logger log.Logger) error {
 
 func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.Mux {
 	mux := chi.NewRouter()
-
-	r := prometheus.NewRegistry()
-	r.MustRegister(prometheus.NewProcessCollector(os.Getpid(), ""))
-	r.MustRegister(prometheus.NewGoCollector())
-
-	r.MustRegister(exporter.NewGeneralCollector(
-		version.Version,
-		version.Revision,
-		version.BuildDate,
-		version.GoVersion,
-		version.StartTime,
-	))
-
-	requestFailures := exporter.RequestFailures()
-	r.MustRegister(requestFailures)
-
-	requestDuration := exporter.RequestDuration()
-	r.MustRegister(requestDuration)
+	mux.Use(middleware.Recoverer(logger))
+	mux.Use(middleware.RealIP)
+	mux.Use(middleware.Timeout)
+	mux.Use(middleware.Cache)
 
 	if cfg.Collector.FloatingIPs {
-		r.MustRegister(exporter.NewFloatingIPCollector(
+		level.Debug(logger).Log(
+			"msg", "Floating IP collector registered",
+		)
+
+		registry.MustRegister(exporter.NewFloatingIPCollector(
 			logger,
 			client,
 			requestFailures,
 			requestDuration,
-			cfg.Target.Timeout,
+			cfg.Target,
 		))
 	}
 
 	if cfg.Collector.Images {
-		r.MustRegister(exporter.NewImageCollector(
+		level.Debug(logger).Log(
+			"msg", "Image collector registered",
+		)
+
+		registry.MustRegister(exporter.NewImageCollector(
 			logger,
 			client,
 			requestFailures,
 			requestDuration,
-			cfg.Target.Timeout,
+			cfg.Target,
 		))
 	}
 
 	if cfg.Collector.Pricing {
-		r.MustRegister(exporter.NewPricingCollector(
+		level.Debug(logger).Log(
+			"msg", "Pricing collector registered",
+		)
+
+		registry.MustRegister(exporter.NewPricingCollector(
 			logger,
 			client,
 			requestFailures,
 			requestDuration,
-			cfg.Target.Timeout,
+			cfg.Target,
 		))
 	}
 
 	if cfg.Collector.Servers {
-		r.MustRegister(exporter.NewServerCollector(
+		level.Debug(logger).Log(
+			"msg", "Server collector registered",
+		)
+
+		registry.MustRegister(exporter.NewServerCollector(
 			logger,
 			client,
 			requestFailures,
 			requestDuration,
-			cfg.Target.Timeout,
+			cfg.Target,
 		))
 	}
 
 	if cfg.Collector.SSHKeys {
-		r.MustRegister(exporter.NewSSHKeyCollector(
+		level.Debug(logger).Log(
+			"msg", "SSH key collector registered",
+		)
+
+		registry.MustRegister(exporter.NewSSHKeyCollector(
 			logger,
 			client,
 			requestFailures,
 			requestDuration,
-			cfg.Target.Timeout,
+			cfg.Target,
 		))
 	}
+
+	if cfg.Collector.Volumes {
+		level.Debug(logger).Log(
+			"msg", "Volumes collector registered",
+		)
+
+		registry.MustRegister(exporter.NewVolumeCollector(
+			logger,
+			client,
+			requestFailures,
+			requestDuration,
+			cfg.Target,
+		))
+	}
+
+	reg := promhttp.HandlerFor(
+		registry,
+		promhttp.HandlerOpts{
+			ErrorLog: promLogger{logger},
+		},
+	)
 
 	mux.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, cfg.Server.Path, http.StatusMovedPermanently)
 	})
 
 	mux.Route("/", func(root chi.Router) {
-		root.Mount(
-			cfg.Server.Path,
-			promhttp.HandlerFor(
-				r,
-				promhttp.HandlerOpts{},
-			),
-		)
+		root.Get(cfg.Server.Path, func(w http.ResponseWriter, r *http.Request) {
+			reg.ServeHTTP(w, r)
+		})
 
 		root.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "text/plain")

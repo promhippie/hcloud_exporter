@@ -57,7 +57,7 @@ Collaborator status may be removed for inactive users from time to time as we se
 
 ## Vulnerabilities
 
-If you've found a vulnerability that is serious, please email to thomas@webhippie.de. If it's not a big deal, a pull request will probably be faster.
+If you've found a vulnerability that is serious, please email to [thomas@webhippie.de.](mailto:thomas@webhippie.de). If it's not a big deal, a pull request will probably be faster.
 
 ## Thank you
 

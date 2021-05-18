@@ -9,6 +9,7 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/hetznercloud/hcloud-go/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/promhippie/hcloud_exporter/pkg/config"
 )
 
 // ImageCollector collects metrics about the images.
@@ -17,7 +18,7 @@ type ImageCollector struct {
 	logger   log.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
-	timeout  time.Duration
+	config   config.Target
 
 	Active     *prometheus.Desc
 	ImageSize  *prometheus.Desc
@@ -27,8 +28,10 @@ type ImageCollector struct {
 }
 
 // NewImageCollector returns a new ImageCollector.
-func NewImageCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, timeout time.Duration) *ImageCollector {
-	failures.WithLabelValues("image").Add(0)
+func NewImageCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *ImageCollector {
+	if failures != nil {
+		failures.WithLabelValues("image").Add(0)
+	}
 
 	labels := []string{"id", "name", "type", "server", "flavor", "version"}
 	return &ImageCollector{
@@ -36,7 +39,7 @@ func NewImageCollector(logger log.Logger, client *hcloud.Client, failures *prome
 		logger:   log.With(logger, "collector", "image"),
 		failures: failures,
 		duration: duration,
-		timeout:  timeout,
+		config:   cfg,
 
 		Active: prometheus.NewDesc(
 			"hcloud_image_active",
@@ -71,6 +74,17 @@ func NewImageCollector(logger log.Logger, client *hcloud.Client, failures *prome
 	}
 }
 
+// Metrics simply returns the list metric descriptors for generating a documentation.
+func (c *ImageCollector) Metrics() []*prometheus.Desc {
+	return []*prometheus.Desc{
+		c.Active,
+		c.ImageSize,
+		c.DiskSize,
+		c.Created,
+		c.Deprecated,
+	}
+}
+
 // Describe sends the super-set of all possible descriptors of metrics collected by this Collector.
 func (c *ImageCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.Active
@@ -82,7 +96,7 @@ func (c *ImageCollector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect is called by the Prometheus registry when collecting metrics.
 func (c *ImageCollector) Collect(ch chan<- prometheus.Metric) {
-	ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
+	ctx, cancel := context.WithTimeout(context.Background(), c.config.Timeout)
 	defer cancel()
 
 	now := time.Now()
