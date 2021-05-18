@@ -6,7 +6,7 @@
     <description>Recent content on HetznerCloud Exporter</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 May 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 28 Oct 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://promhippie.github.io/hcloud_exporter/index.xml" rel="self" type="application/rss+xml" />
     
@@ -24,17 +24,18 @@ First of all we need to prepare a configuration for Prometheus that includes the
     <item>
       <title>Building</title>
       <link>https://promhippie.github.io/hcloud_exporter/building/</link>
-      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 28 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://promhippie.github.io/hcloud_exporter/building/</guid>
       <description>As this project is built with Go you need to install Go first. The installation of Go is out of the scope of this document, please follow the official documentation. After the installation of Go you need to get the sources:
-go get -d github.com/promhippie/hcloud_exporter cd $GOPATH/src/github.com/promhippie/hcloud_exporter All required tool besides Go itself are bundled or getting automatically installed within the GOPATH. We are using retool to keep the used tools consistent and dep to manage the dependencies.</description>
+git clone https://github.com/promhippie/hcloud_exporter.git cd hcloud_exporter/ All required tool besides Go itself are bundled by Go modules, all you need is part of the Makfile:
+make generate build Finally you should have the binary within the bin/ folder now, give it a try with .</description>
     </item>
     
     <item>
       <title>License</title>
       <link>https://promhippie.github.io/hcloud_exporter/license/</link>
-      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 28 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://promhippie.github.io/hcloud_exporter/license/</guid>
       <description>This project is licensed under the Apache 2.0 license. For the license of the used libraries you have to check the respective sources.</description>
