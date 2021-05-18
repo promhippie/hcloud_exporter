@@ -1,35 +1,117 @@
-# Changelog
+# Changelog for unreleased
 
-## [1.0.0] - 2019-03-12
+The following sections list the changes for unreleased.
 
-### Added
+## Summary
 
-* Added a `vat` label (`gross` or `net`) to the `hcloud_server_price` metric. Depending on the setup this can be a breaking change and it may be necessary to adjust some dashboards and alerting rules.
+ * Chg #25: Drop darwin/386 release builds
+ * Chg #24: Refactor build tools and project structure
 
-## [0.2.0] - 2019-03-11
+## Details
 
-### Added
+ * Change #25: Drop darwin/386 release builds
 
-* Added new metric `hcloud_pricing_floating_ip`
-* Added new metric `hcloud_pricing_image`
-* Added new metric `hcloud_pricing_server_backup`
-* Added new metric `hcloud_pricing_traffic`
-* Added new metric `hcloud_server_backup`
+   We dropped the build of 386 builds on Darwin as this architecture is not supported by current Go
+   versions anymore.
 
-### Fixed
+   https://github.com/promhippie/hcloud_exporter/issues/25
 
-* Fixed import path for golint command
+ * Change #24: Refactor build tools and project structure
 
-## [0.1.1] - 2018-12-19
+   To have a unified project structure and build tooling we have integrated the same structure we
+   already got within our GitHub exporter.
 
-### Fixed
+   https://github.com/promhippie/hcloud_exporter/issues/24
 
-* Properly print floating IP values
-* Pin Go to 1.10 to fix building
-* Fix typo within `hcloud_server_incoming_traffic_bytes`
 
-## [0.1.0] - 2018-10-06
+# Changelog for 1.0.0
 
-### Added
+The following sections list the changes for 1.0.0.
 
-* Initial release
+## Summary
+
+ * Chg #19: Add `vat` labels for net and gross values
+
+## Details
+
+ * Change #19: Add `vat` labels for net and gross values
+
+   Added a new `vat` label for `gross` or `net` values to the `hcloud_server_price` metric.
+   Depending on the setup this can be a breaking change and it may be necessary to adjust some
+   dashboards and alerting rules.
+
+   https://github.com/promhippie/hcloud_exporter/pull/19
+
+
+# Changelog for 0.2.0
+
+The following sections list the changes for 0.2.0.
+
+## Summary
+
+ * Chg #18: Add new metric to see if backups enabled
+ * Chg #17: Add pricing collector
+
+## Details
+
+ * Change #18: Add new metric to see if backups enabled
+
+   We added a new metric named `hcloud_server_backup` which indicates if a server got backups
+   enabled or not, that way somebody could add some alerting if a server is missing a backup.
+
+   https://github.com/promhippie/hcloud_exporter/pull/18
+
+ * Change #17: Add pricing collector
+
+   We added a new collector to gather information about the pricings, that way somebody could do
+   calculations how much the costs are increasing or decreasing by sclae up or sclae down. The new
+   collector includes new metrics named `hcloud_pricing_floating_ip`,
+   `hcloud_pricing_image`, `hcloud_pricing_server_backup` and
+   `hcloud_pricing_traffic`.
+
+   https://github.com/promhippie/hcloud_exporter/pull/17
+
+
+# Changelog for 0.1.1
+
+The following sections list the changes for 0.1.1.
+
+## Summary
+
+ * Fix #11: Fix typo within `hcloud_server_incoming_traffic_bytes`
+ * Chg #13: Pin go version to 1.10
+
+## Details
+
+ * Bugfix #11: Fix typo within `hcloud_server_incoming_traffic_bytes`
+
+   We fixed a typo within the `hcloud_server_incoming_traffic_bytes` metric where we were just
+   missing a tiny single letter.
+
+   https://github.com/promhippie/hcloud_exporter/pull/11
+
+ * Change #13: Pin go version to 1.10
+
+   To make sure we got something nearly like reproducible builds and to fix the builds we should pin
+   the build dependencies like the Go version to make sure it is always buildable.
+
+   https://github.com/promhippie/hcloud_exporter/pull/13
+
+
+# Changelog for 0.1.0
+
+The following sections list the changes for 0.1.0.
+
+## Summary
+
+ * Chg #23: Initial release of basic version
+
+## Details
+
+ * Change #23: Initial release of basic version
+
+   Just prepared an initial basic version which could be released to the public.
+
+   https://github.com/promhippie/hcloud_exporter/issues/23
+
+
