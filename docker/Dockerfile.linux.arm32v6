@@ -1,17 +1,18 @@
-FROM webhippie/alpine:latest AS build
+FROM webhippie/alpine:latest-amd64 AS build
 RUN apk add --no-cache ca-certificates mailcap
 
 FROM scratch
 
 LABEL maintainer="Thomas Boerger <thomas@webhippie.de>" \
-  org.label-schema.name="HetznerCloud Exporter" \
-  org.label-schema.vendor="Thomas Boerger" \
-  org.label-schema.schema-version="1.0"
+  org.opencontainers.image.title="HetznerCloud Exporter" \
+  org.opencontainers.image.documentation="https://promhippie.github.io/hcloud_exporter/" \
+  org.opencontainers.image.vendor="Thomas Boerger"
 
 EXPOSE 9501
 ENTRYPOINT ["/usr/bin/hcloud_exporter"]
+HEALTHCHECK CMD ["/usr/bin/hcloud_exporter", "health"]
 
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /etc/mime.types /etc/
 
-COPY dist/binaries/hcloud_exporter-*-linux-arm-6 /usr/bin/hcloud_exporter
+COPY bin/hcloud_exporter /usr/bin/hcloud_exporter
