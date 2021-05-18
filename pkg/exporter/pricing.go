@@ -9,6 +9,7 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/hetznercloud/hcloud-go/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/promhippie/hcloud_exporter/pkg/config"
 )
 
 // PricingCollector collects metrics about the prices for additional products: Image, FloatingIP, Traffic and ServerBackup.
@@ -17,17 +18,22 @@ type PricingCollector struct {
 	logger   log.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
-	timeout  time.Duration
+	config   config.Target
 
-	Image        *prometheus.Desc
-	FloatingIP   *prometheus.Desc
-	Traffic      *prometheus.Desc
-	ServerBackup *prometheus.Desc
+	Image         *prometheus.Desc
+	FloatingIP    *prometheus.Desc
+	Traffic       *prometheus.Desc
+	ServerBackup  *prometheus.Desc
+	Volume        *prometheus.Desc
+	Servers       *prometheus.Desc
+	LoadBalancers *prometheus.Desc
 }
 
 // NewPricingCollector returns a new PricingCollector.
-func NewPricingCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, timeout time.Duration) *PricingCollector {
-	failures.WithLabelValues("pricing").Add(0)
+func NewPricingCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *PricingCollector {
+	if failures != nil {
+		failures.WithLabelValues("pricing").Add(0)
+	}
 
 	labels := []string{"currency", "vat"}
 	return &PricingCollector{
@@ -35,8 +41,7 @@ func NewPricingCollector(logger log.Logger, client *hcloud.Client, failures *pro
 		logger:   log.With(logger, "collector", "pricing"),
 		failures: failures,
 		duration: duration,
-		timeout:  timeout,
-
+		config:   cfg,
 
 		Image: prometheus.NewDesc(
 			"hcloud_pricing_image",
@@ -62,6 +67,37 @@ func NewPricingCollector(logger log.Logger, client *hcloud.Client, failures *pro
 			nil,
 			nil,
 		),
+		Volume: prometheus.NewDesc(
+			"hcloud_pricing_volume",
+			"The cost of a volume per GB/month",
+			labels,
+			nil,
+		),
+		Servers: prometheus.NewDesc(
+			"hcloud_pricing_server_type",
+			"The costs of a server by type and location per month",
+			append(labels, "type", "location"),
+			nil,
+		),
+		LoadBalancers: prometheus.NewDesc(
+			"hcloud_pricing_loadbalancer_type",
+			"The costs of a load balancer by type and location per month",
+			append(labels, "type", "location"),
+			nil,
+		),
+	}
+}
+
+// Metrics simply returns the list metric descriptors for generating a documentation.
+func (c *PricingCollector) Metrics() []*prometheus.Desc {
+	return []*prometheus.Desc{
+		c.Image,
+		c.FloatingIP,
+		c.Traffic,
+		c.ServerBackup,
+		c.Volume,
+		c.Servers,
+		c.LoadBalancers,
 	}
 }
 
@@ -71,11 +107,14 @@ func (c *PricingCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.FloatingIP
 	ch <- c.Traffic
 	ch <- c.ServerBackup
+	ch <- c.Volume
+	ch <- c.Servers
+	ch <- c.LoadBalancers
 }
 
 // Collect is called by the Prometheus registry when collecting metrics.
 func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
-	ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
+	ctx, cancel := context.WithTimeout(context.Background(), c.config.Timeout)
 	defer cancel()
 
 	now := time.Now()
@@ -226,4 +265,134 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 		prometheus.GaugeValue,
 		serverBackup/100,
 	)
+
+	volumeGross, err := strconv.ParseFloat(pricing.Volume.PerGBMonthly.Gross, 64)
+	if err != nil {
+		level.Error(c.logger).Log(
+			"msg", "Failed to parse volume costs",
+			"err", err,
+		)
+
+		c.failures.WithLabelValues("pricing").Inc()
+		return
+	}
+
+	volumeNet, err := strconv.ParseFloat(pricing.Volume.PerGBMonthly.Net, 64)
+	if err != nil {
+		level.Error(c.logger).Log(
+			"msg", "Failed to parse volume costs",
+			"err", err,
+		)
+
+		c.failures.WithLabelValues("pricing").Inc()
+		return
+	}
+
+	ch <- prometheus.MustNewConstMetric(
+		c.Volume,
+		prometheus.GaugeValue,
+		volumeGross,
+		pricing.Volume.PerGBMonthly.Currency,
+		"gross",
+	)
+
+	ch <- prometheus.MustNewConstMetric(
+		c.Volume,
+		prometheus.GaugeValue,
+		volumeNet,
+		pricing.Volume.PerGBMonthly.Currency,
+		"net",
+	)
+
+	for _, serverType := range pricing.ServerTypes {
+		for _, serverPricing := range serverType.Pricings {
+			serverGross, err := strconv.ParseFloat(serverPricing.Monthly.Gross, 64)
+			if err != nil {
+				level.Error(c.logger).Log(
+					"msg", "Failed to parse server costs",
+					"err", err,
+				)
+
+				c.failures.WithLabelValues("pricing").Inc()
+				return
+			}
+
+			serverNet, err := strconv.ParseFloat(serverPricing.Monthly.Net, 64)
+			if err != nil {
+				level.Error(c.logger).Log(
+					"msg", "Failed to parse server costs",
+					"err", err,
+				)
+
+				c.failures.WithLabelValues("pricing").Inc()
+				return
+			}
+
+			ch <- prometheus.MustNewConstMetric(
+				c.Servers,
+				prometheus.GaugeValue,
+				serverGross,
+				serverPricing.Monthly.Currency,
+				"gross",
+				serverType.ServerType.Name,
+				serverPricing.Location.Name,
+			)
+
+			ch <- prometheus.MustNewConstMetric(
+				c.Servers,
+				prometheus.GaugeValue,
+				serverNet,
+				serverPricing.Monthly.Currency,
+				"net",
+				serverType.ServerType.Name,
+				serverPricing.Location.Name,
+			)
+		}
+	}
+
+	for _, lbType := range pricing.LoadBalancerTypes {
+		for _, lbPricing := range lbType.Pricings {
+			lbGross, err := strconv.ParseFloat(lbPricing.Monthly.Gross, 64)
+			if err != nil {
+				level.Error(c.logger).Log(
+					"msg", "Failed to parse server costs",
+					"err", err,
+				)
+
+				c.failures.WithLabelValues("pricing").Inc()
+				return
+			}
+
+			lbNet, err := strconv.ParseFloat(lbPricing.Monthly.Net, 64)
+			if err != nil {
+				level.Error(c.logger).Log(
+					"msg", "Failed to parse server costs",
+					"err", err,
+				)
+
+				c.failures.WithLabelValues("pricing").Inc()
+				return
+			}
+
+			ch <- prometheus.MustNewConstMetric(
+				c.LoadBalancers,
+				prometheus.GaugeValue,
+				lbGross,
+				lbPricing.Monthly.Currency,
+				"gross",
+				lbType.LoadBalancerType.Name,
+				lbPricing.Location.Name,
+			)
+
+			ch <- prometheus.MustNewConstMetric(
+				c.LoadBalancers,
+				prometheus.GaugeValue,
+				lbNet,
+				lbPricing.Monthly.Currency,
+				"net",
+				lbType.LoadBalancerType.Name,
+				lbPricing.Location.Name,
+			)
+		}
+	}
 }
