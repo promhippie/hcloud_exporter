@@ -1,0 +1,20 @@
+apiVersion: v2
+name: hcloud-exporter
+description: A Helm chart for Hetzner cloud Prometheus exporter
+type: application
+version: 0.0.1
+appVersion: "1.0.0"
+home: https://github.com/lablabs/hcloud-exporter
+icon: https://www.hetzner.com/assets/Uploads/icon-circle-cloud.svg
+keywords:
+  - prometheus
+  - hcloud
+  - monitoring
+sources:
+  - https://github.com/promhippie/hcloud_exporter
+maintainers:
+  - name: erwinsteffens
+engine: gotpl
+annotations:
+  artifacthub.io/changes: |
+    - Initial helm chart

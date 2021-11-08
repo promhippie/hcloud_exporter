@@ -1,0 +1,124 @@
+{{- if and .Values.config.token .Values.config.tokenSecret -}}
+{{ fail (printf "ERROR: only one of .Values.config.token or .Values.config.tokenSecret must be defined") }}
+{{- end -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hcloud-exporter.fullname" . }}
+  labels:
+    {{- include "hcloud-exporter.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "hcloud-exporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "hcloud-exporter.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "hcloud-exporter.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          env:
+            {{- if .Values.config.logLevel }}
+            - name: HCLOUD_EXPORTER_LOG_LEVEL
+              value: {{ .Values.config.logLevel }}
+            {{- end }}
+            {{- if .Values.config.logPretty }}
+            - name: HCLOUD_EXPORTER_LOG_PRETTY
+              value: "{{ .Values.config.logPretty }}"
+            {{- end }}
+            {{- if .Values.config.requestTimeout }}
+            - name: HCLOUD_EXPORTER_REQUEST_TIMEOUT
+              value: {{ .Values.config.requestTimeout }}
+            {{- end }}
+            {{- if .Values.config.collect.floatingIps }}
+            - name: HCLOUD_EXPORTER_COLLECTOR_FLOATING_IPS
+              value: "{{ .Values.config.collect.floatingIps }}"
+            {{- end }}
+            {{- if .Values.config.collect.images }}
+            - name: HCLOUD_EXPORTER_COLLECTOR_IMAGES
+              value: "{{ .Values.config.collect.images }}"
+            {{- end }}
+            {{- if .Values.config.collect.pricing }}
+            - name: HCLOUD_EXPORTER_COLLECTOR_PRICING
+              value: "{{ .Values.config.collect.pricing }}"
+            {{- end }}
+            {{- if .Values.config.collect.servers }}
+            - name: HCLOUD_EXPORTER_COLLECTOR_SERVERS
+              value: "{{ .Values.config.collect.servers }}"
+            {{- end }}
+            {{- if .Values.config.collect.sshKeys }}
+            - name: HCLOUD_EXPORTER_COLLECTOR_SSH_KEYS
+              value: "{{ .Values.config.collect.sshKeys }}"
+            {{- end }}
+            {{- if .Values.config.collect.volumes }}
+            - name: HCLOUD_EXPORTER_COLLECTOR_VOLUMES
+              value: "{{ .Values.config.collect.volumes }}"
+            {{- end }}
+            {{- range $key, $value := .Values.extraEnvSecrets }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "Must specify secret!" $value.secret }}
+                  key: {{ required "Must specify key!" $value.key }}
+            {{- end }}
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+          envFrom:
+          {{- if .Values.config.tokenSecret }}
+          - secretRef:
+              name: {{ .Values.tokenSecret }}
+          {{- else }}
+          - secretRef:
+              name: {{ template "hcloud-exporter.fullname" . }}
+          {{- end }}
+          {{- if .Values.envFromSecret }}
+          - secretRef:
+              name: {{ .Values.envFromSecret }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 9501
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

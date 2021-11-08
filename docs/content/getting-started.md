@@ -46,9 +46,8 @@ services:
     image: promhippie/hcloud-exporter:latest
     restart: always
     environment:
-      - GITHUB_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
-      - GITHUB_EXPORTER_LOG_PRETTY=true
-      - GITHUB_EXPORTER_ORG=promhippie
+      - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
+      - HCLOUD_EXPORTER_LOG_PRETTY=true
 {{< / highlight >}}
 
 Since our `latest` Docker tag always refers to the `master` branch of the Git repository you should always use some fixed version. You can see all available tags at our [DockerHub repository](https://hub.docker.com/r/promhippie/hcloud-exporter/tags/), there you will see that we also provide a manifest, you can easily start the exporter on various architectures without any change to the image name. You should apply a change like this to the `docker-compose.yml`:
@@ -59,9 +58,8 @@ Since our `latest` Docker tag always refers to the `master` branch of the Git re
 +   image: promhippie/hcloud_exporter:1.0.0
     restart: always
     environment:
-      - GITHUB_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
-      - GITHUB_EXPORTER_LOG_PRETTY=true
-      - GITHUB_EXPORTER_ORG=promhippie
+      - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
+      - HCLOUD_EXPORTER_LOG_PRETTY=true
 {{< / highlight >}}
 
 If you want to access the exporter directly you should bind it to a local port, otherwise only [Prometheus](https://prometheus.io) will have access to the exporter. For debugging purpose or just to discover all available metrics directly you can apply this change to your `docker-compose.yml`, after that you can access it directly at [http://localhost:9501/metrics](http://localhost:9501/metrics):
@@ -73,9 +71,8 @@ If you want to access the exporter directly you should bind it to a local port, 
 +   ports:
 +     - 127.0.0.1:9501:9501
     environment:
-      - GITHUB_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
-      - GITHUB_EXPORTER_LOG_PRETTY=true
-      - GITHUB_EXPORTER_ORG=promhippie
+      - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
+      - HCLOUD_EXPORTER_LOG_PRETTY=true
 {{< / highlight >}}
 
 Finally the exporter should be configured fine, let's start this stack with [docker-compose](https://docs.docker.com/compose/), you just need to execute `docker-compose up` within the directory where you have stored the `prometheus.yml` and `docker-compose.yml`.
