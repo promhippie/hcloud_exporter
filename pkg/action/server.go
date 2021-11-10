@@ -157,6 +157,20 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 		))
 	}
 
+	if cfg.Collector.LoadBalancers {
+		level.Debug(logger).Log(
+			"msg", "Load balancer collector registered",
+		)
+
+		registry.MustRegister(exporter.NewLoadBalancerCollector(
+			logger,
+			client,
+			requestFailures,
+			requestDuration,
+			cfg.Target,
+		))
+	}
+
 	if cfg.Collector.SSHKeys {
 		level.Debug(logger).Log(
 			"msg", "SSH key collector registered",

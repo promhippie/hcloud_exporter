@@ -134,6 +134,13 @@ func RootFlags(cfg *config.Config) []cli.Flag {
 			Destination: &cfg.Collector.Servers,
 		},
 		&cli.BoolFlag{
+			Name:        "collector.load-balancers",
+			Value:       true,
+			Usage:       "Enable collector for load balancers",
+			EnvVars:     []string{"HCLOUD_EXPORTER_COLLECTOR_LOAD_BALANCERS"},
+			Destination: &cfg.Collector.LoadBalancers,
+		},
+		&cli.BoolFlag{
 			Name:        "collector.ssh-keys",
 			Value:       true,
 			Usage:       "Enable collector for SSH keys",

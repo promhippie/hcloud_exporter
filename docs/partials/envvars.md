@@ -28,6 +28,9 @@ HCLOUD_EXPORTER_COLLECTOR_PRICING
 HCLOUD_EXPORTER_COLLECTOR_SERVERS
 : Enable collector for servers, defaults to `true`
 
+HCLOUD_EXPORTER_COLLECTOR_LOAD_BALANCERS
+: Enable collector for load-balancers, defaults to `true`
+
 HCLOUD_EXPORTER_COLLECTOR_SSH_KEYS
 : Enable collector for SSH keys, defaults to `true`
 
