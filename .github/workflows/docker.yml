@@ -57,7 +57,7 @@ jobs:
         run: make build
 
       - name: Docker meta
-        id: hub
+        id: meta
         uses: docker/metadata-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
