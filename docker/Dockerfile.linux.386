@@ -1,4 +1,4 @@
-FROM amd64/alpine:3.14 AS build
+FROM i386/alpine:3.14 AS build
 RUN apk add --no-cache ca-certificates mailcap
 
 FROM scratch
