@@ -3,7 +3,7 @@ module github.com/promhippie/hcloud_exporter
 go 1.12
 
 require (
-	github.com/go-chi/chi/v5 v5.0.6
+	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-kit/kit v0.12.0
 	github.com/hetznercloud/hcloud-go v1.33.1
 	github.com/joho/godotenv v1.4.0
