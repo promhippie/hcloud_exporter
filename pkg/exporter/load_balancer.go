@@ -303,9 +303,9 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 
 		c.addMetric(ch, c.RequestsPerSecond, "requests_per_second", *loadBalancerMetrics, labels)
 
-		c.addMetric(ch, c.IncomingBandwidth, "bandwidth.in", *loadBalancerMetrics, labels)
+		c.addMetric(ch, c.IncomingBandwidth, "bandwidth_in", *loadBalancerMetrics, labels)
 
-		c.addMetric(ch, c.OutgoingBandwidth, "bandwidth.out", *loadBalancerMetrics, labels)
+		c.addMetric(ch, c.OutgoingBandwidth, "bandwidth_out", *loadBalancerMetrics, labels)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.Services,
