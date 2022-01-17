@@ -346,9 +346,9 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 
 			if isHealthy {
-				targetsHealthy += 1
+				targetsHealthy++
 			} else {
-				targetsUnhealthy += 1
+				targetsUnhealthy++
 			}
 		}
 
