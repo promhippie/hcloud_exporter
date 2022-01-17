@@ -25,12 +25,13 @@ type Target struct {
 
 // Collector defines the collector specific configuration.
 type Collector struct {
-	FloatingIPs bool
-	Images      bool
-	Pricing     bool
-	Servers     bool
-	SSHKeys     bool
-	Volumes     bool
+	FloatingIPs   bool
+	Images        bool
+	Pricing       bool
+	Servers       bool
+	LoadBalancers bool
+	SSHKeys       bool
+	Volumes       bool
 }
 
 // Config is a combination of all available configurations.
