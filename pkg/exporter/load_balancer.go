@@ -33,24 +33,21 @@ type LoadBalancerCollector struct {
 	MaxTargets              *prometheus.Desc
 	TargetsHealthy          *prometheus.Desc
 	TargetsUnhealthy        *prometheus.Desc
+	TargetsUnknown          *prometheus.Desc
 	AssignedCertificates    *prometheus.Desc
 	MaxAssignedCertificates *prometheus.Desc
 	IngoingTraffic          *prometheus.Desc
 	OutgoingTraffic         *prometheus.Desc
 	IncludedTraffic         *prometheus.Desc
-	PriceHourly             *prometheus.Desc
-	PriceMonthly            *prometheus.Desc
 }
 
 // NewLoadBalancerCollector returns a new LoadBalancerCollector.
 func NewLoadBalancerCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *LoadBalancerCollector {
 	if failures != nil {
-		failures.WithLabelValues("load-balancer").Add(0)
+		failures.WithLabelValues("load_balancer").Add(0)
 	}
 
 	labels := []string{"id", "name", "datacenter"}
-	pricingLabels := append(labels, "vat")
-
 	return &LoadBalancerCollector{
 		client:   client,
 		logger:   log.With(logger, "collector", "load-balancer"),
@@ -61,42 +58,6 @@ func NewLoadBalancerCollector(logger log.Logger, client *hcloud.Client, failures
 		Created: prometheus.NewDesc(
 			"hcloud_loadbalancer_created_timestamp",
 			"Timestamp when the load balancer have been created",
-			labels,
-			nil,
-		),
-		Connections: prometheus.NewDesc(
-			"hcloud_loadbalancer_open_connections",
-			"The number of open connections",
-			labels,
-			nil,
-		),
-		MaxConnections: prometheus.NewDesc(
-			"hcloud_loadbalancer_max_open_connections",
-			"The maximum number of open connections",
-			labels,
-			nil,
-		),
-		ConnectionsPerSecond: prometheus.NewDesc(
-			"hcloud_loadbalancer_connections_per_second",
-			"The number of new connections per second",
-			labels,
-			nil,
-		),
-		RequestsPerSecond: prometheus.NewDesc(
-			"hcloud_loadbalancer_requests_per_second",
-			"The number of requests per second",
-			labels,
-			nil,
-		),
-		IncomingBandwidth: prometheus.NewDesc(
-			"hcloud_loadbalancer_open_connections_bandwidth_in",
-			"The incoming bandwidth in bytes per second",
-			labels,
-			nil,
-		),
-		OutgoingBandwidth: prometheus.NewDesc(
-			"hcloud_loadbalancer_open_connections_bandwidth_out",
-			"The outgoing bandwidth in bytes per second",
 			labels,
 			nil,
 		),
@@ -136,6 +97,12 @@ func NewLoadBalancerCollector(logger log.Logger, client *hcloud.Client, failures
 			labels,
 			nil,
 		),
+		TargetsUnknown: prometheus.NewDesc(
+			"hcloud_loadbalancer_targets_unknown",
+			"The number of unknown targets",
+			labels,
+			nil,
+		),
 		AssignedCertificates: prometheus.NewDesc(
 			"hcloud_loadbalancer_assigned_certificates",
 			"The number of assigned certificates",
@@ -166,16 +133,40 @@ func NewLoadBalancerCollector(logger log.Logger, client *hcloud.Client, failures
 			labels,
 			nil,
 		),
-		PriceHourly: prometheus.NewDesc(
-			"hcloud_loadbalancer_price_hourly",
-			"Price of the load balancer billed hourly in €",
-			pricingLabels,
+		Connections: prometheus.NewDesc(
+			"hcloud_loadbalancer_open_connections",
+			"The number of open connections",
+			labels,
 			nil,
 		),
-		PriceMonthly: prometheus.NewDesc(
-			"hcloud_loadbalancer_price_monthly",
-			"Price of the load balancer billed monthly in €",
-			pricingLabels,
+		MaxConnections: prometheus.NewDesc(
+			"hcloud_loadbalancer_max_open_connections",
+			"The maximum number of open connections",
+			labels,
+			nil,
+		),
+		ConnectionsPerSecond: prometheus.NewDesc(
+			"hcloud_loadbalancer_connections_per_second",
+			"The number of new connections per second",
+			labels,
+			nil,
+		),
+		RequestsPerSecond: prometheus.NewDesc(
+			"hcloud_loadbalancer_requests_per_second",
+			"The number of requests per second",
+			labels,
+			nil,
+		),
+		IncomingBandwidth: prometheus.NewDesc(
+			"hcloud_loadbalancer_open_connections_bandwidth_in",
+			"The incoming bandwidth in bytes per second",
+			labels,
+			nil,
+		),
+		OutgoingBandwidth: prometheus.NewDesc(
+			"hcloud_loadbalancer_open_connections_bandwidth_out",
+			"The outgoing bandwidth in bytes per second",
+			labels,
 			nil,
 		),
 	}
@@ -185,50 +176,48 @@ func NewLoadBalancerCollector(logger log.Logger, client *hcloud.Client, failures
 func (c *LoadBalancerCollector) Metrics() []*prometheus.Desc {
 	return []*prometheus.Desc{
 		c.Created,
-		c.Connections,
-		c.MaxConnections,
-		c.ConnectionsPerSecond,
-		c.RequestsPerSecond,
-		c.IncomingBandwidth,
-		c.OutgoingBandwidth,
 		c.Services,
 		c.MaxServices,
 		c.Targets,
 		c.MaxTargets,
 		c.TargetsHealthy,
 		c.TargetsUnhealthy,
+		c.TargetsUnknown,
 		c.AssignedCertificates,
 		c.MaxAssignedCertificates,
 		c.IngoingTraffic,
 		c.OutgoingTraffic,
 		c.IncludedTraffic,
-		c.PriceHourly,
-		c.PriceMonthly,
+		c.Connections,
+		c.MaxConnections,
+		c.ConnectionsPerSecond,
+		c.RequestsPerSecond,
+		c.IncomingBandwidth,
+		c.OutgoingBandwidth,
 	}
 }
 
 // Describe sends the super-set of all possible descriptors of metrics collected by this Collector.
 func (c *LoadBalancerCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.Created
-	ch <- c.Connections
-	ch <- c.MaxConnections
-	ch <- c.ConnectionsPerSecond
-	ch <- c.RequestsPerSecond
-	ch <- c.IncomingBandwidth
-	ch <- c.OutgoingBandwidth
 	ch <- c.Services
 	ch <- c.MaxServices
 	ch <- c.Targets
 	ch <- c.MaxTargets
 	ch <- c.TargetsHealthy
 	ch <- c.TargetsUnhealthy
+	ch <- c.TargetsUnknown
 	ch <- c.AssignedCertificates
 	ch <- c.MaxAssignedCertificates
 	ch <- c.IngoingTraffic
 	ch <- c.OutgoingTraffic
 	ch <- c.IncludedTraffic
-	ch <- c.PriceHourly
-	ch <- c.PriceMonthly
+	ch <- c.Connections
+	ch <- c.MaxConnections
+	ch <- c.ConnectionsPerSecond
+	ch <- c.RequestsPerSecond
+	ch <- c.IncomingBandwidth
+	ch <- c.OutgoingBandwidth
 }
 
 // Collect is called by the Prometheus registry when collecting metrics.
@@ -237,8 +226,8 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 	defer cancel()
 
 	now := time.Now()
-	loadBalancers, err := c.client.LoadBalancer.All(ctx)
-	c.duration.WithLabelValues("load-balancer").Observe(time.Since(now).Seconds())
+	lbs, err := c.client.LoadBalancer.All(ctx)
+	c.duration.WithLabelValues("load_balancer").Observe(time.Since(now).Seconds())
 
 	if err != nil {
 		level.Error(c.logger).Log(
@@ -246,109 +235,75 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 			"err", err,
 		)
 
-		c.failures.WithLabelValues("load-balancer").Inc()
+		c.failures.WithLabelValues("load_balancer").Inc()
 		return
 	}
 
 	level.Debug(c.logger).Log(
-		"msg", "Fetched load balancer",
-		"count", len(loadBalancers),
+		"msg", "Fetched load balancers",
+		"count", len(lbs),
 	)
 
-	for _, loadBalancer := range loadBalancers {
+	for _, lb := range lbs {
+		var (
+			targetsHealthy       int
+			targetsUnhealthy     int
+			targetsUnknown       int
+			assignedCertificates int
+		)
+
 		labels := []string{
-			strconv.Itoa(loadBalancer.ID),
-			loadBalancer.Name,
-			loadBalancer.Location.Name,
-		}
-
-		loadBalancerMetrics, _, err := c.client.LoadBalancer.GetMetrics(ctx, loadBalancer, hcloud.LoadBalancerGetMetricsOpts{
-			Types: []hcloud.LoadBalancerMetricType{
-				hcloud.LoadBalancerMetricOpenConnections,
-				hcloud.LoadBalancerMetricConnectionsPerSecond,
-				hcloud.LoadBalancerMetricRequestsPerSecond,
-				hcloud.LoadBalancerMetricBandwidth,
-			},
-			Start: now,
-			End:   now,
-			Step:  1,
-		})
-		if err != nil {
-			level.Error(c.logger).Log(
-				"msg", "Failed to fetch load balancer metrics",
-				"err", err,
-			)
-
-			c.failures.WithLabelValues("load-balancer").Inc()
-			return
+			strconv.Itoa(lb.ID),
+			lb.Name,
+			lb.Location.Name,
 		}
 
 		ch <- prometheus.MustNewConstMetric(
 			c.Created,
 			prometheus.GaugeValue,
-			float64(loadBalancer.Created.Unix()),
+			float64(lb.Created.Unix()),
 			labels...,
 		)
-
-		c.addMetric(ch, c.Connections, "open_connections", *loadBalancerMetrics, labels)
-
-		ch <- prometheus.MustNewConstMetric(
-			c.MaxConnections,
-			prometheus.GaugeValue,
-			float64(loadBalancer.LoadBalancerType.MaxConnections),
-			labels...,
-		)
-
-		c.addMetric(ch, c.ConnectionsPerSecond, "connections_per_second", *loadBalancerMetrics, labels)
-
-		c.addMetric(ch, c.RequestsPerSecond, "requests_per_second", *loadBalancerMetrics, labels)
-
-		c.addMetric(ch, c.IncomingBandwidth, "bandwidth_in", *loadBalancerMetrics, labels)
-
-		c.addMetric(ch, c.OutgoingBandwidth, "bandwidth_out", *loadBalancerMetrics, labels)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.Services,
 			prometheus.GaugeValue,
-			float64(len(loadBalancer.Services)),
+			float64(len(lb.Services)),
 			labels...,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.MaxServices,
 			prometheus.GaugeValue,
-			float64(loadBalancer.LoadBalancerType.MaxServices),
+			float64(lb.LoadBalancerType.MaxServices),
 			labels...,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.Targets,
 			prometheus.GaugeValue,
-			float64(len(loadBalancer.Targets)),
+			float64(len(lb.Targets)),
 			labels...,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.MaxTargets,
 			prometheus.GaugeValue,
-			float64(loadBalancer.LoadBalancerType.MaxTargets),
+			float64(lb.LoadBalancerType.MaxTargets),
 			labels...,
 		)
 
-		targetsHealthy := 0
-		targetsUnhealthy := 0
-		for _, target := range loadBalancer.Targets {
-			isHealthy := true
+		for _, target := range lb.Targets {
+			match := false
+
 			for _, healthStatus := range target.HealthStatus {
-				if healthStatus.Status != "healthy" {
-					isHealthy = false
+				if healthStatus.Status == hcloud.LoadBalancerTargetHealthStatusStatusHealthy {
+					match = true
 				}
 			}
 
-			if isHealthy {
+			if match {
 				targetsHealthy++
-			} else {
-				targetsUnhealthy++
 			}
 		}
 
@@ -359,6 +314,20 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 			labels...,
 		)
 
+		for _, target := range lb.Targets {
+			match := false
+
+			for _, healthStatus := range target.HealthStatus {
+				if healthStatus.Status == hcloud.LoadBalancerTargetHealthStatusStatusUnhealthy {
+					match = true
+				}
+			}
+
+			if match {
+				targetsUnhealthy++
+			}
+		}
+
 		ch <- prometheus.MustNewConstMetric(
 			c.TargetsUnhealthy,
 			prometheus.GaugeValue,
@@ -366,8 +335,28 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 			labels...,
 		)
 
-		assignedCertificates := 0
-		for _, service := range loadBalancer.Services {
+		for _, target := range lb.Targets {
+			match := false
+
+			for _, healthStatus := range target.HealthStatus {
+				if healthStatus.Status == hcloud.LoadBalancerTargetHealthStatusStatusUnknown {
+					match = true
+				}
+			}
+
+			if match {
+				targetsUnknown++
+			}
+		}
+
+		ch <- prometheus.MustNewConstMetric(
+			c.TargetsUnknown,
+			prometheus.GaugeValue,
+			float64(targetsUnknown),
+			labels...,
+		)
+
+		for _, service := range lb.Services {
 			if service.Protocol == "https" {
 				assignedCertificates += len(service.HTTP.Certificates)
 			}
@@ -383,85 +372,129 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(
 			c.MaxAssignedCertificates,
 			prometheus.GaugeValue,
-			float64(loadBalancer.LoadBalancerType.MaxAssignedCertificates),
+			float64(lb.LoadBalancerType.MaxAssignedCertificates),
 			labels...,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.IngoingTraffic,
 			prometheus.GaugeValue,
-			float64(loadBalancer.IngoingTraffic),
+			float64(lb.IngoingTraffic),
 			labels...,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.OutgoingTraffic,
 			prometheus.GaugeValue,
-			float64(loadBalancer.OutgoingTraffic),
+			float64(lb.OutgoingTraffic),
 			labels...,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.IncludedTraffic,
 			prometheus.GaugeValue,
-			float64(loadBalancer.IncludedTraffic),
+			float64(lb.IncludedTraffic),
 			labels...,
 		)
 
-		labelsNet := append(labels, "net")
-		labelsGross := append(labels, "gross")
+		ch <- prometheus.MustNewConstMetric(
+			c.MaxConnections,
+			prometheus.GaugeValue,
+			float64(lb.LoadBalancerType.MaxConnections),
+			labels...,
+		)
 
-		for _, pricing := range loadBalancer.LoadBalancerType.Pricings {
-			if loadBalancer.Location.Name == pricing.Location.Name {
-				hourlyNet, _ := strconv.ParseFloat(pricing.Hourly.Net, 64)
-				hourlyGross, _ := strconv.ParseFloat(pricing.Hourly.Gross, 64)
+		metrics, _, err := c.client.LoadBalancer.GetMetrics(ctx, lb, hcloud.LoadBalancerGetMetricsOpts{
+			Types: []hcloud.LoadBalancerMetricType{
+				hcloud.LoadBalancerMetricOpenConnections,
+				hcloud.LoadBalancerMetricConnectionsPerSecond,
+				hcloud.LoadBalancerMetricRequestsPerSecond,
+				hcloud.LoadBalancerMetricBandwidth,
+			},
+			Start: now,
+			End:   now,
+			Step:  1,
+		})
 
-				ch <- prometheus.MustNewConstMetric(
-					c.PriceHourly,
-					prometheus.GaugeValue,
-					hourlyNet,
-					labelsNet...,
-				)
+		if err != nil {
+			level.Error(c.logger).Log(
+				"msg", "Failed to fetch load balancer metrics",
+				"load-balancer", lb.Name,
+				"err", err,
+			)
 
-				ch <- prometheus.MustNewConstMetric(
-					c.PriceHourly,
-					prometheus.GaugeValue,
-					hourlyGross,
-					labelsGross...,
-				)
-
-				monthlyNet, _ := strconv.ParseFloat(pricing.Monthly.Net, 64)
-				monthlyGross, _ := strconv.ParseFloat(pricing.Monthly.Gross, 64)
-
-				ch <- prometheus.MustNewConstMetric(
-					c.PriceMonthly,
-					prometheus.GaugeValue,
-					monthlyNet,
-					labelsNet...,
-				)
-
-				ch <- prometheus.MustNewConstMetric(
-					c.PriceMonthly,
-					prometheus.GaugeValue,
-					monthlyGross,
-					labelsGross...,
-				)
-			}
+			c.failures.WithLabelValues("load_balancer").Inc()
+			return
 		}
+
+		c.addTimeSeries(
+			ch,
+			c.Connections,
+			"open_connections",
+			lb,
+			*metrics,
+			labels,
+		)
+
+		c.addTimeSeries(
+			ch,
+			c.ConnectionsPerSecond,
+			"connections_per_second",
+			lb,
+			*metrics,
+			labels,
+		)
+
+		c.addTimeSeries(
+			ch,
+			c.RequestsPerSecond,
+			"requests_per_second",
+			lb,
+			*metrics,
+			labels,
+		)
+
+		c.addTimeSeries(
+			ch,
+			c.IncomingBandwidth,
+			"bandwidth_in",
+			lb,
+			*metrics,
+			labels,
+		)
+
+		c.addTimeSeries(
+			ch,
+			c.OutgoingBandwidth,
+			"bandwidth_out",
+			lb,
+			*metrics,
+			labels,
+		)
 	}
 }
 
-func (c *LoadBalancerCollector) addMetric(ch chan<- prometheus.Metric, desc *prometheus.Desc, metric string, loadBalancerMetrics hcloud.LoadBalancerMetrics, labels []string) {
-	if metric, ok := loadBalancerMetrics.TimeSeries[metric]; ok {
+func (c *LoadBalancerCollector) addTimeSeries(
+	ch chan<- prometheus.Metric,
+	desc *prometheus.Desc,
+	name string,
+	lb *hcloud.LoadBalancer,
+	metrics hcloud.LoadBalancerMetrics,
+	labels []string,
+) {
+	if metric, ok := metrics.TimeSeries[name]; ok {
 		if len(metric) > 0 {
 			value, err := strconv.ParseFloat(metric[0].Value, 64)
+
 			if err != nil {
 				level.Error(c.logger).Log(
-					"msg", "Failed to parse value of open_connections",
+					"msg", "Failed to parse load balancer metric",
+					"load-balancer", lb.Name,
+					"name", name,
 					"err", err,
 				)
 
-				c.failures.WithLabelValues("load-balancer").Inc()
+				c.failures.WithLabelValues("load_balancer").Inc()
 				return
 			}
 
