@@ -5,6 +5,7 @@ The following sections list the changes for unreleased.
 ## Summary
 
  * Chg #25: Drop darwin/386 release builds
+ * Chg #39: Add collector for load balancers
  * Chg #24: Refactor build tools and project structure
  * Chg #21: Add collector for volumes
 
@@ -16,6 +17,13 @@ The following sections list the changes for unreleased.
    versions anymore.
 
    https://github.com/promhippie/hcloud_exporter/issues/25
+
+ * Change #39: Add collector for load balancers
+
+   We have added a new optional collector, which is enabled by default, to gather metrics about all
+   loadbalancers part of the configured Hetzner Cloud project.
+
+   https://github.com/promhippie/hcloud_exporter/issues/39
 
  * Change #24: Refactor build tools and project structure
 
