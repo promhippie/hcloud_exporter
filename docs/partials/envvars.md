@@ -11,7 +11,7 @@ HCLOUD_EXPORTER_WEB_PATH
 : Path to bind the metrics server, defaults to `/metrics`
 
 HCLOUD_EXPORTER_REQUEST_TIMEOUT
-: Request timeout as duration, defaults to `5s`
+: Request timeout as duration, defaults to `10s`
 
 HCLOUD_EXPORTER_TOKEN
 : Access token for the HetznerCloud API
