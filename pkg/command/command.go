@@ -93,7 +93,7 @@ func RootFlags(cfg *config.Config) []cli.Flag {
 		},
 		&cli.DurationFlag{
 			Name:        "request.timeout",
-			Value:       5 * time.Second,
+			Value:       10 * time.Second,
 			Usage:       "Request timeout as duration",
 			EnvVars:     []string{"HCLOUD_EXPORTER_REQUEST_TIMEOUT"},
 			Destination: &cfg.Target.Timeout,
