@@ -55,4 +55,16 @@ jobs:
       #     project-token: ${{ secrets.CODACY_TOKEN }}
       #     coverage-reports: coverage.out
 
+  kustomize:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout source
+        id: source
+        uses: actions/checkout@v2
+
+      - name: Build manifest
+        uses: actionhippie/kustomize@v1
+        with:
+          path: deploy/kubernetes/
 ...

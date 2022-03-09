@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: hcloud-exporter
+  labels:
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/component: exporter
+
+spec:
+  replicas: 1
+
+  revisionHistoryLimit: 3
+  progressDeadlineSeconds: 600
+
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: hcloud-exporter
+      app.kubernetes.io/component: exporter
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: hcloud-exporter
+        app.kubernetes.io/component: exporter
+
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+
+      containers:
+        - name: exporter
+          image: hcloud-exporter
+          imagePullPolicy: Always
+
+          envFrom:
+            - configMapRef:
+                name: hcloud-exporter
+            - secretRef:
+                name: hcloud-exporter
+
+          ports:
+            - name: http
+              containerPort: 9501
+              protocol: TCP
+
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+
+...
