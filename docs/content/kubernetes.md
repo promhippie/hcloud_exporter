@@ -23,8 +23,15 @@ resources:
 
 configMapGenerator:
   - name: hcloud-exporter
+    behavior: merge
     literals:
-      - GITHUB_EXPORTER_ORG=promhippie
+      - HCLOUD_EXPORTER_COLLECTOR_FLOATING_IPS=true
+      - HCLOUD_EXPORTER_COLLECTOR_IMAGES=true
+      - HCLOUD_EXPORTER_COLLECTOR_PRICING=true
+      - HCLOUD_EXPORTER_COLLECTOR_SERVERS=true
+      - HCLOUD_EXPORTER_COLLECTOR_LOAD_BALANCERS=true
+      - HCLOUD_EXPORTER_COLLECTOR_SSH_KEYS=true
+      - HCLOUD_EXPORTER_COLLECTOR_VOLUMES=true
 
 secretGenerator:
   - name: hcloud-exporter
