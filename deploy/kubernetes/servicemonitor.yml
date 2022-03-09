@@ -1,0 +1,23 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+
+metadata:
+  name: hcloud-exporter
+  labels:
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/component: exporter
+
+spec:
+  endpoints:
+    - interval: 60s
+      port: http
+      scheme: http
+      path: /metrics
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: hcloud-exporter
+      app.kubernetes.io/component: exporter
+
+...

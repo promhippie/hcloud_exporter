@@ -1,0 +1,22 @@
+---
+kind: Service
+apiVersion: v1
+
+metadata:
+  name: hcloud-exporter
+  labels:
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/component: exporter
+
+spec:
+  selector:
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/component: exporter
+
+  ports:
+    - name: http
+      port: 9501
+      targetPort: http
+      protocol: TCP
+
+...
