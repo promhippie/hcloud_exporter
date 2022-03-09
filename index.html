@@ -371,6 +371,10 @@
 						Getting Started
 					</a>
 				
+					<a href="#kubernetes">
+						Kubernetes
+					</a>
+				
 					<a href="#building">
 						Building
 					</a>
@@ -550,6 +554,48 @@
 <dt>hcloud_volume_status{id, server, location, name}</dt>
 <dd>If 1 the volume is availabel, 0 otherwise</dd>
 </dl>
+
+			</section>
+		
+			<section id="kubernetes">
+				<h1>
+					<a href="#kubernetes">
+						Kubernetes
+					</a>
+
+					<small>
+						<a href="#html">
+							Back to Top
+						</a>
+					</small>
+				</h1>
+
+				<h2 id="kubernetes">Kubernetes</h2>
+<p>So far we got the deployment via <a href="https://github.com/kubernetes-sigs/kustomize">Kustomize</a> to get this exporter working on Kubernetes. We are already working on a <a href="">Helm</a> chart to offer more options, dependening on your preferences.</p>
+<h3 id="kustomize">Kustomize</h3>
+<p>We won&rsquo;t cover the installation of <a href="https://github.com/kubernetes-sigs/kustomize">Kustomize</a> or encryption tooling like <a href="https://github.com/viaduct-ai/kustomize-sops">KSOPS</a> within this guide, to get it installed and working please consult the documentation of these projects. After the installation of <a href="https://github.com/kubernetes-sigs/kustomize">Kustomize</a> you just need to prepare a <code>kustomization.yml</code> wherever you like:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kustomize.config.k8s.io/v1beta1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Kustomization</span><span class="w">
+</span><span class="w"></span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">hcloud-exporter</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="l">github.com/promhippie/hcloud_exporter?ref=master</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">configMapGenerator</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hcloud-exporter</span><span class="w">
+</span><span class="w">    </span><span class="nt">literals</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">GITHUB_EXPORTER_ORG=promhippie</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">secretGenerator</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hcloud-exporter</span><span class="w">
+</span><span class="w">    </span><span class="nt">behavior</span><span class="p">:</span><span class="w"> </span><span class="l">merge</span><span class="w">
+</span><span class="w">    </span><span class="nt">literals</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb</span></code></pre></div>
+<p>After that you can simply execute <code>kustomize build | kubectl apply -f -</code> to get the manifest applied. Generally it&rsquo;s best to use fixed versions of Docker images, this can be done quite easy, you just need to append this block to your <code>kustomization.yml</code> to use this specific version:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">images</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">quay.io/promhippie/hcloud-exporter</span><span class="w">
+</span><span class="w">    </span><span class="nt">newTag</span><span class="p">:</span><span class="w"> </span><span class="m">1.1.0</span></code></pre></div>
+<p>After applying this manifest the exporter should be directly visible within your Prometheus instance if you are using the Prometheus Operator as these manifests are providing a ServiceMonitor.</p>
 
 			</section>
 		

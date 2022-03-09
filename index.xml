@@ -17,6 +17,16 @@ First of all we need to prepare a configuration for Prometheus that includes the
     </item>
     
     <item>
+      <title>Kubernetes</title>
+      <link>https://promhippie.github.io/hcloud_exporter/kubernetes/</link>
+      <pubDate>Wed, 09 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://promhippie.github.io/hcloud_exporter/kubernetes/</guid>
+      <description>Kubernetes So far we got the deployment via Kustomize to get this exporter working on Kubernetes. We are already working on a Helm chart to offer more options, dependening on your preferences.
+Kustomize We won&amp;rsquo;t cover the installation of Kustomize or encryption tooling like KSOPS within this guide, to get it installed and working please consult the documentation of these projects. After the installation of Kustomize you just need to prepare a kustomization.</description>
+    </item>
+    
+    <item>
       <title>Building</title>
       <link>https://promhippie.github.io/hcloud_exporter/building/</link>
       <pubDate>Wed, 28 Oct 2020 00:00:00 +0000</pubDate>
