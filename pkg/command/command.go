@@ -92,6 +92,20 @@ func RootFlags(cfg *config.Config) []cli.Flag {
 			Destination: &cfg.Server.Path,
 		},
 		&cli.DurationFlag{
+			Name:        "web.timeout",
+			Value:       10 * time.Second,
+			Usage:       "Server metrics endpoint timeout",
+			EnvVars:     []string{"HCLOUD_EXPORTER_WEB_TIMEOUT"},
+			Destination: &cfg.Server.Timeout,
+		},
+		&cli.StringFlag{
+			Name:        "web.config",
+			Value:       "",
+			Usage:       "Path to web-config file",
+			EnvVars:     []string{"HCLOUD_EXPORTER_WEB_CONFIG"},
+			Destination: &cfg.Server.Web,
+		},
+		&cli.DurationFlag{
 			Name:        "request.timeout",
 			Value:       10 * time.Second,
 			Usage:       "Request timeout as duration",

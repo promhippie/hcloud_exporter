@@ -1,3 +1,22 @@
+# Changelog for unreleased
+
+The following sections list the changes for unreleased.
+
+## Summary
+
+ * Chg #53: Integrate standard web config
+
+## Details
+
+ * Change #53: Integrate standard web config
+
+   We integrated the new web config from the Prometheus toolkit which provides a configuration
+   for TLS support and also some basic builtin authentication. For the detailed configuration
+   you check out the documentation.
+
+   https://github.com/promhippie/hcloud_exporter/issues/53
+
+
 # Changelog for 1.1.0
 
 The following sections list the changes for 1.1.0.

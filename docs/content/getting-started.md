@@ -75,6 +75,18 @@ If you want to access the exporter directly you should bind it to a local port, 
       - HCLOUD_EXPORTER_LOG_PRETTY=true
 {{< / highlight >}}
 
+If you want to secure the access to the exporter or also the HTTP service discovery endpoint you can provide a web config. You just need to provide a path to the config file in order to enable the support for it, for details about the config format look at the [documentation](#web-configuration) section:
+
+{{< highlight diff >}}
+  hcloud_exporter:
+    image: promhippie/hcloud-exporter:latest
+    restart: always
+    environment:
++     - HCLOUD_EXPORTER_WEB_CONFIG=path/to/web-config.json
+      - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
+      - HCLOUD_EXPORTER_LOG_PRETTY=true
+{{< / highlight >}}
+
 Finally the exporter should be configured fine, let's start this stack with [docker-compose](https://docs.docker.com/compose/), you just need to execute `docker-compose up` within the directory where you have stored the `prometheus.yml` and `docker-compose.yml`.
 
 That's all, the exporter should be up and running. Have fun with it and hopefully you will gather interesting metrics and never run into issues. You can access the exporter at [http://localhost:9501/metrics](http://localhost:9501/metrics) and [Prometheus](https://prometheus.io) at [http://localhost:9090](http://localhost:9090).
@@ -82,6 +94,10 @@ That's all, the exporter should be up and running. Have fun with it and hopefull
 ## Configuration
 
 {{< partial "envvars.md" >}}
+
+### Web Configuration
+
+If you want to secure the service by TLS or by some basic authentication you can provide a `YAML` configuration file whch follows the [Prometheus](https://prometheus.io) toolkit format. You can see a full configration example within the [toolkit documentation](https://github.com/prometheus/exporter-toolkit/blob/master/docs/web-configuration.md).
 
 ## Metrics
 

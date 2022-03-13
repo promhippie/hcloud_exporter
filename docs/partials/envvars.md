@@ -10,6 +10,12 @@ HCLOUD_EXPORTER_WEB_ADDRESS
 HCLOUD_EXPORTER_WEB_PATH
 : Path to bind the metrics server, defaults to `/metrics`
 
+HCLOUD_EXPORTER_WEB_TIMEOUT
+: Server metrics endpoint timeout, defaults to `10s`
+
+HCLOUD_EXPORTER_WEB_CONFIG
+: Path to web-config file
+
 HCLOUD_EXPORTER_REQUEST_TIMEOUT
 : Request timeout as duration, defaults to `10s`
 
