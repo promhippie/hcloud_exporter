@@ -454,6 +454,15 @@
       - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
       - HCLOUD_EXPORTER_LOG_PRETTY=true
 </code></pre></div>
+<p>If you want to secure the access to the exporter or also the HTTP service discovery endpoint you can provide a web config. You just need to provide a path to the config file in order to enable the support for it, for details about the config format look at the <a href="#web-configuration">documentation</a> section:</p>
+<div class="highlight"><pre class="chroma"><code class="language-diff" data-lang="diff">  hcloud_exporter:
+    image: promhippie/hcloud-exporter:latest
+    restart: always
+    environment:
+<span class="gi">+     - HCLOUD_EXPORTER_WEB_CONFIG=path/to/web-config.json
+</span><span class="gi"></span>      - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
+      - HCLOUD_EXPORTER_LOG_PRETTY=true
+</code></pre></div>
 <p>Finally the exporter should be configured fine, let&rsquo;s start this stack with <a href="https://docs.docker.com/compose/">docker-compose</a>, you just need to execute <code>docker-compose up</code> within the directory where you have stored the <code>prometheus.yml</code> and <code>docker-compose.yml</code>.</p>
 <p>That&rsquo;s all, the exporter should be up and running. Have fun with it and hopefully you will gather interesting metrics and never run into issues. You can access the exporter at <a href="http://localhost:9501/metrics">http://localhost:9501/metrics</a> and <a href="https://prometheus.io">Prometheus</a> at <a href="http://localhost:9090">http://localhost:9090</a>.</p>
 <h2 id="configuration">Configuration</h2>
@@ -466,6 +475,10 @@
 <dd>Address to bind the metrics server, defaults to <code>0.0.0.0:9501</code></dd>
 <dt>HCLOUD_EXPORTER_WEB_PATH</dt>
 <dd>Path to bind the metrics server, defaults to <code>/metrics</code></dd>
+<dt>HCLOUD_EXPORTER_WEB_TIMEOUT</dt>
+<dd>Server metrics endpoint timeout, defaults to <code>10s</code></dd>
+<dt>HCLOUD_EXPORTER_WEB_CONFIG</dt>
+<dd>Path to web-config file</dd>
 <dt>HCLOUD_EXPORTER_REQUEST_TIMEOUT</dt>
 <dd>Request timeout as duration, defaults to <code>10s</code></dd>
 <dt>HCLOUD_EXPORTER_TOKEN</dt>
@@ -485,6 +498,8 @@
 <dt>HCLOUD_EXPORTER_COLLECTOR_VOLUMES</dt>
 <dd>Enable collector for volumes, defaults to <code>false</code></dd>
 </dl>
+<h3 id="web-configuration">Web Configuration</h3>
+<p>If you want to secure the service by TLS or by some basic authentication you can provide a <code>YAML</code> configuration file whch follows the <a href="https://prometheus.io">Prometheus</a> toolkit format. You can see a full configration example within the <a href="https://github.com/prometheus/exporter-toolkit/blob/master/docs/web-configuration.md">toolkit documentation</a>.</p>
 <h2 id="metrics">Metrics</h2>
 <p>You can a rough list of available metrics below, additionally to these metrics you will always get the standard metrics exported by the Golang client of <a href="https://prometheus.io">Prometheus</a>. If you want to know more about these standard metrics take a look at the <a href="https://github.com/prometheus/client_golang/blob/master/prometheus/process_collector.go">process collector</a> and the <a href="https://github.com/prometheus/client_golang/blob/master/prometheus/go_collector.go">Go collector</a>.</p>
 <dl>
