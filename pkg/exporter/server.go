@@ -98,7 +98,7 @@ func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prom
 		),
 		Backup: prometheus.NewDesc(
 			"hcloud_server_backup",
-			"If 1 server backups are enabled, 0 otherwise",
+			"1 if server backups are enabled, 0 otherwise",
 			labels,
 			nil,
 		),

@@ -158,6 +158,21 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 		))
 	}
 
+	if cfg.Collector.ServerMetrics.Enabled {
+		level.Debug(logger).Log(
+			"msg", "Server metrics collector registered",
+		)
+
+		registry.MustRegister(exporter.NewServerMetricsCollector(
+			logger,
+			client,
+			requestFailures,
+			requestDuration,
+			cfg.Target,
+			cfg.Collector.ServerMetrics.Duration,
+		))
+	}
+
 	if cfg.Collector.LoadBalancers {
 		level.Debug(logger).Log(
 			"msg", "Load balancer collector registered",

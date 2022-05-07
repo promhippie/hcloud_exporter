@@ -148,6 +148,20 @@ func RootFlags(cfg *config.Config) []cli.Flag {
 			Destination: &cfg.Collector.Servers,
 		},
 		&cli.BoolFlag{
+			Name:        "collector.server_metrics",
+			Value:       true,
+			Usage:       "Enable collector for server metrics",
+			EnvVars:     []string{"HCLOUD_EXPORTER_COLLECTOR_SERVER_METRICS"},
+			Destination: &cfg.Collector.ServerMetrics.Enabled,
+		},
+		&cli.DurationFlag{
+			Name:        "collector.server_metrics.duration",
+			Value:       1 * time.Minute,
+			Usage:       "Duration for server metrics collection. Typically the same as the scrape interval",
+			EnvVars:     []string{"HCLOUD_EXPORTER_COLLECTOR_SERVER_METRICS_DURATION"},
+			Destination: &cfg.Collector.ServerMetrics.Duration,
+		},
+		&cli.BoolFlag{
 			Name:        "collector.load-balancers",
 			Value:       true,
 			Usage:       "Enable collector for load balancers",
