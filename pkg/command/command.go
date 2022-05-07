@@ -148,6 +148,13 @@ func RootFlags(cfg *config.Config) []cli.Flag {
 			Destination: &cfg.Collector.Servers,
 		},
 		&cli.BoolFlag{
+			Name:        "collector.server-metrics",
+			Value:       true,
+			Usage:       "Enable collector for server metrics",
+			EnvVars:     []string{"HCLOUD_EXPORTER_COLLECTOR_SERVER_METRICS"},
+			Destination: &cfg.Collector.ServerMetrics,
+		},
+		&cli.BoolFlag{
 			Name:        "collector.load-balancers",
 			Value:       true,
 			Usage:       "Enable collector for load balancers",

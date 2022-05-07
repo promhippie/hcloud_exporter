@@ -30,6 +30,7 @@ type Collector struct {
 	Images        bool
 	Pricing       bool
 	Servers       bool
+	ServerMetrics bool
 	LoadBalancers bool
 	SSHKeys       bool
 	Volumes       bool
