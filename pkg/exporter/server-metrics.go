@@ -38,6 +38,8 @@ func NewServerMetricsCollector(logger log.Logger, client *hcloud.Client, failure
 	}
 
 	labels := []string{"id", "name", "datacenter"}
+	diskLabels := []string{"id", "name", "datacenter", "disk"}
+	networkLabels := []string{"id", "name", "datacenter", "interface"}
 	return &ServerMetricsCollector{
 		client:   client,
 		logger:   log.With(logger, "collector", "server-metrics"),
@@ -62,49 +64,42 @@ func NewServerMetricsCollector(logger log.Logger, client *hcloud.Client, failure
 		DiskWriteIops: prometheus.NewDesc(
 			"hcloud_server_metrics_disk_write_iops",
 			"Server disk write iop/s metric",
-			labels,
-			nil,
-		),
-
-		DiskReadBps: prometheus.NewDesc(
-			"hcloud_server_metrics_disk_read_bps",
-			"Server disk read bytes/s metric",
-			labels,
+			diskLabels,
 			nil,
 		),
 
 		DiskWriteBps: prometheus.NewDesc(
 			"hcloud_server_metrics_disk_write_bps",
 			"Server disk write bytes/s metric",
-			labels,
+			diskLabels,
 			nil,
 		),
 
 		NetworkInPps: prometheus.NewDesc(
 			"hcloud_server_metrics_network_in_pps",
 			"Server network incoming packets/s metric",
-			labels,
+			networkLabels,
 			nil,
 		),
 
 		NetworkOutPps: prometheus.NewDesc(
 			"hcloud_server_metrics_network_out_pps",
 			"Server network outgoing packets/s metric",
-			labels,
+			networkLabels,
 			nil,
 		),
 
 		NetworkInBps: prometheus.NewDesc(
 			"hcloud_server_metrics_network_in_bps",
 			"Server network incoming bytes/s metric",
-			labels,
+			networkLabels,
 			nil,
 		),
 
 		NetworkOutBps: prometheus.NewDesc(
 			"hcloud_server_metrics_network_out_bps",
 			"Server network outgoing bytes/s metric",
-			labels,
+			networkLabels,
 			nil,
 		),
 	}
@@ -207,6 +202,22 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 				return
 			}
 
+			// Hetzner currently only provides a single 0-indexed timeseries for each metric, so it's simply hardcoded.
+			// If Hetzner ever extends this, determining the amount of returned timeseries would be better.
+			diskLabels := []string{
+				strconv.Itoa(server.ID),
+				server.Name,
+				server.Datacenter.Name,
+				"0",
+			}
+
+			networkLabels := []string{
+				strconv.Itoa(server.ID),
+				server.Name,
+				server.Datacenter.Name,
+				"0",
+			}
+
 			CPU, _ := strconv.ParseFloat(metrics.TimeSeries["cpu"][0].Value, 64)
 			DiskReadIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.read"][0].Value, 64)
 			DiskWriteIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.write"][0].Value, 64)
@@ -228,56 +239,56 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 				c.DiskReadIops,
 				prometheus.GaugeValue,
 				DiskReadIops,
-				labels...,
+				diskLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.DiskWriteIops,
 				prometheus.GaugeValue,
 				DiskWriteIops,
-				labels...,
+				diskLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.DiskReadBps,
 				prometheus.GaugeValue,
 				DiskReadBps,
-				labels...,
+				diskLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.DiskWriteBps,
 				prometheus.GaugeValue,
 				DiskWriteBps,
-				labels...,
+				diskLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.NetworkInPps,
 				prometheus.GaugeValue,
 				NetworkInPps,
-				labels...,
+				networkLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.NetworkOutPps,
 				prometheus.GaugeValue,
 				NetworkOutPps,
-				labels...,
+				networkLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.NetworkInBps,
 				prometheus.GaugeValue,
 				NetworkInBps,
-				labels...,
+				networkLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.NetworkOutBps,
 				prometheus.GaugeValue,
 				NetworkOutBps,
-				labels...,
+				networkLabels...,
 			)
 		}(c, ctx, server)
 
