@@ -57,13 +57,20 @@ func NewServerMetricsCollector(logger log.Logger, client *hcloud.Client, failure
 		DiskReadIops: prometheus.NewDesc(
 			"hcloud_server_metrics_disk_read_iops",
 			"Server disk read iop/s metric",
-			labels,
+			diskLabels,
 			nil,
 		),
 
 		DiskWriteIops: prometheus.NewDesc(
 			"hcloud_server_metrics_disk_write_iops",
 			"Server disk write iop/s metric",
+			diskLabels,
+			nil,
+		),
+
+		DiskReadBps: prometheus.NewDesc(
+			"hcloud_server_metrics_disk_read_bps",
+			"Server disk write bytes/s metric",
 			diskLabels,
 			nil,
 		),
@@ -202,19 +209,8 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 
 			// Hetzner currently only provides a single 0-indexed timeseries for each metric, so it's simply hardcoded.
 			// If Hetzner ever extends this, determining the amount of returned timeseries would be better.
-			diskLabels := []string{
-				strconv.Itoa(server.ID),
-				server.Name,
-				server.Datacenter.Name,
-				"0",
-			}
-
-			networkLabels := []string{
-				strconv.Itoa(server.ID),
-				server.Name,
-				server.Datacenter.Name,
-				"0",
-			}
+			diskLabels := append(labels, "0")
+			networkLabels := append(labels, "0")
 
 			CPU, _ := strconv.ParseFloat(metrics.TimeSeries["cpu"][0].Value, 64)
 			DiskReadIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.read"][0].Value, 64)
