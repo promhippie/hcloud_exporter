@@ -163,8 +163,6 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
-	now = time.Now()
-
 	type empty struct{}
 	sem := make(chan empty, len(servers))
 
