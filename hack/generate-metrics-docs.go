@@ -46,6 +46,11 @@ func main() {
 
 	collectors = append(
 		collectors,
+		exporter.NewServerMetricsCollector(nil, nil, nil, nil, config.Load().Target).Metrics()...,
+	)
+
+	collectors = append(
+		collectors,
 		exporter.NewSSHKeyCollector(nil, nil, nil, nil, config.Load().Target).Metrics()...,
 	)
 
