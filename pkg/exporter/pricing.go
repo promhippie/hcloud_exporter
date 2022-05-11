@@ -119,7 +119,6 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 
 	now := time.Now()
 	pricing, _, err := c.client.Pricing.Get(ctx)
-	c.duration.WithLabelValues("pricing").Observe(time.Since(now).Seconds())
 
 	if err != nil {
 		level.Error(c.logger).Log(
@@ -395,4 +394,6 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 			)
 		}
 	}
+
+	c.duration.WithLabelValues("pricing").Observe(time.Since(now).Seconds())
 }

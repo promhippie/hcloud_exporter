@@ -275,10 +275,5 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Fetched server metrics",
-		"count", len(servers),
-	)
-
 	c.duration.WithLabelValues("server_metrics").Observe(time.Since(now).Seconds())
 }

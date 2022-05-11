@@ -65,7 +65,6 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 
 	now := time.Now()
 	ips, err := c.client.FloatingIP.All(ctx)
-	c.duration.WithLabelValues("floating_ip").Observe(time.Since(now).Seconds())
 
 	if err != nil {
 		level.Error(c.logger).Log(
@@ -108,4 +107,6 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 			labels...,
 		)
 	}
+
+	c.duration.WithLabelValues("floating_ip").Observe(time.Since(now).Seconds())
 }
