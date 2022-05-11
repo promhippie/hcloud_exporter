@@ -38,8 +38,8 @@ func NewServerMetricsCollector(logger log.Logger, client *hcloud.Client, failure
 	}
 
 	labels := []string{"id", "name", "datacenter"}
-	diskLabels := []string{"id", "name", "datacenter", "disk"}
-	networkLabels := []string{"id", "name", "datacenter", "interface"}
+	diskLabels := append(labels, "disk")
+	networkLabels := append(labels, "interface")
 	return &ServerMetricsCollector{
 		client:   client,
 		logger:   log.With(logger, "collector", "server-metrics"),
@@ -115,7 +115,6 @@ func NewServerMetricsCollector(logger log.Logger, client *hcloud.Client, failure
 // Metrics simply returns the list metric descriptors for generating a documentation.
 func (c *ServerMetricsCollector) Metrics() []*prometheus.Desc {
 	return []*prometheus.Desc{
-
 		c.CPU,
 		c.DiskReadIops,
 		c.DiskWriteIops,
@@ -130,7 +129,6 @@ func (c *ServerMetricsCollector) Metrics() []*prometheus.Desc {
 
 // Describe sends the super-set of all possible descriptors of metrics collected by this Collector.
 func (c *ServerMetricsCollector) Describe(ch chan<- *prometheus.Desc) {
-
 	ch <- c.CPU
 	ch <- c.DiskReadIops
 	ch <- c.DiskWriteIops
@@ -148,17 +146,11 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 	defer cancel()
 
 	now := time.Now()
-	opts := hcloud.ServerListOpts{
+	servers, _, err := c.client.Server.List(ctx, hcloud.ServerListOpts{
 		Status: []hcloud.ServerStatus{
 			hcloud.ServerStatusRunning,
 		},
-	}
-	servers, _, err := c.client.Server.List(ctx, opts)
-
-	level.Debug(c.logger).Log(
-		"msg", "Fetched online servers",
-		"count", len(servers),
-	)
+	})
 
 	if err != nil {
 		level.Error(c.logger).Log(
@@ -170,11 +162,15 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
+	level.Debug(c.logger).Log(
+		"msg", "Fetched online servers",
+		"count", len(servers),
+	)
+
 	type empty struct{}
 	sem := make(chan empty, len(servers))
 
 	for _, server := range servers {
-
 		labels := []string{
 			strconv.Itoa(server.ID),
 			server.Name,
@@ -182,18 +178,19 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 		}
 
 		go func(c *ServerMetricsCollector, ctx context.Context, server *hcloud.Server) {
-
-			metricsOpts := hcloud.ServerGetMetricsOpts{
-				Types: []hcloud.ServerMetricType{
-					hcloud.ServerMetricCPU,
-					hcloud.ServerMetricDisk,
-					hcloud.ServerMetricNetwork,
+			metrics, _, err := c.client.Server.GetMetrics(
+				ctx,
+				server,
+				hcloud.ServerGetMetricsOpts{
+					Types: []hcloud.ServerMetricType{
+						hcloud.ServerMetricCPU,
+						hcloud.ServerMetricDisk,
+						hcloud.ServerMetricNetwork,
+					},
+					Start: time.Now(),
+					End:   time.Now(),
 				},
-				Start: time.Now(),
-				End:   time.Now(),
-			}
-
-			metrics, _, err := c.client.Server.GetMetrics(ctx, server, metricsOpts)
+			)
 
 			sem <- empty{}
 
@@ -207,96 +204,92 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 				return
 			}
 
-			// Hetzner currently only provides a single 0-indexed timeseries for each metric, so it's simply hardcoded.
-			// If Hetzner ever extends this, determining the amount of returned timeseries would be better.
 			diskLabels := append(labels, "0")
 			networkLabels := append(labels, "0")
 
-			CPU, _ := strconv.ParseFloat(metrics.TimeSeries["cpu"][0].Value, 64)
-			DiskReadIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.read"][0].Value, 64)
-			DiskWriteIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.write"][0].Value, 64)
-			DiskReadBps, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.bandwidth.read"][0].Value, 64)
-			DiskWriteBps, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.bandwidth.write"][0].Value, 64)
-			NetworkInPps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.pps.in"][0].Value, 64)
-			NetworkOutPps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.pps.out"][0].Value, 64)
-			NetworkInBps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.bandwidth.in"][0].Value, 64)
-			NetworkOutBps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.bandwidth.out"][0].Value, 64)
+			cpuUsage, _ := strconv.ParseFloat(metrics.TimeSeries["cpu"][0].Value, 64)
+			diskReadIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.read"][0].Value, 64)
+			diskWriteIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.write"][0].Value, 64)
+			diskReadBps, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.bandwidth.read"][0].Value, 64)
+			diskWriteBps, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.bandwidth.write"][0].Value, 64)
+			networkInPps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.pps.in"][0].Value, 64)
+			networkOutPps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.pps.out"][0].Value, 64)
+			networkInBps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.bandwidth.in"][0].Value, 64)
+			networkOutBps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.bandwidth.out"][0].Value, 64)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.CPU,
 				prometheus.GaugeValue,
-				CPU,
+				cpuUsage,
 				labels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.DiskReadIops,
 				prometheus.GaugeValue,
-				DiskReadIops,
+				diskReadIops,
 				diskLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.DiskWriteIops,
 				prometheus.GaugeValue,
-				DiskWriteIops,
+				diskWriteIops,
 				diskLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.DiskReadBps,
 				prometheus.GaugeValue,
-				DiskReadBps,
+				diskReadBps,
 				diskLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.DiskWriteBps,
 				prometheus.GaugeValue,
-				DiskWriteBps,
+				diskWriteBps,
 				diskLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.NetworkInPps,
 				prometheus.GaugeValue,
-				NetworkInPps,
+				networkInPps,
 				networkLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.NetworkOutPps,
 				prometheus.GaugeValue,
-				NetworkOutPps,
+				networkOutPps,
 				networkLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.NetworkInBps,
 				prometheus.GaugeValue,
-				NetworkInBps,
+				networkInBps,
 				networkLabels...,
 			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.NetworkOutBps,
 				prometheus.GaugeValue,
-				NetworkOutBps,
+				networkOutBps,
 				networkLabels...,
 			)
 		}(c, ctx, server)
-
 	}
 
-	// Wait for all go-routines to signal finished metrics fetch
 	for i := 0; i < len(servers); i++ {
 		<-sem
 	}
 
-	c.duration.WithLabelValues("server-metrics").Observe(time.Since(now).Seconds())
 	level.Debug(c.logger).Log(
 		"msg", "Fetched server metrics",
 		"count", len(servers),
 	)
 
+	c.duration.WithLabelValues("server-metrics").Observe(time.Since(now).Seconds())
 }
