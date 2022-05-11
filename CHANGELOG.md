@@ -1,12 +1,21 @@
-# Changelog for unreleased
+# Changelog for 1.2.0
 
-The following sections list the changes for unreleased.
+The following sections list the changes for 1.2.0.
 
 ## Summary
 
+ * Chg #67: Add collector for server metrics
  * Chg #53: Integrate standard web config
 
 ## Details
+
+ * Change #67: Add collector for server metrics
+
+   Hetzner Cloud collects basic metrics on the hypervisor-level for each server. We have added a
+   new collector which scrapes the latest available metric point for each running server. It is
+   enabled by default.
+
+   https://github.com/promhippie/hcloud_exporter/pull/67
 
  * Change #53: Integrate standard web config
 
