@@ -491,6 +491,8 @@
 <dd>Enable collector for pricing, defaults to <code>true</code></dd>
 <dt>HCLOUD_EXPORTER_COLLECTOR_SERVERS</dt>
 <dd>Enable collector for servers, defaults to <code>true</code></dd>
+<dt>HCLOUD_EXPORTER_COLLECTOR_SERVER_METRICS</dt>
+<dd>Enable collector for server metrics, defaults to <code>true</code></dd>
 <dt>HCLOUD_EXPORTER_COLLECTOR_LOAD_BALANCERS</dt>
 <dd>Enable collector for load balancers, defaults to <code>true</code></dd>
 <dt>HCLOUD_EXPORTER_COLLECTOR_SSH_KEYS</dt>
@@ -547,6 +549,24 @@
 <dd>Ingoing traffic to the server in bytes</dd>
 <dt>hcloud_server_memory_bytes{id, name, datacenter}</dt>
 <dd>Server memory in bytes</dd>
+<dt>hcloud_server_metrics_cpu{id, name, datacenter}</dt>
+<dd>Server CPU usage metric</dd>
+<dt>hcloud_server_metrics_disk_read_bps{id, name, datacenter, disk}</dt>
+<dd>Server disk write bytes/s metric</dd>
+<dt>hcloud_server_metrics_disk_read_iops{id, name, datacenter, disk}</dt>
+<dd>Server disk read iop/s metric</dd>
+<dt>hcloud_server_metrics_disk_write_bps{id, name, datacenter, disk}</dt>
+<dd>Server disk write bytes/s metric</dd>
+<dt>hcloud_server_metrics_disk_write_iops{id, name, datacenter, disk}</dt>
+<dd>Server disk write iop/s metric</dd>
+<dt>hcloud_server_metrics_network_in_bps{id, name, datacenter, interface}</dt>
+<dd>Server network incoming bytes/s metric</dd>
+<dt>hcloud_server_metrics_network_in_pps{id, name, datacenter, interface}</dt>
+<dd>Server network incoming packets/s metric</dd>
+<dt>hcloud_server_metrics_network_out_bps{id, name, datacenter, interface}</dt>
+<dd>Server network outgoing bytes/s metric</dd>
+<dt>hcloud_server_metrics_network_out_pps{id, name, datacenter, interface}</dt>
+<dd>Server network outgoing packets/s metric</dd>
 <dt>hcloud_server_outgoing_traffic_bytes{id, name, datacenter}</dt>
 <dd>Outgoing traffic from the server in bytes</dd>
 <dt>hcloud_server_price_hourly{id, name, datacenter, vat}</dt>
