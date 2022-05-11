@@ -156,7 +156,6 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 
 	now := time.Now()
 	servers, err := c.client.Server.All(ctx)
-	c.duration.WithLabelValues("server").Observe(time.Since(now).Seconds())
 
 	if err != nil {
 		level.Error(c.logger).Log(
@@ -297,4 +296,6 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 		}
 	}
+
+	c.duration.WithLabelValues("server").Observe(time.Since(now).Seconds())
 }

@@ -92,7 +92,6 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 
 	now := time.Now()
 	volumes, err := c.client.Volume.All(ctx)
-	c.duration.WithLabelValues("volume").Observe(time.Since(now).Seconds())
 
 	if err != nil {
 		level.Error(c.logger).Log(
@@ -163,4 +162,6 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 			labels...,
 		)
 	}
+
+	c.duration.WithLabelValues("volume").Observe(time.Since(now).Seconds())
 }

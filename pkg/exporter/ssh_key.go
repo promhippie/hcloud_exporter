@@ -65,7 +65,6 @@ func (c *SSHKeyCollector) Collect(ch chan<- prometheus.Metric) {
 
 	now := time.Now()
 	keys, err := c.client.SSHKey.All(ctx)
-	c.duration.WithLabelValues("ssh_key").Observe(time.Since(now).Seconds())
 
 	if err != nil {
 		level.Error(c.logger).Log(
@@ -96,4 +95,6 @@ func (c *SSHKeyCollector) Collect(ch chan<- prometheus.Metric) {
 			labels...,
 		)
 	}
+
+	c.duration.WithLabelValues("ssh_key").Observe(time.Since(now).Seconds())
 }

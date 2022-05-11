@@ -227,7 +227,6 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 
 	now := time.Now()
 	lbs, err := c.client.LoadBalancer.All(ctx)
-	c.duration.WithLabelValues("load_balancer").Observe(time.Since(now).Seconds())
 
 	if err != nil {
 		level.Error(c.logger).Log(
@@ -472,6 +471,8 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 			labels,
 		)
 	}
+
+	c.duration.WithLabelValues("load_balancer").Observe(time.Since(now).Seconds())
 }
 
 func (c *LoadBalancerCollector) addTimeSeries(
