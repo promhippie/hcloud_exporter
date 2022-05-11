@@ -26,6 +26,24 @@ The following sections list the changes for 1.2.0.
    https://github.com/promhippie/hcloud_exporter/issues/53
 
 
+# Changelog for 1.2.1
+
+The following sections list the changes for 1.2.1.
+
+## Summary
+
+ * Fix #70: Fix go routine errors within server metrics
+
+## Details
+
+ * Bugfix #70: Fix go routine errors within server metrics
+
+   We fixed a go routines issue within the new server metrics. We just got rid of the routines to
+   avoid any errors related to sending to closed channels.
+
+   https://github.com/promhippie/hcloud_exporter/issues/70
+
+
 # Changelog for 1.1.0
 
 The following sections list the changes for 1.1.0.
