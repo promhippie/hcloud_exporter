@@ -183,8 +183,8 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 					hcloud.ServerMetricDisk,
 					hcloud.ServerMetricNetwork,
 				},
-				Start: time.Now(),
-				End:   time.Now(),
+				Start: now,
+				End:   now,
 			},
 		)
 
