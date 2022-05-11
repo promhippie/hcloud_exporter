@@ -64,6 +64,33 @@ hcloud_server_incoming_traffic_bytes{id, name, datacenter}
 hcloud_server_memory_bytes{id, name, datacenter}
 : Server memory in bytes
 
+hcloud_server_metrics_cpu{id, name, datacenter}
+: Server CPU usage metric
+
+hcloud_server_metrics_disk_read_bps{id, name, datacenter, disk}
+: Server disk write bytes/s metric
+
+hcloud_server_metrics_disk_read_iops{id, name, datacenter, disk}
+: Server disk read iop/s metric
+
+hcloud_server_metrics_disk_write_bps{id, name, datacenter, disk}
+: Server disk write bytes/s metric
+
+hcloud_server_metrics_disk_write_iops{id, name, datacenter, disk}
+: Server disk write iop/s metric
+
+hcloud_server_metrics_network_in_bps{id, name, datacenter, interface}
+: Server network incoming bytes/s metric
+
+hcloud_server_metrics_network_in_pps{id, name, datacenter, interface}
+: Server network incoming packets/s metric
+
+hcloud_server_metrics_network_out_bps{id, name, datacenter, interface}
+: Server network outgoing bytes/s metric
+
+hcloud_server_metrics_network_out_pps{id, name, datacenter, interface}
+: Server network outgoing packets/s metric
+
 hcloud_server_outgoing_traffic_bytes{id, name, datacenter}
 : Outgoing traffic from the server in bytes
 
