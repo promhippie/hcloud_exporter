@@ -5,7 +5,6 @@ The following sections list the changes for unreleased.
 ## Summary
 
  * Chg #53: Integrate standard web config
- * Chg #67: Add collector for server metrics
 
 ## Details
 
@@ -16,14 +15,6 @@ The following sections list the changes for unreleased.
    you check out the documentation.
 
    https://github.com/promhippie/hcloud_exporter/issues/53
-
-  * Change #67:Add collector for server metrics
-
-   Hetzner Cloud collects basic metrics on the hypervisor-level for each server. We've added a
-   new collector which scrapes the latest available metric point for each running server. It is
-   enabled by default.
-
-   https://github.com/promhippie/hcloud_exporter/pull/67
 
 
 # Changelog for 1.1.0
