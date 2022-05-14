@@ -35,7 +35,7 @@ HCLOUD_EXPORTER_COLLECTOR_SERVERS
 : Enable collector for servers, defaults to `true`
 
 HCLOUD_EXPORTER_COLLECTOR_SERVER_METRICS
-: Enable collector for server metrics, defaults to `true`
+: Enable collector for server metrics, defaults to `false`
 
 HCLOUD_EXPORTER_COLLECTOR_LOAD_BALANCERS
 : Enable collector for load balancers, defaults to `true`
