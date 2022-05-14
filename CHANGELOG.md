@@ -1,3 +1,30 @@
+# Changelog for 1.2.2
+
+The following sections list the changes for 1.2.2.
+
+## Summary
+
+ * Fix #74: Another fix for go routines within server metrics
+ * Fix #72: Fix index out of range issue within server metrics
+
+## Details
+
+ * Bugfix #74: Another fix for go routines within server metrics
+
+   We disabled the server metrics by default for now until the implementation is really stable to
+   avoid any side effects. I have reintroduced routines, otherwise the scrapetime will be far too
+   high. This time I used wait groups to get everything handled properly.
+
+   https://github.com/promhippie/hcloud_exporter/issues/74
+
+ * Bugfix #72: Fix index out of range issue within server metrics
+
+   The code has not checked if an index have been really available within the server metrics API
+   response. With this fix it gets properly handled.
+
+   https://github.com/promhippie/hcloud_exporter/issues/72
+
+
 # Changelog for 1.2.1
 
 The following sections list the changes for 1.2.1.
