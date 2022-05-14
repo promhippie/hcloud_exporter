@@ -32,7 +32,7 @@ func NewSSHKeyCollector(logger log.Logger, client *hcloud.Client, failures *prom
 	labels := []string{"id", "name", "fingerprint"}
 	return &SSHKeyCollector{
 		client:   client,
-		logger:   log.With(logger, "collector", "ssh_key"),
+		logger:   log.With(logger, "collector", "ssh-key"),
 		failures: failures,
 		duration: duration,
 		config:   cfg,
@@ -95,6 +95,11 @@ func (c *SSHKeyCollector) Collect(ch chan<- prometheus.Metric) {
 			labels...,
 		)
 	}
+
+	level.Debug(c.logger).Log(
+		"msg", "Processed SSH key collector",
+		"duration", time.Since(now),
+	)
 
 	c.duration.WithLabelValues("ssh_key").Observe(time.Since(now).Seconds())
 }

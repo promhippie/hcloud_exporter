@@ -395,5 +395,10 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 		}
 	}
 
+	level.Debug(c.logger).Log(
+		"msg", "Processed pricing collector",
+		"duration", time.Since(now),
+	)
+
 	c.duration.WithLabelValues("pricing").Observe(time.Since(now).Seconds())
 }

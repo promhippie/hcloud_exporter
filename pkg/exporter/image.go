@@ -182,5 +182,10 @@ func (c *ImageCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
+	level.Debug(c.logger).Log(
+		"msg", "Processed image collector",
+		"duration", time.Since(now),
+	)
+
 	c.duration.WithLabelValues("image").Observe(time.Since(now).Seconds())
 }

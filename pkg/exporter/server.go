@@ -297,5 +297,10 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 		}
 	}
 
+	level.Debug(c.logger).Log(
+		"msg", "Processed server collector",
+		"duration", time.Since(now),
+	)
+
 	c.duration.WithLabelValues("server").Observe(time.Since(now).Seconds())
 }

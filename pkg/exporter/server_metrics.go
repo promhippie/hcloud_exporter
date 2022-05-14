@@ -3,6 +3,7 @@ package exporter
 import (
 	"context"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/go-kit/kit/log"
@@ -167,6 +168,10 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 		"count", len(servers),
 	)
 
+	var (
+		wg sync.WaitGroup
+	)
+
 	for _, server := range servers {
 		labels := []string{
 			strconv.Itoa(server.ID),
@@ -174,123 +179,137 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 			server.Datacenter.Name,
 		}
 
-		metrics, _, err := c.client.Server.GetMetrics(
-			ctx,
-			server,
-			hcloud.ServerGetMetricsOpts{
-				Types: []hcloud.ServerMetricType{
-					hcloud.ServerMetricCPU,
-					hcloud.ServerMetricDisk,
-					hcloud.ServerMetricNetwork,
+		wg.Add(1)
+
+		go func(server *hcloud.Server) {
+			defer wg.Done()
+			logger := log.With(c.logger, "server", server.Name)
+
+			metrics, _, err := c.client.Server.GetMetrics(
+				ctx,
+				server,
+				hcloud.ServerGetMetricsOpts{
+					Types: []hcloud.ServerMetricType{
+						hcloud.ServerMetricCPU,
+						hcloud.ServerMetricDisk,
+						hcloud.ServerMetricNetwork,
+					},
+					Start: now,
+					End:   now,
 				},
-				Start: now,
-				End:   now,
-			},
-		)
-
-		if err != nil {
-			level.Error(c.logger).Log(
-				"msg", "Failed to fetch server metrics",
-				"err", err,
 			)
 
-			c.failures.WithLabelValues("server_metrics").Inc()
-			return
-		}
+			if err != nil {
+				level.Error(logger).Log(
+					"msg", "Failed to fetch server metrics",
+					"err", err,
+				)
 
-		diskLabels := append(labels, "0")
-		networkLabels := append(labels, "0")
+				c.failures.WithLabelValues("server_metrics").Inc()
+				return
+			}
 
-		if len(metrics.TimeSeries["cpu"]) > 0 {
-			cpuUsage, _ := strconv.ParseFloat(metrics.TimeSeries["cpu"][len(metrics.TimeSeries["cpu"])-1].Value, 64)
-			ch <- prometheus.MustNewConstMetric(
-				c.CPU,
-				prometheus.GaugeValue,
-				cpuUsage,
-				labels...,
-			)
-		}
+			diskLabels := append(labels, "0")
+			networkLabels := append(labels, "0")
 
-		if len(metrics.TimeSeries["disk.0.iops.read"]) > 0 {
-			diskReadIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.read"][len(metrics.TimeSeries["disk.0.iops.read"])-1].Value, 64)
-			ch <- prometheus.MustNewConstMetric(
-				c.DiskReadIops,
-				prometheus.GaugeValue,
-				diskReadIops,
-				diskLabels...,
-			)
-		}
+			if len(metrics.TimeSeries["cpu"]) > 0 {
+				cpuUsage, _ := strconv.ParseFloat(metrics.TimeSeries["cpu"][len(metrics.TimeSeries["cpu"])-1].Value, 64)
+				ch <- prometheus.MustNewConstMetric(
+					c.CPU,
+					prometheus.GaugeValue,
+					cpuUsage,
+					labels...,
+				)
+			}
 
-		if len(metrics.TimeSeries["disk.0.iops.write"]) > 0 {
-			diskWriteIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.write"][len(metrics.TimeSeries["disk.0.iops.write"])-1].Value, 64)
-			ch <- prometheus.MustNewConstMetric(
-				c.DiskWriteIops,
-				prometheus.GaugeValue,
-				diskWriteIops,
-				diskLabels...,
-			)
-		}
+			if len(metrics.TimeSeries["disk.0.iops.read"]) > 0 {
+				diskReadIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.read"][len(metrics.TimeSeries["disk.0.iops.read"])-1].Value, 64)
+				ch <- prometheus.MustNewConstMetric(
+					c.DiskReadIops,
+					prometheus.GaugeValue,
+					diskReadIops,
+					diskLabels...,
+				)
+			}
 
-		if len(metrics.TimeSeries["disk.0.bandwidth.read"]) > 0 {
-			diskReadBps, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.bandwidth.read"][len(metrics.TimeSeries["disk.0.bandwidth.read"])-1].Value, 64)
-			ch <- prometheus.MustNewConstMetric(
-				c.DiskReadBps,
-				prometheus.GaugeValue,
-				diskReadBps,
-				diskLabels...,
-			)
-		}
+			if len(metrics.TimeSeries["disk.0.iops.write"]) > 0 {
+				diskWriteIops, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.iops.write"][len(metrics.TimeSeries["disk.0.iops.write"])-1].Value, 64)
+				ch <- prometheus.MustNewConstMetric(
+					c.DiskWriteIops,
+					prometheus.GaugeValue,
+					diskWriteIops,
+					diskLabels...,
+				)
+			}
 
-		if len(metrics.TimeSeries["disk.0.bandwidth.write"]) > 0 {
-			diskWriteBps, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.bandwidth.write"][len(metrics.TimeSeries["disk.0.bandwidth.write"])-1].Value, 64)
-			ch <- prometheus.MustNewConstMetric(
-				c.DiskWriteBps,
-				prometheus.GaugeValue,
-				diskWriteBps,
-				diskLabels...,
-			)
-		}
+			if len(metrics.TimeSeries["disk.0.bandwidth.read"]) > 0 {
+				diskReadBps, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.bandwidth.read"][len(metrics.TimeSeries["disk.0.bandwidth.read"])-1].Value, 64)
+				ch <- prometheus.MustNewConstMetric(
+					c.DiskReadBps,
+					prometheus.GaugeValue,
+					diskReadBps,
+					diskLabels...,
+				)
+			}
 
-		if len(metrics.TimeSeries["network.0.pps.in"]) > 0 {
-			networkInPps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.pps.in"][len(metrics.TimeSeries["network.0.pps.in"])-1].Value, 64)
-			ch <- prometheus.MustNewConstMetric(
-				c.NetworkInPps,
-				prometheus.GaugeValue,
-				networkInPps,
-				networkLabels...,
-			)
-		}
+			if len(metrics.TimeSeries["disk.0.bandwidth.write"]) > 0 {
+				diskWriteBps, _ := strconv.ParseFloat(metrics.TimeSeries["disk.0.bandwidth.write"][len(metrics.TimeSeries["disk.0.bandwidth.write"])-1].Value, 64)
+				ch <- prometheus.MustNewConstMetric(
+					c.DiskWriteBps,
+					prometheus.GaugeValue,
+					diskWriteBps,
+					diskLabels...,
+				)
+			}
 
-		if len(metrics.TimeSeries["network.0.pps.out"]) > 0 {
-			networkOutPps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.pps.out"][len(metrics.TimeSeries["network.0.pps.out"])-1].Value, 64)
-			ch <- prometheus.MustNewConstMetric(
-				c.NetworkOutPps,
-				prometheus.GaugeValue,
-				networkOutPps,
-				networkLabels...,
-			)
-		}
+			if len(metrics.TimeSeries["network.0.pps.in"]) > 0 {
+				networkInPps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.pps.in"][len(metrics.TimeSeries["network.0.pps.in"])-1].Value, 64)
+				ch <- prometheus.MustNewConstMetric(
+					c.NetworkInPps,
+					prometheus.GaugeValue,
+					networkInPps,
+					networkLabels...,
+				)
+			}
 
-		if len(metrics.TimeSeries["network.0.bandwidth.in"]) > 0 {
-			networkInBps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.bandwidth.in"][len(metrics.TimeSeries["network.0.bandwidth.in"])-1].Value, 64)
-			ch <- prometheus.MustNewConstMetric(
-				c.NetworkInBps,
-				prometheus.GaugeValue,
-				networkInBps,
-				networkLabels...,
-			)
-		}
+			if len(metrics.TimeSeries["network.0.pps.out"]) > 0 {
+				networkOutPps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.pps.out"][len(metrics.TimeSeries["network.0.pps.out"])-1].Value, 64)
+				ch <- prometheus.MustNewConstMetric(
+					c.NetworkOutPps,
+					prometheus.GaugeValue,
+					networkOutPps,
+					networkLabels...,
+				)
+			}
 
-		if len(metrics.TimeSeries["network.0.bandwidth.out"]) > 0 {
-			networkOutBps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.bandwidth.out"][len(metrics.TimeSeries["network.0.bandwidth.out"])-1].Value, 64)
-			ch <- prometheus.MustNewConstMetric(
-				c.NetworkOutBps,
-				prometheus.GaugeValue,
-				networkOutBps,
-				networkLabels...,
-			)
-		}
+			if len(metrics.TimeSeries["network.0.bandwidth.in"]) > 0 {
+				networkInBps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.bandwidth.in"][len(metrics.TimeSeries["network.0.bandwidth.in"])-1].Value, 64)
+				ch <- prometheus.MustNewConstMetric(
+					c.NetworkInBps,
+					prometheus.GaugeValue,
+					networkInBps,
+					networkLabels...,
+				)
+			}
+
+			if len(metrics.TimeSeries["network.0.bandwidth.out"]) > 0 {
+				networkOutBps, _ := strconv.ParseFloat(metrics.TimeSeries["network.0.bandwidth.out"][len(metrics.TimeSeries["network.0.bandwidth.out"])-1].Value, 64)
+				ch <- prometheus.MustNewConstMetric(
+					c.NetworkOutBps,
+					prometheus.GaugeValue,
+					networkOutBps,
+					networkLabels...,
+				)
+			}
+		}(server)
 	}
+
+	wg.Wait()
+
+	level.Debug(c.logger).Log(
+		"msg", "Processed server metrics collector",
+		"duration", time.Since(now),
+	)
 
 	c.duration.WithLabelValues("server_metrics").Observe(time.Since(now).Seconds())
 }

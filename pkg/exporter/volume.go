@@ -163,5 +163,10 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
+	level.Debug(c.logger).Log(
+		"msg", "Processed volume collector",
+		"duration", time.Since(now),
+	)
+
 	c.duration.WithLabelValues("volume").Observe(time.Since(now).Seconds())
 }
