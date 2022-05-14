@@ -472,6 +472,11 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
+	level.Debug(c.logger).Log(
+		"msg", "Processed load balancer collector",
+		"duration", time.Since(now),
+	)
+
 	c.duration.WithLabelValues("load_balancer").Observe(time.Since(now).Seconds())
 }
 
