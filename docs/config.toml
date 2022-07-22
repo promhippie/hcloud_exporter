@@ -1,6 +1,6 @@
 baseURL = "https://promhippie.github.io/hcloud_exporter/"
 languageCode = "en-us"
-title = "HetznerCloud Exporter"
+title = "Hetzner Cloud Exporter"
 pygmentsUseClasses = true
 
 [markup.goldmark.renderer]
@@ -15,5 +15,5 @@ pygmentsUseClasses = true
 
 [params]
   author = "Thomas Boerger"
-  description = "Export HetznerCloud metrics for Prometheus"
+  description = "Prometheus exporter for Hetzner Cloud"
   keywords = "prometheus, exporter, hetzner, cloud"
