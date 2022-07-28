@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-kit/kit/log/level"
+	"github.com/go-kit/log/level"
 	"github.com/promhippie/hcloud_exporter/pkg/action"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
 	"github.com/promhippie/hcloud_exporter/pkg/version"
