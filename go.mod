@@ -10,7 +10,7 @@ require (
 	github.com/oklog/run v1.1.0
 	github.com/prometheus/client_golang v1.13.0
 	github.com/prometheus/exporter-toolkit v0.7.1
-	github.com/urfave/cli/v2 v2.19.1
+	github.com/urfave/cli/v2 v2.19.2
 )
 
 require (
