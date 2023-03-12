@@ -65,6 +65,7 @@ jobs:
             promhippie/hcloud-exporter
             quay.io/promhippie/hcloud-exporter
           labels: |
+            io.artifacthub.package.readme-url=https://raw.githubusercontent.com/promhippie/hcloud_exporter/master/README.md
             org.opencontainers.image.vendor=Webhippie
             maintainer=Thomas Boerger <thomas@webhippie.de>
           tags: |
