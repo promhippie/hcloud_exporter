@@ -4,10 +4,17 @@ The following sections list the changes for 1.2.2.
 
 ## Summary
 
- * Fix #74: Another fix for go routines within server metrics
  * Fix #72: Fix index out of range issue within server metrics
+ * Fix #74: Another fix for go routines within server metrics
 
 ## Details
+
+ * Bugfix #72: Fix index out of range issue within server metrics
+
+   The code has not checked if an index have been really available within the server metrics API
+   response. With this fix it gets properly handled.
+
+   https://github.com/promhippie/hcloud_exporter/issues/72
 
  * Bugfix #74: Another fix for go routines within server metrics
 
@@ -16,13 +23,6 @@ The following sections list the changes for 1.2.2.
    high. This time I used wait groups to get everything handled properly.
 
    https://github.com/promhippie/hcloud_exporter/issues/74
-
- * Bugfix #72: Fix index out of range issue within server metrics
-
-   The code has not checked if an index have been really available within the server metrics API
-   response. With this fix it gets properly handled.
-
-   https://github.com/promhippie/hcloud_exporter/issues/72
 
 
 # Changelog for 1.2.1
@@ -49,18 +49,10 @@ The following sections list the changes for 1.2.0.
 
 ## Summary
 
- * Chg #67: Add collector for server metrics
  * Chg #53: Integrate standard web config
+ * Chg #67: Add collector for server metrics
 
 ## Details
-
- * Change #67: Add collector for server metrics
-
-   Hetzner Cloud collects basic metrics on the hypervisor-level for each server. We have added a
-   new collector which scrapes the latest available metric point for each running server. It is
-   enabled by default.
-
-   https://github.com/promhippie/hcloud_exporter/pull/67
 
  * Change #53: Integrate standard web config
 
@@ -70,6 +62,14 @@ The following sections list the changes for 1.2.0.
 
    https://github.com/promhippie/hcloud_exporter/issues/53
 
+ * Change #67: Add collector for server metrics
+
+   Hetzner Cloud collects basic metrics on the hypervisor-level for each server. We have added a
+   new collector which scrapes the latest available metric point for each running server. It is
+   enabled by default.
+
+   https://github.com/promhippie/hcloud_exporter/pull/67
+
 
 # Changelog for 1.1.0
 
@@ -77,12 +77,26 @@ The following sections list the changes for 1.1.0.
 
 ## Summary
 
+ * Chg #21: Add collector for volumes
+ * Chg #24: Refactor build tools and project structure
  * Chg #25: Drop darwin/386 release builds
  * Chg #39: Add collector for load balancers
- * Chg #24: Refactor build tools and project structure
- * Chg #21: Add collector for volumes
 
 ## Details
+
+ * Change #21: Add collector for volumes
+
+   We have added a new optional collector, which is disabled by default, to gather metrics about
+   the volumes part of the configured Hetzner Cloud project.
+
+   https://github.com/promhippie/hcloud_exporter/issues/21
+
+ * Change #24: Refactor build tools and project structure
+
+   To have a unified project structure and build tooling we have integrated the same structure we
+   already got within our GitHub exporter.
+
+   https://github.com/promhippie/hcloud_exporter/issues/24
 
  * Change #25: Drop darwin/386 release builds
 
@@ -97,20 +111,6 @@ The following sections list the changes for 1.1.0.
    loadbalancers part of the configured Hetzner Cloud project.
 
    https://github.com/promhippie/hcloud_exporter/issues/39
-
- * Change #24: Refactor build tools and project structure
-
-   To have a unified project structure and build tooling we have integrated the same structure we
-   already got within our GitHub exporter.
-
-   https://github.com/promhippie/hcloud_exporter/issues/24
-
- * Change #21: Add collector for volumes
-
-   We have added a new optional collector, which is disabled by default, to gather metrics about
-   the volumes part of the configured Hetzner Cloud project.
-
-   https://github.com/promhippie/hcloud_exporter/issues/21
 
 
 # Changelog for 1.0.0
@@ -138,17 +138,10 @@ The following sections list the changes for 0.2.0.
 
 ## Summary
 
- * Chg #18: Add new metric to see if backups enabled
  * Chg #17: Add pricing collector
+ * Chg #18: Add new metric to see if backups enabled
 
 ## Details
-
- * Change #18: Add new metric to see if backups enabled
-
-   We added a new metric named `hcloud_server_backup` which indicates if a server got backups
-   enabled or not, that way somebody could add some alerting if a server is missing a backup.
-
-   https://github.com/promhippie/hcloud_exporter/pull/18
 
  * Change #17: Add pricing collector
 
@@ -159,6 +152,13 @@ The following sections list the changes for 0.2.0.
    `hcloud_pricing_traffic`.
 
    https://github.com/promhippie/hcloud_exporter/pull/17
+
+ * Change #18: Add new metric to see if backups enabled
+
+   We added a new metric named `hcloud_server_backup` which indicates if a server got backups
+   enabled or not, that way somebody could add some alerting if a server is missing a backup.
+
+   https://github.com/promhippie/hcloud_exporter/pull/18
 
 
 # Changelog for 0.1.1
