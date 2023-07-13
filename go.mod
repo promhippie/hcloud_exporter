@@ -6,6 +6,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-kit/log v0.2.1
 	github.com/hetznercloud/hcloud-go v1.48.0
+	github.com/hetznercloud/hcloud-go/v2 v2.0.0
 	github.com/joho/godotenv v1.5.1
 	github.com/oklog/run v1.1.0
 	github.com/prometheus/client_golang v1.16.0
@@ -30,7 +31,7 @@ require (
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.42.0 // indirect
 	github.com/prometheus/procfs v0.10.1 // indirect
-	github.com/rogpeppe/go-internal v1.9.0 // indirect
+	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
