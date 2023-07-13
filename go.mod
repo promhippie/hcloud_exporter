@@ -3,10 +3,9 @@ module github.com/promhippie/hcloud_exporter
 go 1.19
 
 require (
-	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-chi/chi/v5 v5.0.10
 	github.com/go-kit/log v0.2.1
 	github.com/hetznercloud/hcloud-go v1.48.0
-	github.com/hetznercloud/hcloud-go/v2 v2.0.0
 	github.com/joho/godotenv v1.5.1
 	github.com/oklog/run v1.1.0
 	github.com/prometheus/client_golang v1.16.0
