@@ -134,7 +134,7 @@ func (c *ImageCollector) Collect(ch chan<- prometheus.Metric) {
 		}
 
 		labels := []string{
-			strconv.Itoa(image.ID),
+			strconv.FormatInt(image.ID, 10),
 			image.Name,
 			string(image.Type),
 			name,

@@ -83,7 +83,7 @@ func (c *SSHKeyCollector) Collect(ch chan<- prometheus.Metric) {
 
 	for _, key := range keys {
 		labels := []string{
-			strconv.Itoa(key.ID),
+			strconv.FormatInt(key.ID, 10),
 			key.Name,
 			key.Fingerprint,
 		}

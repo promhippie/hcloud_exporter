@@ -178,7 +178,7 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 
 		labels := []string{
-			strconv.Itoa(server.ID),
+			strconv.FormatInt(server.ID, 10),
 			server.Name,
 			server.Datacenter.Name,
 		}

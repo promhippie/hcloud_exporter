@@ -252,7 +252,7 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 
 		labels := []string{
-			strconv.Itoa(lb.ID),
+			strconv.FormatInt(lb.ID, 10),
 			lb.Name,
 			lb.Location.Name,
 		}

@@ -93,7 +93,7 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 		}
 
 		labels := []string{
-			strconv.Itoa(ip.ID),
+			strconv.FormatInt(ip.ID, 10),
 			name,
 			ip.HomeLocation.Name,
 			string(ip.Type),
