@@ -120,7 +120,7 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 		}
 
 		labels := []string{
-			strconv.Itoa(volume.ID),
+			strconv.FormatInt(volume.ID, 10),
 			name,
 			volume.Location.Name,
 			volume.Name,
