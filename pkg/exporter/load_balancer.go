@@ -456,7 +456,7 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 		c.addTimeSeries(
 			ch,
 			c.IncomingBandwidth,
-			"bandwidth_in",
+			"bandwidth.in",
 			lb,
 			*metrics,
 			labels,
@@ -465,7 +465,7 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 		c.addTimeSeries(
 			ch,
 			c.OutgoingBandwidth,
-			"bandwidth_out",
+			"bandwidth.out",
 			lb,
 			*metrics,
 			labels,
