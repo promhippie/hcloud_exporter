@@ -80,7 +80,9 @@ func main() {
 			Labels: make([]string, 0),
 		}
 
-		labels := reflect.ValueOf(desc).Elem().FieldByName("variableLabels")
+		labels := reflect.Indirect(
+			reflect.ValueOf(desc).Elem().FieldByName("variableLabels"),
+		).FieldByName("names")
 
 		for i := 0; i < labels.Len(); i++ {
 			m.Labels = append(m.Labels, labels.Index(i).String())

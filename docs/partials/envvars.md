@@ -10,6 +10,9 @@ HCLOUD_EXPORTER_WEB_ADDRESS
 HCLOUD_EXPORTER_WEB_PATH
 : Path to bind the metrics server, defaults to `/metrics`
 
+HCLOUD_EXPORTER_WEB_PPROF
+: Enable pprof debugging for server, defaults to `false`
+
 HCLOUD_EXPORTER_WEB_TIMEOUT
 : Server metrics endpoint timeout, defaults to `10s`
 

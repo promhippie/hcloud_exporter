@@ -107,6 +107,20 @@ support for it, for details about the config format look at the
       - HCLOUD_EXPORTER_LOG_PRETTY=true
 {{< / highlight >}}
 
+If you want to provide the required secrets from a file it's also possible. For
+this use case you can write the secret to a file on any path and reference it
+with the following format:
+
+{{< highlight diff >}}
+  hcloud_exporter:
+    image: promhippie/hcloud-exporter:latest
+    restart: always
+    environment:
+-     - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
++     - HCLOUD_EXPORTER_TOKEN=file://path/to/secret/file/with/token
+      - HCLOUD_EXPORTER_LOG_PRETTY=true
+{{< / highlight >}}
+
 Finally the exporter should be configured fine, let's start this stack with
 [docker-compose][compose], you just need to execute `docker-compose up` within
 the directory where you have stored the `prometheus.yml` and

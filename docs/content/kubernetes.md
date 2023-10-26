@@ -64,7 +64,7 @@ helm install hcloud-exporter promhippie/hcloud-exporter
 {{< / highlight >}}
 
 You can also watch that available values and generally the details of the chart
-provided by us within our [chart][chart] repository.
+provided by us within our [chart][chart] repository or on [Artifacthub][ahub].
 
 After applying this manifest the exporter should be directly visible within your
 Prometheus instance depending on your installation if you enabled the
@@ -72,4 +72,5 @@ annotations or the service monitor.
 
 [kustomize]: https://github.com/kubernetes-sigs/kustomize
 [helm]: https://helm.sh
-[chart]: https://github.com/promhippie/charts/tree/master/charts/hcloud-exporter
+[chart]: https://github.com/promhippie/charts/tree/master/stable/hcloud-exporter
+[ahub]: https://artifacthub.io/packages/helm/promhippie/hcloud-exporter
