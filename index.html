@@ -83,7 +83,7 @@
 		line-height: 1.6;
 		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 		color: #242424;
-		max-width: 800px;
+		max-width: 900px;
 		margin: 5% auto;
 	}
 
@@ -130,6 +130,7 @@
 	h3 {
 		font-size: 18px;
 		margin-bottom: 0.3em;
+		margin-top: 1.0em;
 	}
 
 	h1 small a {
@@ -230,6 +231,11 @@
 
 	dl dt {
 		font-weight: bold;
+		margin-top: 10px;
+	}
+
+	dl dt:first-child {
+		margin-top: 0px;
 	}
 
 	dl dd {
@@ -483,6 +489,17 @@ support for it, for details about the config format look at the
 </span></span></span><span class="line"><span class="cl"><span class="gi"></span>      - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
 </span></span><span class="line"><span class="cl">      - HCLOUD_EXPORTER_LOG_PRETTY=true
 </span></span></code></pre></div>
+<p>If you want to provide the required secrets from a file it&rsquo;s also possible. For
+this use case you can write the secret to a file on any path and reference it
+with the following format:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-diff" data-lang="diff"><span class="line"><span class="cl">  hcloud_exporter:
+</span></span><span class="line"><span class="cl">    image: promhippie/hcloud-exporter:latest
+</span></span><span class="line"><span class="cl">    restart: always
+</span></span><span class="line"><span class="cl">    environment:
+</span></span><span class="line"><span class="cl"><span class="gd">-     - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
+</span></span></span><span class="line"><span class="cl"><span class="gd"></span><span class="gi">+     - HCLOUD_EXPORTER_TOKEN=file://path/to/secret/file/with/token
+</span></span></span><span class="line"><span class="cl"><span class="gi"></span>      - HCLOUD_EXPORTER_LOG_PRETTY=true
+</span></span></code></pre></div>
 <p>Finally the exporter should be configured fine, let&rsquo;s start this stack with
 <a href="https://docs.docker.com/compose/">docker-compose</a>, you just need to execute <code>docker-compose up</code> within
 the directory where you have stored the <code>prometheus.yml</code> and
@@ -502,6 +519,8 @@ access the exporter at
 <dd>Address to bind the metrics server, defaults to <code>0.0.0.0:9501</code></dd>
 <dt>HCLOUD_EXPORTER_WEB_PATH</dt>
 <dd>Path to bind the metrics server, defaults to <code>/metrics</code></dd>
+<dt>HCLOUD_EXPORTER_WEB_PPROF</dt>
+<dd>Enable pprof debugging for server, defaults to <code>false</code></dd>
 <dt>HCLOUD_EXPORTER_WEB_TIMEOUT</dt>
 <dd>Server metrics endpoint timeout, defaults to <code>10s</code></dd>
 <dt>HCLOUD_EXPORTER_WEB_CONFIG</dt>
@@ -539,85 +558,85 @@ you will always get the standard metrics exported by the Golang client of
 take a look at the <a href="https://github.com/prometheus/client_golang/blob/master/prometheus/process_collector.go">process collector</a> and the
 <a href="https://github.com/prometheus/client_golang/blob/master/prometheus/go_collector.go">Go collector</a>.</p>
 <dl>
-<dt>hcloud_floating_ip_active{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_floating_ip_active{id, server, location, type, ip}</dt>
 <dd>If 1 the floating IP is used by a server, 0 otherwise</dd>
-<dt>hcloud_image_active{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_image_active{id, name, type, server, flavor, version}</dt>
 <dd>If 1 the image is used by a server, 0 otherwise</dd>
-<dt>hcloud_image_created_timestamp{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_image_created_timestamp{id, name, type, server, flavor, version}</dt>
 <dd>Timestamp when the image have been created</dd>
-<dt>hcloud_image_deprecated_timestamp{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_image_deprecated_timestamp{id, name, type, server, flavor, version}</dt>
 <dd>Timestamp when the image will be deprecated, 0 if not deprecated</dd>
-<dt>hcloud_image_disk_bytes{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_image_disk_bytes{id, name, type, server, flavor, version}</dt>
 <dd>Size if the disk for the image in bytes</dd>
-<dt>hcloud_image_size_bytes{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_image_size_bytes{id, name, type, server, flavor, version}</dt>
 <dd>Size of the image in bytes</dd>
-<dt>hcloud_pricing_floating_ip{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_pricing_floating_ip{currency, vat}</dt>
 <dd>The cost of one floating IP per month</dd>
-<dt>hcloud_pricing_image{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_pricing_image{currency, vat}</dt>
 <dd>The cost of an image per GB/month</dd>
-<dt>hcloud_pricing_loadbalancer_type{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_pricing_loadbalancer_type{currency, vat, type, location}</dt>
 <dd>The costs of a load balancer by type and location per month</dd>
 <dt>hcloud_pricing_server_backup{}</dt>
 <dd>Will increase base server costs by specific percentage if server backups are enabled</dd>
-<dt>hcloud_pricing_server_type{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_pricing_server_type{currency, vat, type, location}</dt>
 <dd>The costs of a server by type and location per month</dd>
-<dt>hcloud_pricing_traffic{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_pricing_traffic{currency, vat}</dt>
 <dd>The cost of additional traffic per TB</dd>
-<dt>hcloud_pricing_volume{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_pricing_volume{currency, vat}</dt>
 <dd>The cost of a volume per GB/month</dd>
 <dt>hcloud_request_duration_seconds{collector}</dt>
 <dd>Histogram of latencies for requests to the api per collector</dd>
 <dt>hcloud_request_failures_total{collector}</dt>
 <dd>Total number of failed requests to the api per collector</dd>
-<dt>hcloud_server_backup{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_backup{id, name, datacenter}</dt>
 <dd>If 1 server backups are enabled, 0 otherwise</dd>
-<dt>hcloud_server_cores{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_cores{id, name, datacenter}</dt>
 <dd>Server number of cores</dd>
-<dt>hcloud_server_created_timestamp{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_created_timestamp{id, name, datacenter}</dt>
 <dd>Timestamp when the server have been created</dd>
-<dt>hcloud_server_disk_bytes{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_disk_bytes{id, name, datacenter}</dt>
 <dd>Server disk in bytes</dd>
-<dt>hcloud_server_included_traffic_bytes{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_included_traffic_bytes{id, name, datacenter}</dt>
 <dd>Included traffic for the server in bytes</dd>
-<dt>hcloud_server_incoming_traffic_bytes{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_incoming_traffic_bytes{id, name, datacenter}</dt>
 <dd>Ingoing traffic to the server in bytes</dd>
-<dt>hcloud_server_memory_bytes{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_memory_bytes{id, name, datacenter}</dt>
 <dd>Server memory in bytes</dd>
-<dt>hcloud_server_metrics_cpu{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_metrics_cpu{id, name, datacenter}</dt>
 <dd>Server CPU usage metric</dd>
-<dt>hcloud_server_metrics_disk_read_bps{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_metrics_disk_read_bps{id, name, datacenter, disk}</dt>
 <dd>Server disk write bytes/s metric</dd>
-<dt>hcloud_server_metrics_disk_read_iops{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_metrics_disk_read_iops{id, name, datacenter, disk}</dt>
 <dd>Server disk read iop/s metric</dd>
-<dt>hcloud_server_metrics_disk_write_bps{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_metrics_disk_write_bps{id, name, datacenter, disk}</dt>
 <dd>Server disk write bytes/s metric</dd>
-<dt>hcloud_server_metrics_disk_write_iops{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_metrics_disk_write_iops{id, name, datacenter, disk}</dt>
 <dd>Server disk write iop/s metric</dd>
-<dt>hcloud_server_metrics_network_in_bps{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_metrics_network_in_bps{id, name, datacenter, interface}</dt>
 <dd>Server network incoming bytes/s metric</dd>
-<dt>hcloud_server_metrics_network_in_pps{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_metrics_network_in_pps{id, name, datacenter, interface}</dt>
 <dd>Server network incoming packets/s metric</dd>
-<dt>hcloud_server_metrics_network_out_bps{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_metrics_network_out_bps{id, name, datacenter, interface}</dt>
 <dd>Server network outgoing bytes/s metric</dd>
-<dt>hcloud_server_metrics_network_out_pps{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_metrics_network_out_pps{id, name, datacenter, interface}</dt>
 <dd>Server network outgoing packets/s metric</dd>
-<dt>hcloud_server_outgoing_traffic_bytes{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_outgoing_traffic_bytes{id, name, datacenter}</dt>
 <dd>Outgoing traffic from the server in bytes</dd>
-<dt>hcloud_server_price_hourly{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_price_hourly{id, name, datacenter, vat}</dt>
 <dd>Price of the server billed hourly in €</dd>
-<dt>hcloud_server_price_monthly{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_price_monthly{id, name, datacenter, vat}</dt>
 <dd>Price of the server billed monthly in €</dd>
-<dt>hcloud_server_running{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_server_running{id, name, datacenter}</dt>
 <dd>If 1 the server is running, 0 otherwise</dd>
-<dt>hcloud_ssh_key{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_ssh_key{id, name, fingerprint}</dt>
 <dd>Information about SSH keys in your HetznerCloud project</dd>
-<dt>hcloud_volume_created{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_volume_created{id, server, location, name}</dt>
 <dd>Timestamp when the volume have been created</dd>
-<dt>hcloud_volume_protection{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_volume_protection{id, server, location, name}</dt>
 <dd>If 1 the volume is protected, 0 otherwise</dd>
-<dt>hcloud_volume_size{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_volume_size{id, server, location, name}</dt>
 <dd>Size of the volume in GB</dd>
-<dt>hcloud_volume_status{&lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;, &lt;prometheus.ConstrainedLabel Value&gt;}</dt>
+<dt>hcloud_volume_status{id, server, location, name}</dt>
 <dd>If 1 the volume is availabel, 0 otherwise</dd>
 </dl>
 
@@ -679,7 +698,7 @@ installation of <a href="https://helm.sh">Helm</a> you just need to execute the 
 </span></span></span><span class="line"><span class="cl"><span class="go">helm install hcloud-exporter promhippie/hcloud-exporter
 </span></span></span></code></pre></div>
 <p>You can also watch that available values and generally the details of the chart
-provided by us within our <a href="https://github.com/promhippie/charts/tree/master/charts/hcloud-exporter">chart</a> repository.</p>
+provided by us within our <a href="https://github.com/promhippie/charts/tree/master/stable/hcloud-exporter">chart</a> repository or on <a href="https://artifacthub.io/packages/helm/promhippie/hcloud-exporter">Artifacthub</a>.</p>
 <p>After applying this manifest the exporter should be directly visible within your
 Prometheus instance depending on your installation if you enabled the
 annotations or the service monitor.</p>
