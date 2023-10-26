@@ -31,9 +31,20 @@ func Server(cfg *config.Config, logger log.Logger) error {
 		"go", version.Go,
 	)
 
+	token, err := config.Value(cfg.Target.Token)
+
+	if err != nil {
+		level.Error(logger).Log(
+			"msg", "Failed to load token from file",
+			"err", err,
+		)
+
+		return err
+	}
+
 	client := hcloud.NewClient(
 		hcloud.WithToken(
-			cfg.Target.Token,
+			token,
 		),
 		hcloud.WithApplication(
 			"hcloud_exporter",
@@ -109,6 +120,10 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	mux.Use(middleware.RealIP)
 	mux.Use(middleware.Timeout)
 	mux.Use(middleware.Cache)
+
+	if cfg.Server.Pprof {
+		mux.Mount("/debug", middleware.Profiler())
+	}
 
 	if cfg.Collector.FloatingIPs {
 		level.Debug(logger).Log(
@@ -254,16 +269,4 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	})
 
 	return mux
-}
-
-func boolP(i bool) *bool {
-	return &i
-}
-
-func stringP(i string) *string {
-	return &i
-}
-
-func sliceP(i []string) *[]string {
-	return &i
 }

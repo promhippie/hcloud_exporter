@@ -91,6 +91,13 @@ func RootFlags(cfg *config.Config) []cli.Flag {
 			EnvVars:     []string{"HCLOUD_EXPORTER_WEB_PATH"},
 			Destination: &cfg.Server.Path,
 		},
+		&cli.BoolFlag{
+			Name:        "web.debug",
+			Value:       false,
+			Usage:       "Enable pprof debugging for server",
+			EnvVars:     []string{"HCLOUD_EXPORTER_WEB_PPROF"},
+			Destination: &cfg.Server.Pprof,
+		},
 		&cli.DurationFlag{
 			Name:        "web.timeout",
 			Value:       10 * time.Second,
