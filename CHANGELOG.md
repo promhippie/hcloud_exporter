@@ -1,3 +1,40 @@
+# Changelog for 1.3.0
+
+The following sections list the changes for 1.3.0.
+
+## Summary
+
+ * Chg #193: Read secrets form files
+ * Chg #193: Integrate standard web config
+ * Enh #193: Integrate option pprof profiling
+
+## Details
+
+ * Change #193: Read secrets form files
+
+   We have added proper support to load secrets like the password from files or from
+   base64-encoded strings. Just provide the flags or environment variables for token or private
+   key with a DSN formatted string like `file://path/to/file` or `base64://Zm9vYmFy`.
+
+   https://github.com/promhippie/hcloud_exporter/pull/193
+
+ * Change #193: Integrate standard web config
+
+   We integrated the new web config from the Prometheus toolkit which provides a configuration
+   for TLS support and also some basic builtin authentication. For the detailed configuration
+   you can check out the documentation.
+
+   https://github.com/promhippie/hcloud_exporter/pull/193
+
+ * Enhancement #193: Integrate option pprof profiling
+
+   We have added an option to enable a pprof endpoint for proper profiling support with the help of
+   tools like Parca. The endpoint `/debug/pprof` can now optionally be enabled to get the
+   profiling details for catching potential memory leaks.
+
+   https://github.com/promhippie/hcloud_exporter/pull/193
+
+
 # Changelog for 1.2.3
 
 The following sections list the changes for 1.2.3.
