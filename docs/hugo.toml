@@ -3,6 +3,9 @@ languageCode = "en-us"
 title = "Hetzner Cloud Exporter"
 pygmentsUseClasses = true
 
+disableKinds = ["RSS", "sitemap", "taxonomy", "term", "section"]
+enableRobotsTXT = true
+
 [markup.goldmark.renderer]
   unsafe = true
 
