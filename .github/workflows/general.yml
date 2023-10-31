@@ -2,12 +2,16 @@
 name: general
 
 "on":
-  push:
-    branches:
-      - master
+  workflow_dispatch:
   pull_request:
     branches:
       - master
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
 
 jobs:
   testing:
@@ -16,7 +20,7 @@ jobs:
     steps:
       - name: Checkout source
         id: source
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v4
 
       - name: Setup golang
         id: golang
@@ -50,7 +54,7 @@ jobs:
 
       - name: Coverage report
         id: codacy
-        if: github.ref == 'refs/heads/master'
+        if: github.event_name != 'pull_request'
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}

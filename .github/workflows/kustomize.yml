@@ -2,12 +2,16 @@
 name: kustomize
 
 "on":
-  push:
-    branches:
-      - master
+  workflow_dispatch:
   pull_request:
     branches:
       - master
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
 
 jobs:
   generate:
@@ -16,15 +20,13 @@ jobs:
     steps:
       - name: Checkout source
         id: source
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-        with:
-          token: ${{ secrets.BOT_ACCESS_TOKEN }}
+        uses: actions/checkout@v4
 
       - name: Generate manifest
         id: kustomize
         uses: actionhippie/kustomize@v2
         with:
-          version: 4.4.0
+          version: 5.2.1
           path: deploy/kubernetes/
           target: deploy/kubernetes/bundle.yml
 

@@ -2,9 +2,16 @@
 name: changes
 
 "on":
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - master
   push:
     branches:
       - master
+
+permissions:
+  contents: read
 
 jobs:
   changelog:
@@ -13,7 +20,7 @@ jobs:
     steps:
       - name: Checkout source
         id: source
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.BOT_ACCESS_TOKEN }}
 
@@ -29,6 +36,7 @@ jobs:
 
       - name: Commit changes
         id: commit
+        if: github.event_name != 'pull_request'
         uses: EndBug/add-and-commit@v9
         with:
           author_name: GitHub Actions
@@ -44,7 +52,7 @@ jobs:
     steps:
       - name: Checkout source
         id: source
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.BOT_ACCESS_TOKEN }}
 
@@ -60,6 +68,7 @@ jobs:
 
       - name: Commit changes
         id: commit
+        if: github.event_name != 'pull_request'
         uses: EndBug/add-and-commit@v9
         with:
           author_name: GitHub Actions
@@ -75,7 +84,7 @@ jobs:
     steps:
       - name: Checkout source
         id: source
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.BOT_ACCESS_TOKEN }}
 
@@ -91,6 +100,7 @@ jobs:
 
       - name: Commit changes
         id: commit
+        if: github.event_name != 'pull_request'
         uses: EndBug/add-and-commit@v9
         with:
           author_name: GitHub Actions
