@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.21.3
 
 require (
-	github.com/go-chi/chi/v5 v5.0.11
+	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-kit/log v0.2.1
 	github.com/hetznercloud/hcloud-go/v2 v2.6.0
 	github.com/joho/godotenv v1.5.1
