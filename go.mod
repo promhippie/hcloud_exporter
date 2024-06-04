@@ -2,7 +2,7 @@ module github.com/promhippie/hcloud_exporter
 
 go 1.21
 
-toolchain go1.22.3
+toolchain go1.22.4
 
 require (
 	github.com/go-chi/chi/v5 v5.0.12
