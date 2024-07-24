@@ -1,4 +1,5 @@
 .direnv
+.devenv
 coverage.out
 
 /bin
