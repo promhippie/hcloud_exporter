@@ -7,7 +7,7 @@ toolchain go1.22.6
 require (
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-kit/log v0.2.1
-	github.com/hetznercloud/hcloud-go/v2 v2.11.0
+	github.com/hetznercloud/hcloud-go/v2 v2.13.1
 	github.com/joho/godotenv v1.5.1
 	github.com/oklog/run v1.1.0
 	github.com/prometheus/client_golang v1.19.1
