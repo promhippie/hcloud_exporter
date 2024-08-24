@@ -30,7 +30,7 @@ func Run() error {
 		Commands: []*cli.Command{
 			Health(cfg),
 		},
-		Action: func(c *cli.Context) error {
+		Action: func(_ *cli.Context) error {
 			logger := setupLogger(cfg)
 
 			if cfg.Target.Token == "" {
