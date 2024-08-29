@@ -576,12 +576,14 @@ take a look at the <a href="https://github.com/prometheus/client_golang/blob/mas
 <dd>The cost of an image per GB/month</dd>
 <dt>hcloud_pricing_loadbalancer_type{currency, vat, type, location}</dt>
 <dd>The costs of a load balancer by type and location per month</dd>
+<dt>hcloud_pricing_loadbalancer_type_traffic{currency, vat, type, location}</dt>
+<dd>The costs of additional traffic per TB for a load balancer by type and location per month</dd>
 <dt>hcloud_pricing_server_backup{}</dt>
 <dd>Will increase base server costs by specific percentage if server backups are enabled</dd>
 <dt>hcloud_pricing_server_type{currency, vat, type, location}</dt>
 <dd>The costs of a server by type and location per month</dd>
-<dt>hcloud_pricing_traffic{currency, vat}</dt>
-<dd>The cost of additional traffic per TB</dd>
+<dt>hcloud_pricing_server_type_traffic{currency, vat, type, location}</dt>
+<dd>The costs of additional traffic per TB for a server by type and location per month</dd>
 <dt>hcloud_pricing_volume{currency, vat}</dt>
 <dd>The cost of a volume per GB/month</dd>
 <dt>hcloud_request_duration_seconds{collector}</dt>
