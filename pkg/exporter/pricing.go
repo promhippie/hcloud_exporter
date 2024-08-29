@@ -134,264 +134,238 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 		"msg", "Fetched pricing",
 	)
 
-	imageGross, err := strconv.ParseFloat(pricing.Image.PerGBMonth.Gross, 64)
-	if err != nil {
+	if gross, err := strconv.ParseFloat(pricing.Image.PerGBMonth.Gross, 64); err != nil {
 		level.Error(c.logger).Log(
 			"msg", "Failed to parse image costs",
 			"err", err,
 		)
 
 		c.failures.WithLabelValues("pricing").Inc()
-		return
+	} else {
+		ch <- prometheus.MustNewConstMetric(
+			c.Image,
+			prometheus.GaugeValue,
+			gross,
+			pricing.Image.PerGBMonth.Currency,
+			"gross",
+		)
 	}
 
-	imageNet, err := strconv.ParseFloat(pricing.Image.PerGBMonth.Net, 64)
-	if err != nil {
+	if net, err := strconv.ParseFloat(pricing.Image.PerGBMonth.Net, 64); err != nil {
 		level.Error(c.logger).Log(
 			"msg", "Failed to parse image costs",
 			"err", err,
 		)
 
 		c.failures.WithLabelValues("pricing").Inc()
-		return
+	} else {
+		ch <- prometheus.MustNewConstMetric(
+			c.Image,
+			prometheus.GaugeValue,
+			net,
+			pricing.Image.PerGBMonth.Currency,
+			"net",
+		)
 	}
 
-	ch <- prometheus.MustNewConstMetric(
-		c.Image,
-		prometheus.GaugeValue,
-		imageGross,
-		pricing.Image.PerGBMonth.Currency,
-		"gross",
-	)
-
-	ch <- prometheus.MustNewConstMetric(
-		c.Image,
-		prometheus.GaugeValue,
-		imageNet,
-		pricing.Image.PerGBMonth.Currency,
-		"net",
-	)
-
-	floatingIPGross, err := strconv.ParseFloat(pricing.FloatingIP.Monthly.Gross, 64)
-	if err != nil {
+	if gross, err := strconv.ParseFloat(pricing.FloatingIP.Monthly.Gross, 64); err != nil {
 		level.Error(c.logger).Log(
 			"msg", "Failed to parse floating IP costs",
 			"err", err,
 		)
 
 		c.failures.WithLabelValues("pricing").Inc()
-		return
+	} else {
+		ch <- prometheus.MustNewConstMetric(
+			c.FloatingIP,
+			prometheus.GaugeValue,
+			gross,
+			pricing.FloatingIP.Monthly.Currency,
+			"gross",
+		)
 	}
 
-	floatingIPNet, err := strconv.ParseFloat(pricing.FloatingIP.Monthly.Net, 64)
-	if err != nil {
+	if net, err := strconv.ParseFloat(pricing.FloatingIP.Monthly.Net, 64); err != nil {
 		level.Error(c.logger).Log(
 			"msg", "Failed to parse floating IP costs",
 			"err", err,
 		)
 
 		c.failures.WithLabelValues("pricing").Inc()
-		return
-	}
-
-	ch <- prometheus.MustNewConstMetric(
-		c.FloatingIP,
-		prometheus.GaugeValue,
-		floatingIPGross,
-		pricing.FloatingIP.Monthly.Currency,
-		"gross",
-	)
-
-	ch <- prometheus.MustNewConstMetric(
-		c.FloatingIP,
-		prometheus.GaugeValue,
-		floatingIPNet,
-		pricing.FloatingIP.Monthly.Currency,
-		"net",
-	)
-
-	trafficGross, err := strconv.ParseFloat(pricing.Traffic.PerTB.Gross, 64)
-	if err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to parse traffic costs",
-			"err", err,
+	} else {
+		ch <- prometheus.MustNewConstMetric(
+			c.FloatingIP,
+			prometheus.GaugeValue,
+			net,
+			pricing.FloatingIP.Monthly.Currency,
+			"net",
 		)
-
-		c.failures.WithLabelValues("pricing").Inc()
-		return
 	}
 
-	trafficNet, err := strconv.ParseFloat(pricing.Traffic.PerTB.Net, 64)
-	if err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to parse traffic costs",
-			"err", err,
-		)
-
-		c.failures.WithLabelValues("pricing").Inc()
-		return
-	}
-
-	ch <- prometheus.MustNewConstMetric(
-		c.Traffic,
-		prometheus.GaugeValue,
-		trafficGross,
-		pricing.Traffic.PerTB.Currency,
-		"gross",
-	)
-
-	ch <- prometheus.MustNewConstMetric(
-		c.Traffic,
-		prometheus.GaugeValue,
-		trafficNet,
-		pricing.Traffic.PerTB.Currency,
-		"net",
-	)
-
-	serverBackup, err := strconv.ParseFloat(pricing.ServerBackup.Percentage, 64)
-	if err != nil {
+	if backup, err := strconv.ParseFloat(pricing.ServerBackup.Percentage, 64); err != nil {
 		level.Error(c.logger).Log(
 			"msg", "Failed to parse server backup costs",
 			"err", err,
 		)
 
 		c.failures.WithLabelValues("pricing").Inc()
-		return
+	} else {
+		ch <- prometheus.MustNewConstMetric(
+			c.ServerBackup,
+			prometheus.GaugeValue,
+			backup/100,
+		)
 	}
 
-	ch <- prometheus.MustNewConstMetric(
-		c.ServerBackup,
-		prometheus.GaugeValue,
-		serverBackup/100,
-	)
-
-	volumeGross, err := strconv.ParseFloat(pricing.Volume.PerGBMonthly.Gross, 64)
-	if err != nil {
+	if gross, err := strconv.ParseFloat(pricing.Volume.PerGBMonthly.Gross, 64); err != nil {
 		level.Error(c.logger).Log(
 			"msg", "Failed to parse volume costs",
 			"err", err,
 		)
 
 		c.failures.WithLabelValues("pricing").Inc()
-		return
+	} else {
+		ch <- prometheus.MustNewConstMetric(
+			c.Volume,
+			prometheus.GaugeValue,
+			gross,
+			pricing.Volume.PerGBMonthly.Currency,
+			"gross",
+		)
 	}
 
-	volumeNet, err := strconv.ParseFloat(pricing.Volume.PerGBMonthly.Net, 64)
-	if err != nil {
+	if net, err := strconv.ParseFloat(pricing.Volume.PerGBMonthly.Net, 64); err != nil {
 		level.Error(c.logger).Log(
 			"msg", "Failed to parse volume costs",
 			"err", err,
 		)
 
 		c.failures.WithLabelValues("pricing").Inc()
-		return
+	} else {
+		ch <- prometheus.MustNewConstMetric(
+			c.Volume,
+			prometheus.GaugeValue,
+			net,
+			pricing.Volume.PerGBMonthly.Currency,
+			"net",
+		)
 	}
 
-	ch <- prometheus.MustNewConstMetric(
-		c.Volume,
-		prometheus.GaugeValue,
-		volumeGross,
-		pricing.Volume.PerGBMonthly.Currency,
-		"gross",
-	)
+	if gross, err := strconv.ParseFloat(pricing.Traffic.PerTB.Gross, 64); err != nil {
+		level.Error(c.logger).Log(
+			"msg", "Failed to parse traffic costs",
+			"err", err,
+		)
 
-	ch <- prometheus.MustNewConstMetric(
-		c.Volume,
-		prometheus.GaugeValue,
-		volumeNet,
-		pricing.Volume.PerGBMonthly.Currency,
-		"net",
-	)
+		c.failures.WithLabelValues("pricing").Inc()
+	} else {
+		ch <- prometheus.MustNewConstMetric(
+			c.Traffic,
+			prometheus.GaugeValue,
+			gross,
+			pricing.Traffic.PerTB.Currency,
+			"gross",
+		)
+	}
+
+	if net, err := strconv.ParseFloat(pricing.Traffic.PerTB.Net, 64); err != nil {
+		level.Error(c.logger).Log(
+			"msg", "Failed to parse traffic costs",
+			"err", err,
+		)
+
+		c.failures.WithLabelValues("pricing").Inc()
+	} else {
+		ch <- prometheus.MustNewConstMetric(
+			c.Traffic,
+			prometheus.GaugeValue,
+			net,
+			pricing.Traffic.PerTB.Currency,
+			"net",
+		)
+	}
 
 	for _, serverType := range pricing.ServerTypes {
 		for _, serverPricing := range serverType.Pricings {
-			serverGross, err := strconv.ParseFloat(serverPricing.Monthly.Gross, 64)
-			if err != nil {
+			if gross, err := strconv.ParseFloat(serverPricing.Monthly.Gross, 64); err != nil {
 				level.Error(c.logger).Log(
 					"msg", "Failed to parse server costs",
 					"err", err,
 				)
 
 				c.failures.WithLabelValues("pricing").Inc()
-				return
+			} else {
+				ch <- prometheus.MustNewConstMetric(
+					c.Servers,
+					prometheus.GaugeValue,
+					gross,
+					serverPricing.Monthly.Currency,
+					"gross",
+					serverType.ServerType.Name,
+					serverPricing.Location.Name,
+				)
 			}
 
-			serverNet, err := strconv.ParseFloat(serverPricing.Monthly.Net, 64)
-			if err != nil {
+			if net, err := strconv.ParseFloat(serverPricing.Monthly.Net, 64); err != nil {
 				level.Error(c.logger).Log(
 					"msg", "Failed to parse server costs",
 					"err", err,
 				)
 
 				c.failures.WithLabelValues("pricing").Inc()
-				return
+			} else {
+				ch <- prometheus.MustNewConstMetric(
+					c.Servers,
+					prometheus.GaugeValue,
+					net,
+					serverPricing.Monthly.Currency,
+					"net",
+					serverType.ServerType.Name,
+					serverPricing.Location.Name,
+				)
 			}
-
-			ch <- prometheus.MustNewConstMetric(
-				c.Servers,
-				prometheus.GaugeValue,
-				serverGross,
-				serverPricing.Monthly.Currency,
-				"gross",
-				serverType.ServerType.Name,
-				serverPricing.Location.Name,
-			)
-
-			ch <- prometheus.MustNewConstMetric(
-				c.Servers,
-				prometheus.GaugeValue,
-				serverNet,
-				serverPricing.Monthly.Currency,
-				"net",
-				serverType.ServerType.Name,
-				serverPricing.Location.Name,
-			)
 		}
 	}
 
 	for _, lbType := range pricing.LoadBalancerTypes {
 		for _, lbPricing := range lbType.Pricings {
-			lbGross, err := strconv.ParseFloat(lbPricing.Monthly.Gross, 64)
-			if err != nil {
+			if gross, err := strconv.ParseFloat(lbPricing.Monthly.Gross, 64); err != nil {
 				level.Error(c.logger).Log(
 					"msg", "Failed to parse server costs",
 					"err", err,
 				)
 
 				c.failures.WithLabelValues("pricing").Inc()
-				return
+			} else {
+				ch <- prometheus.MustNewConstMetric(
+					c.LoadBalancers,
+					prometheus.GaugeValue,
+					gross,
+					lbPricing.Monthly.Currency,
+					"gross",
+					lbType.LoadBalancerType.Name,
+					lbPricing.Location.Name,
+				)
 			}
 
-			lbNet, err := strconv.ParseFloat(lbPricing.Monthly.Net, 64)
-			if err != nil {
+			if net, err := strconv.ParseFloat(lbPricing.Monthly.Net, 64); err != nil {
 				level.Error(c.logger).Log(
 					"msg", "Failed to parse server costs",
 					"err", err,
 				)
 
 				c.failures.WithLabelValues("pricing").Inc()
-				return
+			} else {
+				ch <- prometheus.MustNewConstMetric(
+					c.LoadBalancers,
+					prometheus.GaugeValue,
+					net,
+					lbPricing.Monthly.Currency,
+					"net",
+					lbType.LoadBalancerType.Name,
+					lbPricing.Location.Name,
+				)
 			}
-
-			ch <- prometheus.MustNewConstMetric(
-				c.LoadBalancers,
-				prometheus.GaugeValue,
-				lbGross,
-				lbPricing.Monthly.Currency,
-				"gross",
-				lbType.LoadBalancerType.Name,
-				lbPricing.Location.Name,
-			)
-
-			ch <- prometheus.MustNewConstMetric(
-				c.LoadBalancers,
-				prometheus.GaugeValue,
-				lbNet,
-				lbPricing.Monthly.Currency,
-				"net",
-				lbType.LoadBalancerType.Name,
-				lbPricing.Location.Name,
-			)
 		}
 	}
 

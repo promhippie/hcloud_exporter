@@ -260,39 +260,73 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 
 		for _, pricing := range server.ServerType.Pricings {
 			if server.Datacenter.Location.Name == pricing.Location.Name {
-				hourlyNet, _ := strconv.ParseFloat(pricing.Hourly.Net, 64)
-				hourlyGross, _ := strconv.ParseFloat(pricing.Hourly.Gross, 64)
+				if net, err := strconv.ParseFloat(pricing.Hourly.Net, 64); err != nil {
+					level.Error(c.logger).Log(
+						"msg", "Failed to parse hourly server type net costs",
+						"name", server.Name,
+						"err", err,
+					)
 
-				ch <- prometheus.MustNewConstMetric(
-					c.PriceHourly,
-					prometheus.GaugeValue,
-					hourlyNet,
-					labelsNet...,
-				)
+					c.failures.WithLabelValues("server").Inc()
+				} else {
+					ch <- prometheus.MustNewConstMetric(
+						c.PriceHourly,
+						prometheus.GaugeValue,
+						net,
+						labelsNet...,
+					)
+				}
 
-				ch <- prometheus.MustNewConstMetric(
-					c.PriceHourly,
-					prometheus.GaugeValue,
-					hourlyGross,
-					labelsGross...,
-				)
+				if gross, err := strconv.ParseFloat(pricing.Hourly.Gross, 64); err != nil {
+					level.Error(c.logger).Log(
+						"msg", "Failed to parse hourly server type gross costs",
+						"name", server.Name,
+						"err", err,
+					)
 
-				monthlyNet, _ := strconv.ParseFloat(pricing.Monthly.Net, 64)
-				monthlyGross, _ := strconv.ParseFloat(pricing.Monthly.Gross, 64)
+					c.failures.WithLabelValues("server").Inc()
+				} else {
+					ch <- prometheus.MustNewConstMetric(
+						c.PriceHourly,
+						prometheus.GaugeValue,
+						gross,
+						labelsGross...,
+					)
+				}
 
-				ch <- prometheus.MustNewConstMetric(
-					c.PriceMonthly,
-					prometheus.GaugeValue,
-					monthlyNet,
-					labelsNet...,
-				)
+				if net, err := strconv.ParseFloat(pricing.Monthly.Net, 64); err != nil {
+					level.Error(c.logger).Log(
+						"msg", "Failed to parse monthly server type net costs",
+						"name", server.Name,
+						"err", err,
+					)
 
-				ch <- prometheus.MustNewConstMetric(
-					c.PriceMonthly,
-					prometheus.GaugeValue,
-					monthlyGross,
-					labelsGross...,
-				)
+					c.failures.WithLabelValues("server").Inc()
+				} else {
+					ch <- prometheus.MustNewConstMetric(
+						c.PriceMonthly,
+						prometheus.GaugeValue,
+						net,
+						labelsNet...,
+					)
+				}
+
+				if gross, err := strconv.ParseFloat(pricing.Monthly.Gross, 64); err != nil {
+					level.Error(c.logger).Log(
+						"msg", "Failed to parse monthly server type gross costs",
+						"name", server.Name,
+						"err", err,
+					)
+
+					c.failures.WithLabelValues("server").Inc()
+				} else {
+					ch <- prometheus.MustNewConstMetric(
+						c.PriceMonthly,
+						prometheus.GaugeValue,
+						gross,
+						labelsGross...,
+					)
+				}
 			}
 		}
 	}
