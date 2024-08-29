@@ -25,14 +25,17 @@ hcloud_pricing_image{currency, vat}
 hcloud_pricing_loadbalancer_type{currency, vat, type, location}
 : The costs of a load balancer by type and location per month
 
+hcloud_pricing_loadbalancer_type_traffic{currency, vat, type, location}
+: The costs of additional traffic per TB for a load balancer by type and location per month
+
 hcloud_pricing_server_backup{}
 : Will increase base server costs by specific percentage if server backups are enabled
 
 hcloud_pricing_server_type{currency, vat, type, location}
 : The costs of a server by type and location per month
 
-hcloud_pricing_traffic{currency, vat}
-: The cost of additional traffic per TB
+hcloud_pricing_server_type_traffic{currency, vat, type, location}
+: The costs of additional traffic per TB for a server by type and location per month
 
 hcloud_pricing_volume{currency, vat}
 : The cost of a volume per GB/month
