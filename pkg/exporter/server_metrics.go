@@ -147,7 +147,7 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 	defer cancel()
 
 	now := time.Now()
-	servers, _, err := c.client.Server.List(ctx, hcloud.ServerListOpts{
+	servers, err := c.client.Server.AllWithOpts(ctx, hcloud.ServerListOpts{
 		Status: []hcloud.ServerStatus{
 			hcloud.ServerStatusRunning,
 		},
