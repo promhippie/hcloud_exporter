@@ -1,3 +1,22 @@
+# Changelog for unreleased
+
+The following sections list the changes for unreleased.
+
+## Summary
+
+ * Chg #258: Switch to official logging library
+
+## Details
+
+ * Change #258: Switch to official logging library
+
+   Since there have been a structured logger part of the Go standard library we
+   thought it's time to replace the library with that. Be aware that log messages
+   should change a little bit.
+
+   https://github.com/promhippie/hcloud_exporter/issues/258
+
+
 # Changelog for 2.0.0
 
 The following sections list the changes for 2.0.0.
