@@ -2,12 +2,11 @@ package exporter
 
 import (
 	"context"
+	"log/slog"
 	"strconv"
 	"sync"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
@@ -16,7 +15,7 @@ import (
 // ServerMetricsCollector collects the servers metrics.
 type ServerMetricsCollector struct {
 	client   *hcloud.Client
-	logger   log.Logger
+	logger   *slog.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
 	config   config.Target
@@ -33,7 +32,7 @@ type ServerMetricsCollector struct {
 }
 
 // NewServerMetricsCollector returns a new ServerMetricsCollector.
-func NewServerMetricsCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *ServerMetricsCollector {
+func NewServerMetricsCollector(logger *slog.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *ServerMetricsCollector {
 	if failures != nil {
 		failures.WithLabelValues("server_metrics").Add(0)
 	}
@@ -43,7 +42,7 @@ func NewServerMetricsCollector(logger log.Logger, client *hcloud.Client, failure
 	networkLabels := append(labels, "interface")
 	return &ServerMetricsCollector{
 		client:   client,
-		logger:   log.With(logger, "collector", "server-metrics"),
+		logger:   logger.With("collector", "server-metrics"),
 		failures: failures,
 		duration: duration,
 		config:   cfg,
@@ -154,8 +153,7 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 	})
 
 	if err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to fetch servers",
+		c.logger.Error("Failed to fetch servers",
 			"err", err,
 		)
 
@@ -163,8 +161,7 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Fetched online servers",
+	c.logger.Debug("Fetched online servers",
 		"count", len(servers),
 	)
 
@@ -183,7 +180,7 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 
 		go func(server *hcloud.Server) {
 			defer wg.Done()
-			logger := log.With(c.logger, "server", server.Name)
+			logger := c.logger.With("server", server.Name)
 
 			metrics, _, err := c.client.Server.GetMetrics(
 				ctx,
@@ -200,8 +197,7 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 			)
 
 			if err != nil {
-				level.Error(logger).Log(
-					"msg", "Failed to fetch server metrics",
+				logger.Error("Failed to fetch server metrics",
 					"err", err,
 				)
 
@@ -306,8 +302,7 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 
 	wg.Wait()
 
-	level.Debug(c.logger).Log(
-		"msg", "Processed server metrics collector",
+	c.logger.Debug("Processed server metrics collector",
 		"duration", time.Since(now),
 	)
 

@@ -2,11 +2,10 @@ package exporter
 
 import (
 	"context"
+	"log/slog"
 	"strconv"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
@@ -15,7 +14,7 @@ import (
 // PricingCollector collects metrics about the prices for additional products: Image, FloatingIP, Traffic and ServerBackup.
 type PricingCollector struct {
 	client   *hcloud.Client
-	logger   log.Logger
+	logger   *slog.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
 	config   config.Target
@@ -32,7 +31,7 @@ type PricingCollector struct {
 }
 
 // NewPricingCollector returns a new PricingCollector.
-func NewPricingCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *PricingCollector {
+func NewPricingCollector(logger *slog.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *PricingCollector {
 	if failures != nil {
 		failures.WithLabelValues("pricing").Add(0)
 	}
@@ -40,7 +39,7 @@ func NewPricingCollector(logger log.Logger, client *hcloud.Client, failures *pro
 	labels := []string{"currency", "vat"}
 	return &PricingCollector{
 		client:   client,
-		logger:   log.With(logger, "collector", "pricing"),
+		logger:   logger.With("collector", "pricing"),
 		failures: failures,
 		duration: duration,
 		config:   cfg,
@@ -131,8 +130,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 	pricing, _, err := c.client.Pricing.Get(ctx)
 
 	if err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to fetch pricing",
+		c.logger.Error("Failed to fetch pricing",
 			"err", err,
 		)
 
@@ -140,13 +138,10 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Fetched pricing",
-	)
+	c.logger.Debug("Fetched pricing")
 
 	if gross, err := strconv.ParseFloat(pricing.Image.PerGBMonth.Gross, 64); err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to parse image costs",
+		c.logger.Error("Failed to parse image costs",
 			"err", err,
 		)
 
@@ -162,8 +157,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 
 	if net, err := strconv.ParseFloat(pricing.Image.PerGBMonth.Net, 64); err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to parse image costs",
+		c.logger.Error("Failed to parse image costs",
 			"err", err,
 		)
 
@@ -179,8 +173,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 
 	if gross, err := strconv.ParseFloat(pricing.FloatingIP.Monthly.Gross, 64); err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to parse floating IP costs",
+		c.logger.Error("Failed to parse floating IP costs",
 			"err", err,
 		)
 
@@ -196,8 +189,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 
 	if net, err := strconv.ParseFloat(pricing.FloatingIP.Monthly.Net, 64); err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to parse floating IP costs",
+		c.logger.Error("Failed to parse floating IP costs",
 			"err", err,
 		)
 
@@ -213,8 +205,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 
 	if backup, err := strconv.ParseFloat(pricing.ServerBackup.Percentage, 64); err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to parse server backup costs",
+		c.logger.Error("Failed to parse server backup costs",
 			"err", err,
 		)
 
@@ -228,8 +219,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 
 	if gross, err := strconv.ParseFloat(pricing.Volume.PerGBMonthly.Gross, 64); err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to parse volume costs",
+		c.logger.Error("Failed to parse volume costs",
 			"err", err,
 		)
 
@@ -245,8 +235,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 
 	if net, err := strconv.ParseFloat(pricing.Volume.PerGBMonthly.Net, 64); err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to parse volume costs",
+		c.logger.Error("Failed to parse volume costs",
 			"err", err,
 		)
 
@@ -264,8 +253,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 	for _, serverType := range pricing.ServerTypes {
 		for _, serverPricing := range serverType.Pricings {
 			if gross, err := strconv.ParseFloat(serverPricing.PerTBTraffic.Gross, 64); err != nil {
-				level.Error(c.logger).Log(
-					"msg", "Failed to parse traffic costs",
+				c.logger.Error("Failed to parse traffic costs",
 					"service", "server",
 					"type", serverType.ServerType.Name,
 					"locations", serverPricing.Location.Name,
@@ -286,8 +274,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 
 			if net, err := strconv.ParseFloat(serverPricing.PerTBTraffic.Net, 64); err != nil {
-				level.Error(c.logger).Log(
-					"msg", "Failed to parse traffic costs",
+				c.logger.Error("Failed to parse traffic costs",
 					"service", "server",
 					"type", serverType.ServerType.Name,
 					"locations", serverPricing.Location.Name,
@@ -308,8 +295,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 
 			if gross, err := strconv.ParseFloat(serverPricing.Monthly.Gross, 64); err != nil {
-				level.Error(c.logger).Log(
-					"msg", "Failed to parse server costs",
+				c.logger.Error("Failed to parse server costs",
 					"err", err,
 				)
 
@@ -327,8 +313,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 
 			if net, err := strconv.ParseFloat(serverPricing.Monthly.Net, 64); err != nil {
-				level.Error(c.logger).Log(
-					"msg", "Failed to parse server costs",
+				c.logger.Error("Failed to parse server costs",
 					"err", err,
 				)
 
@@ -350,8 +335,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 	for _, lbType := range pricing.LoadBalancerTypes {
 		for _, lbPricing := range lbType.Pricings {
 			if gross, err := strconv.ParseFloat(lbPricing.PerTBTraffic.Gross, 64); err != nil {
-				level.Error(c.logger).Log(
-					"msg", "Failed to parse traffic costs",
+				c.logger.Error("Failed to parse traffic costs",
 					"service", "server",
 					"type", lbType.LoadBalancerType.Name,
 					"locations", lbPricing.Location.Name,
@@ -372,8 +356,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 
 			if net, err := strconv.ParseFloat(lbPricing.PerTBTraffic.Net, 64); err != nil {
-				level.Error(c.logger).Log(
-					"msg", "Failed to parse traffic costs",
+				c.logger.Error("Failed to parse traffic costs",
 					"service", "server",
 					"type", lbType.LoadBalancerType.Name,
 					"locations", lbPricing.Location.Name,
@@ -394,8 +377,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 
 			if gross, err := strconv.ParseFloat(lbPricing.Monthly.Gross, 64); err != nil {
-				level.Error(c.logger).Log(
-					"msg", "Failed to parse server costs",
+				c.logger.Error("Failed to parse load balancer costs",
 					"err", err,
 				)
 
@@ -413,8 +395,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 
 			if net, err := strconv.ParseFloat(lbPricing.Monthly.Net, 64); err != nil {
-				level.Error(c.logger).Log(
-					"msg", "Failed to parse server costs",
+				c.logger.Error("Failed to parse load balancer costs",
 					"err", err,
 				)
 
@@ -433,8 +414,7 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 		}
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Processed pricing collector",
+	c.logger.Debug("Processed pricing collector",
 		"duration", time.Since(now),
 	)
 

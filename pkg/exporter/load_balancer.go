@@ -2,11 +2,10 @@ package exporter
 
 import (
 	"context"
+	"log/slog"
 	"strconv"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
@@ -15,7 +14,7 @@ import (
 // LoadBalancerCollector collects metrics about the load balancers.
 type LoadBalancerCollector struct {
 	client   *hcloud.Client
-	logger   log.Logger
+	logger   *slog.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
 	config   config.Target
@@ -42,7 +41,7 @@ type LoadBalancerCollector struct {
 }
 
 // NewLoadBalancerCollector returns a new LoadBalancerCollector.
-func NewLoadBalancerCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *LoadBalancerCollector {
+func NewLoadBalancerCollector(logger *slog.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *LoadBalancerCollector {
 	if failures != nil {
 		failures.WithLabelValues("load_balancer").Add(0)
 	}
@@ -50,7 +49,7 @@ func NewLoadBalancerCollector(logger log.Logger, client *hcloud.Client, failures
 	labels := []string{"id", "name", "datacenter"}
 	return &LoadBalancerCollector{
 		client:   client,
-		logger:   log.With(logger, "collector", "load-balancer"),
+		logger:   logger.With("collector", "load-balancer"),
 		failures: failures,
 		duration: duration,
 		config:   cfg,
@@ -229,8 +228,7 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 	lbs, err := c.client.LoadBalancer.All(ctx)
 
 	if err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to fetch load balancers",
+		c.logger.Error("Failed to fetch load balancers",
 			"err", err,
 		)
 
@@ -238,8 +236,7 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Fetched load balancers",
+	c.logger.Debug("Fetched load balancers",
 		"count", len(lbs),
 	)
 
@@ -416,8 +413,7 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 		})
 
 		if err != nil {
-			level.Error(c.logger).Log(
-				"msg", "Failed to fetch load balancer metrics",
+			c.logger.Error("Failed to fetch load balancer metrics",
 				"load-balancer", lb.Name,
 				"err", err,
 			)
@@ -472,8 +468,7 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Processed load balancer collector",
+	c.logger.Debug("Processed load balancer collector",
 		"duration", time.Since(now),
 	)
 
@@ -493,8 +488,7 @@ func (c *LoadBalancerCollector) addTimeSeries(
 			value, err := strconv.ParseFloat(metric[0].Value, 64)
 
 			if err != nil {
-				level.Error(c.logger).Log(
-					"msg", "Failed to parse load balancer metric",
+				c.logger.Error("Failed to parse load balancer metric",
 					"load-balancer", lb.Name,
 					"name", name,
 					"err", err,

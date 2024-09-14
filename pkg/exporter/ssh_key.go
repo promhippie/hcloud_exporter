@@ -2,11 +2,10 @@ package exporter
 
 import (
 	"context"
+	"log/slog"
 	"strconv"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
@@ -15,7 +14,7 @@ import (
 // SSHKeyCollector collects metrics about the SSH keys.
 type SSHKeyCollector struct {
 	client   *hcloud.Client
-	logger   log.Logger
+	logger   *slog.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
 	config   config.Target
@@ -24,7 +23,7 @@ type SSHKeyCollector struct {
 }
 
 // NewSSHKeyCollector returns a new SSHKeyCollector.
-func NewSSHKeyCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *SSHKeyCollector {
+func NewSSHKeyCollector(logger *slog.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *SSHKeyCollector {
 	if failures != nil {
 		failures.WithLabelValues("ssh_key").Add(0)
 	}
@@ -32,7 +31,7 @@ func NewSSHKeyCollector(logger log.Logger, client *hcloud.Client, failures *prom
 	labels := []string{"id", "name", "fingerprint"}
 	return &SSHKeyCollector{
 		client:   client,
-		logger:   log.With(logger, "collector", "ssh-key"),
+		logger:   logger.With("collector", "ssh-key"),
 		failures: failures,
 		duration: duration,
 		config:   cfg,
@@ -67,8 +66,7 @@ func (c *SSHKeyCollector) Collect(ch chan<- prometheus.Metric) {
 	keys, err := c.client.SSHKey.All(ctx)
 
 	if err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to fetch SSH keys",
+		c.logger.Error("Failed to fetch SSH keys",
 			"err", err,
 		)
 
@@ -76,8 +74,7 @@ func (c *SSHKeyCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Fetched SSH keys",
+	c.logger.Debug("Fetched SSH keys",
 		"count", len(keys),
 	)
 
@@ -96,8 +93,7 @@ func (c *SSHKeyCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Processed SSH key collector",
+	c.logger.Debug("Processed SSH key collector",
 		"duration", time.Since(now),
 	)
 

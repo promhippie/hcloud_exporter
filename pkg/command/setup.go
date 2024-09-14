@@ -1,42 +1,40 @@
 package command
 
 import (
+	"log/slog"
 	"os"
 	"strings"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
 )
 
-func setupLogger(cfg *config.Config) log.Logger {
-	var logger log.Logger
-
+func setupLogger(cfg *config.Config) *slog.Logger {
 	if cfg.Logs.Pretty {
-		logger = log.NewSyncLogger(
-			log.NewLogfmtLogger(os.Stdout),
-		)
-	} else {
-		logger = log.NewSyncLogger(
-			log.NewJSONLogger(os.Stdout),
+		return slog.New(
+			slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+				Level: loggerLevel(cfg),
+			}),
 		)
 	}
 
+	return slog.New(
+		slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+			Level: loggerLevel(cfg),
+		}),
+	)
+}
+
+func loggerLevel(cfg *config.Config) slog.Leveler {
 	switch strings.ToLower(cfg.Logs.Level) {
 	case "error":
-		logger = level.NewFilter(logger, level.AllowError())
+		return slog.LevelError
 	case "warn":
-		logger = level.NewFilter(logger, level.AllowWarn())
+		return slog.LevelWarn
 	case "info":
-		logger = level.NewFilter(logger, level.AllowInfo())
+		return slog.LevelInfo
 	case "debug":
-		logger = level.NewFilter(logger, level.AllowDebug())
-	default:
-		logger = level.NewFilter(logger, level.AllowInfo())
+		return slog.LevelDebug
 	}
 
-	return log.With(
-		logger,
-		"ts", log.DefaultTimestampUTC,
-	)
+	return slog.LevelInfo
 }
