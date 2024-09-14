@@ -5,6 +5,7 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 	"reflect"
 	"sort"
@@ -26,37 +27,37 @@ func main() {
 
 	collectors = append(
 		collectors,
-		exporter.NewFloatingIPCollector(nil, nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewFloatingIPCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewImageCollector(nil, nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewImageCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewPricingCollector(nil, nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewPricingCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewServerCollector(nil, nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewServerCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewServerMetricsCollector(nil, nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewServerMetricsCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewSSHKeyCollector(nil, nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewSSHKeyCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewVolumeCollector(nil, nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewVolumeCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
 	)
 
 	metrics := make([]metric, 0)
