@@ -2,11 +2,10 @@ package exporter
 
 import (
 	"context"
+	"log/slog"
 	"strconv"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
@@ -15,7 +14,7 @@ import (
 // ImageCollector collects metrics about the images.
 type ImageCollector struct {
 	client   *hcloud.Client
-	logger   log.Logger
+	logger   *slog.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
 	config   config.Target
@@ -28,7 +27,7 @@ type ImageCollector struct {
 }
 
 // NewImageCollector returns a new ImageCollector.
-func NewImageCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *ImageCollector {
+func NewImageCollector(logger *slog.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *ImageCollector {
 	if failures != nil {
 		failures.WithLabelValues("image").Add(0)
 	}
@@ -36,7 +35,7 @@ func NewImageCollector(logger log.Logger, client *hcloud.Client, failures *prome
 	labels := []string{"id", "name", "type", "server", "flavor", "version"}
 	return &ImageCollector{
 		client:   client,
-		logger:   log.With(logger, "collector", "image"),
+		logger:   logger.With("collector", "image"),
 		failures: failures,
 		duration: duration,
 		config:   cfg,
@@ -103,8 +102,7 @@ func (c *ImageCollector) Collect(ch chan<- prometheus.Metric) {
 	images, err := c.client.Image.All(ctx)
 
 	if err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to fetch images",
+		c.logger.Error("Failed to fetch images",
 			"err", err,
 		)
 
@@ -112,8 +110,7 @@ func (c *ImageCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Fetched images",
+	c.logger.Debug("Fetched images",
 		"count", len(images),
 	)
 
@@ -182,8 +179,7 @@ func (c *ImageCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Processed image collector",
+	c.logger.Debug("Processed image collector",
 		"duration", time.Since(now),
 	)
 

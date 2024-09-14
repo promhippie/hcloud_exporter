@@ -2,11 +2,10 @@ package exporter
 
 import (
 	"context"
+	"log/slog"
 	"strconv"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
@@ -15,7 +14,7 @@ import (
 // ServerCollector collects metrics about the servers.
 type ServerCollector struct {
 	client   *hcloud.Client
-	logger   log.Logger
+	logger   *slog.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
 	config   config.Target
@@ -34,7 +33,7 @@ type ServerCollector struct {
 }
 
 // NewServerCollector returns a new ServerCollector.
-func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *ServerCollector {
+func NewServerCollector(logger *slog.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *ServerCollector {
 	if failures != nil {
 		failures.WithLabelValues("server").Add(0)
 	}
@@ -43,7 +42,7 @@ func NewServerCollector(logger log.Logger, client *hcloud.Client, failures *prom
 	pricingLabels := append(labels, "vat")
 	return &ServerCollector{
 		client:   client,
-		logger:   log.With(logger, "collector", "server"),
+		logger:   logger.With("collector", "server"),
 		failures: failures,
 		duration: duration,
 		config:   cfg,
@@ -158,8 +157,7 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 	servers, err := c.client.Server.All(ctx)
 
 	if err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to fetch servers",
+		c.logger.Error("Failed to fetch servers",
 			"err", err,
 		)
 
@@ -167,8 +165,7 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Fetched servers",
+	c.logger.Debug("Fetched servers",
 		"count", len(servers),
 	)
 
@@ -261,8 +258,7 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 		for _, pricing := range server.ServerType.Pricings {
 			if server.Datacenter.Location.Name == pricing.Location.Name {
 				if net, err := strconv.ParseFloat(pricing.Hourly.Net, 64); err != nil {
-					level.Error(c.logger).Log(
-						"msg", "Failed to parse hourly server type net costs",
+					c.logger.Error("Failed to parse hourly server type net costs",
 						"name", server.Name,
 						"err", err,
 					)
@@ -278,8 +274,7 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 				}
 
 				if gross, err := strconv.ParseFloat(pricing.Hourly.Gross, 64); err != nil {
-					level.Error(c.logger).Log(
-						"msg", "Failed to parse hourly server type gross costs",
+					c.logger.Error("Failed to parse hourly server type gross costs",
 						"name", server.Name,
 						"err", err,
 					)
@@ -295,8 +290,7 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 				}
 
 				if net, err := strconv.ParseFloat(pricing.Monthly.Net, 64); err != nil {
-					level.Error(c.logger).Log(
-						"msg", "Failed to parse monthly server type net costs",
+					c.logger.Error("Failed to parse monthly server type net costs",
 						"name", server.Name,
 						"err", err,
 					)
@@ -312,8 +306,7 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 				}
 
 				if gross, err := strconv.ParseFloat(pricing.Monthly.Gross, 64); err != nil {
-					level.Error(c.logger).Log(
-						"msg", "Failed to parse monthly server type gross costs",
+					c.logger.Error("Failed to parse monthly server type gross costs",
 						"name", server.Name,
 						"err", err,
 					)
@@ -331,8 +324,7 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 		}
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Processed server collector",
+	c.logger.Debug("Processed server collector",
 		"duration", time.Since(now),
 	)
 

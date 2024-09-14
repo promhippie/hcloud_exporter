@@ -5,7 +5,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-kit/log/level"
 	"github.com/promhippie/hcloud_exporter/pkg/action"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
 	"github.com/promhippie/hcloud_exporter/pkg/version"
@@ -34,10 +33,7 @@ func Run() error {
 			logger := setupLogger(cfg)
 
 			if cfg.Target.Token == "" {
-				level.Error(logger).Log(
-					"msg", "Missing required hcloud.token",
-				)
-
+				logger.Error("Missing required hcloud.token")
 				return fmt.Errorf("missing required hcloud.token")
 			}
 

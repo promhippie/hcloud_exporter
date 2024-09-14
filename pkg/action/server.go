@@ -3,14 +3,13 @@ package action
 import (
 	"context"
 	"io"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/oklog/run"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -22,9 +21,8 @@ import (
 )
 
 // Server handles the server sub-command.
-func Server(cfg *config.Config, logger log.Logger) error {
-	level.Info(logger).Log(
-		"msg", "Launching HetznerCloud Exporter",
+func Server(cfg *config.Config, logger *slog.Logger) error {
+	logger.Info("Launching HetznerCloud Exporter",
 		"version", version.String,
 		"revision", version.Revision,
 		"date", version.Date,
@@ -34,8 +32,7 @@ func Server(cfg *config.Config, logger log.Logger) error {
 	token, err := config.Value(cfg.Target.Token)
 
 	if err != nil {
-		level.Error(logger).Log(
-			"msg", "Failed to load token from file",
+		logger.Error("Failed to load token from file",
 			"err", err,
 		)
 
@@ -63,9 +60,8 @@ func Server(cfg *config.Config, logger log.Logger) error {
 		}
 
 		gr.Add(func() error {
-			level.Info(logger).Log(
-				"msg", "Starting metrics server",
-				"addr", cfg.Server.Addr,
+			logger.Info("Starting metrics server",
+				"address", cfg.Server.Addr,
 			)
 
 			return web.ListenAndServe(
@@ -82,16 +78,14 @@ func Server(cfg *config.Config, logger log.Logger) error {
 			defer cancel()
 
 			if err := server.Shutdown(ctx); err != nil {
-				level.Error(logger).Log(
-					"msg", "Failed to shutdown metrics gracefully",
+				logger.Error("Failed to shutdown metrics gracefully",
 					"err", err,
 				)
 
 				return
 			}
 
-			level.Info(logger).Log(
-				"msg", "Metrics shutdown gracefully",
+			logger.Info("Metrics shutdown gracefully",
 				"reason", reason,
 			)
 		})
@@ -114,7 +108,7 @@ func Server(cfg *config.Config, logger log.Logger) error {
 	return gr.Run()
 }
 
-func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.Mux {
+func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *chi.Mux {
 	mux := chi.NewRouter()
 	mux.Use(middleware.Recoverer(logger))
 	mux.Use(middleware.RealIP)
@@ -126,9 +120,7 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	}
 
 	if cfg.Collector.FloatingIPs {
-		level.Debug(logger).Log(
-			"msg", "Floating IP collector registered",
-		)
+		logger.Debug("Floating IP collector registered")
 
 		registry.MustRegister(exporter.NewFloatingIPCollector(
 			logger,
@@ -140,9 +132,7 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	}
 
 	if cfg.Collector.Images {
-		level.Debug(logger).Log(
-			"msg", "Image collector registered",
-		)
+		logger.Debug("Image collector registered")
 
 		registry.MustRegister(exporter.NewImageCollector(
 			logger,
@@ -154,9 +144,7 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	}
 
 	if cfg.Collector.Pricing {
-		level.Debug(logger).Log(
-			"msg", "Pricing collector registered",
-		)
+		logger.Debug("Pricing collector registered")
 
 		registry.MustRegister(exporter.NewPricingCollector(
 			logger,
@@ -168,9 +156,7 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	}
 
 	if cfg.Collector.Servers {
-		level.Debug(logger).Log(
-			"msg", "Server collector registered",
-		)
+		logger.Debug("Server collector registered")
 
 		registry.MustRegister(exporter.NewServerCollector(
 			logger,
@@ -182,9 +168,7 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	}
 
 	if cfg.Collector.ServerMetrics {
-		level.Debug(logger).Log(
-			"msg", "Server metrics collector registered",
-		)
+		logger.Debug("Server metrics collector registered")
 
 		registry.MustRegister(exporter.NewServerMetricsCollector(
 			logger,
@@ -196,9 +180,7 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	}
 
 	if cfg.Collector.LoadBalancers {
-		level.Debug(logger).Log(
-			"msg", "Load balancer collector registered",
-		)
+		logger.Debug("Load balancer collector registered")
 
 		registry.MustRegister(exporter.NewLoadBalancerCollector(
 			logger,
@@ -210,9 +192,7 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	}
 
 	if cfg.Collector.SSHKeys {
-		level.Debug(logger).Log(
-			"msg", "SSH key collector registered",
-		)
+		logger.Debug("SSH key collector registered")
 
 		registry.MustRegister(exporter.NewSSHKeyCollector(
 			logger,
@@ -224,9 +204,7 @@ func handler(cfg *config.Config, logger log.Logger, client *hcloud.Client) *chi.
 	}
 
 	if cfg.Collector.Volumes {
-		level.Debug(logger).Log(
-			"msg", "Volumes collector registered",
-		)
+		logger.Debug("Volumes collector registered")
 
 		registry.MustRegister(exporter.NewVolumeCollector(
 			logger,

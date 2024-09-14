@@ -2,11 +2,10 @@ package exporter
 
 import (
 	"context"
+	"log/slog"
 	"strconv"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
@@ -15,7 +14,7 @@ import (
 // VolumeCollector collects metrics about the volumes.
 type VolumeCollector struct {
 	client   *hcloud.Client
-	logger   log.Logger
+	logger   *slog.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
 	config   config.Target
@@ -27,7 +26,7 @@ type VolumeCollector struct {
 }
 
 // NewVolumeCollector returns a new VolumeCollector.
-func NewVolumeCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *VolumeCollector {
+func NewVolumeCollector(logger *slog.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *VolumeCollector {
 	if failures != nil {
 		failures.WithLabelValues("volume").Add(0)
 	}
@@ -35,7 +34,7 @@ func NewVolumeCollector(logger log.Logger, client *hcloud.Client, failures *prom
 	labels := []string{"id", "server", "location", "name"}
 	return &VolumeCollector{
 		client:   client,
-		logger:   log.With(logger, "collector", "volume"),
+		logger:   logger.With("collector", "volume"),
 		failures: failures,
 		duration: duration,
 		config:   cfg,
@@ -94,8 +93,7 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 	volumes, err := c.client.Volume.All(ctx)
 
 	if err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to fetch volumes",
+		c.logger.Error("Failed to fetch volumes",
 			"err", err,
 		)
 
@@ -103,8 +101,7 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Fetched volumes",
+	c.logger.Debug("Fetched volumes",
 		"count", len(volumes),
 	)
 
@@ -163,8 +160,7 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Processed volume collector",
+	c.logger.Debug("Processed volume collector",
 		"duration", time.Since(now),
 	)
 

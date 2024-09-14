@@ -2,11 +2,10 @@ package exporter
 
 import (
 	"context"
+	"log/slog"
 	"strconv"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
@@ -15,7 +14,7 @@ import (
 // FloatingIPCollector collects metrics about the floating IPs.
 type FloatingIPCollector struct {
 	client   *hcloud.Client
-	logger   log.Logger
+	logger   *slog.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
 	config   config.Target
@@ -24,7 +23,7 @@ type FloatingIPCollector struct {
 }
 
 // NewFloatingIPCollector returns a new FloatingIPCollector.
-func NewFloatingIPCollector(logger log.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *FloatingIPCollector {
+func NewFloatingIPCollector(logger *slog.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *FloatingIPCollector {
 	if failures != nil {
 		failures.WithLabelValues("floating_ip").Add(0)
 	}
@@ -32,7 +31,7 @@ func NewFloatingIPCollector(logger log.Logger, client *hcloud.Client, failures *
 	labels := []string{"id", "server", "location", "type", "ip"}
 	return &FloatingIPCollector{
 		client:   client,
-		logger:   log.With(logger, "collector", "floating-ip"),
+		logger:   logger.With("collector", "floating-ip"),
 		failures: failures,
 		duration: duration,
 		config:   cfg,
@@ -67,8 +66,7 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 	ips, err := c.client.FloatingIP.All(ctx)
 
 	if err != nil {
-		level.Error(c.logger).Log(
-			"msg", "Failed to fetch floating IPs",
+		c.logger.Error("Failed to fetch floating IPs",
 			"err", err,
 		)
 
@@ -76,8 +74,7 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Fetched floating IPs",
+	c.logger.Debug("Fetched floating IPs",
 		"count", len(ips),
 	)
 
@@ -108,8 +105,7 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
-	level.Debug(c.logger).Log(
-		"msg", "Processed floating IP collector",
+	c.logger.Debug("Processed floating IP collector",
 		"duration", time.Since(now),
 	)
 
