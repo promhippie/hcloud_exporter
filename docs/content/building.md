@@ -16,7 +16,7 @@ cd hcloud_exporter/
 {{< / highlight >}}
 
 All required tool besides Go itself are bundled, all you need is part of the
-`Makfile`:
+`Makefile`:
 
 {{< highlight txt >}}
 make generate build
