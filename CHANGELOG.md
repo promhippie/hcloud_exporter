@@ -1,10 +1,11 @@
-# Changelog for unreleased
+# Changelog for 2.1.0
 
-The following sections list the changes for unreleased.
+The following sections list the changes for 2.1.0.
 
 ## Summary
 
  * Chg #258: Switch to official logging library
+ * Chg #272: Add type to IP pricing and add metrics for primary IPs
 
 ## Details
 
@@ -15,6 +16,15 @@ The following sections list the changes for unreleased.
    should change a little bit.
 
    https://github.com/promhippie/hcloud_exporter/issues/258
+
+ * Change #272: Add type to IP pricing and add metrics for primary IPs
+
+   Since the client SDK has deprecated the previous handling for the pricing of IP
+   addresses we had to update the metrics to include the type and location of the
+   IPs. Besides that we have also added metrics for the pricing of the primary IP
+   addresses.
+
+   https://github.com/promhippie/hcloud_exporter/pull/272
 
 
 # Changelog for 2.0.0
