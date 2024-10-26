@@ -570,7 +570,7 @@ take a look at the <a href="https://github.com/prometheus/client_golang/blob/mas
 <dd>Size if the disk for the image in bytes</dd>
 <dt>hcloud_image_size_bytes{id, name, type, server, flavor, version}</dt>
 <dd>Size of the image in bytes</dd>
-<dt>hcloud_pricing_floating_ip{currency, vat}</dt>
+<dt>hcloud_pricing_floating_ip{currency, vat, type, location}</dt>
 <dd>The cost of one floating IP per month</dd>
 <dt>hcloud_pricing_image{currency, vat}</dt>
 <dd>The cost of an image per GB/month</dd>
@@ -578,6 +578,8 @@ take a look at the <a href="https://github.com/prometheus/client_golang/blob/mas
 <dd>The costs of a load balancer by type and location per month</dd>
 <dt>hcloud_pricing_loadbalancer_type_traffic{currency, vat, type, location}</dt>
 <dd>The costs of additional traffic per TB for a load balancer by type and location per month</dd>
+<dt>hcloud_pricing_primary_ip{currency, vat, type, location}</dt>
+<dd>The cost of one primary IP per month</dd>
 <dt>hcloud_pricing_server_backup{}</dt>
 <dd>Will increase base server costs by specific percentage if server backups are enabled</dd>
 <dt>hcloud_pricing_server_type{currency, vat, type, location}</dt>
