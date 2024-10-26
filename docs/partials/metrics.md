@@ -16,7 +16,7 @@ hcloud_image_disk_bytes{id, name, type, server, flavor, version}
 hcloud_image_size_bytes{id, name, type, server, flavor, version}
 : Size of the image in bytes
 
-hcloud_pricing_floating_ip{currency, vat}
+hcloud_pricing_floating_ip{currency, vat, type, location}
 : The cost of one floating IP per month
 
 hcloud_pricing_image{currency, vat}
@@ -27,6 +27,9 @@ hcloud_pricing_loadbalancer_type{currency, vat, type, location}
 
 hcloud_pricing_loadbalancer_type_traffic{currency, vat, type, location}
 : The costs of additional traffic per TB for a load balancer by type and location per month
+
+hcloud_pricing_primary_ip{currency, vat, type, location}
+: The cost of one primary IP per month
 
 hcloud_pricing_server_backup{}
 : Will increase base server costs by specific percentage if server backups are enabled
