@@ -20,10 +20,11 @@ type PricingCollector struct {
 	config   config.Target
 
 	Image                *prometheus.Desc
-	FloatingIP           *prometheus.Desc
 	Traffic              *prometheus.Desc
 	ServerBackup         *prometheus.Desc
 	Volume               *prometheus.Desc
+	FloatingIP           *prometheus.Desc
+	PrimaryIP            *prometheus.Desc
 	Servers              *prometheus.Desc
 	ServersTraffic       *prometheus.Desc
 	LoadBalancers        *prometheus.Desc
@@ -50,12 +51,6 @@ func NewPricingCollector(logger *slog.Logger, client *hcloud.Client, failures *p
 			labels,
 			nil,
 		),
-		FloatingIP: prometheus.NewDesc(
-			"hcloud_pricing_floating_ip",
-			"The cost of one floating IP per month",
-			labels,
-			nil,
-		),
 		ServerBackup: prometheus.NewDesc(
 			"hcloud_pricing_server_backup",
 			"Will increase base server costs by specific percentage if server backups are enabled",
@@ -66,6 +61,18 @@ func NewPricingCollector(logger *slog.Logger, client *hcloud.Client, failures *p
 			"hcloud_pricing_volume",
 			"The cost of a volume per GB/month",
 			labels,
+			nil,
+		),
+		FloatingIP: prometheus.NewDesc(
+			"hcloud_pricing_floating_ip",
+			"The cost of one floating IP per month",
+			append(labels, "type", "location"),
+			nil,
+		),
+		PrimaryIP: prometheus.NewDesc(
+			"hcloud_pricing_primary_ip",
+			"The cost of one primary IP per month",
+			append(labels, "type", "location"),
 			nil,
 		),
 		Servers: prometheus.NewDesc(
@@ -99,9 +106,10 @@ func NewPricingCollector(logger *slog.Logger, client *hcloud.Client, failures *p
 func (c *PricingCollector) Metrics() []*prometheus.Desc {
 	return []*prometheus.Desc{
 		c.Image,
-		c.FloatingIP,
 		c.ServerBackup,
 		c.Volume,
+		c.FloatingIP,
+		c.PrimaryIP,
 		c.Servers,
 		c.ServersTraffic,
 		c.LoadBalancers,
@@ -112,9 +120,10 @@ func (c *PricingCollector) Metrics() []*prometheus.Desc {
 // Describe sends the super-set of all possible descriptors of metrics collected by this Collector.
 func (c *PricingCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.Image
-	ch <- c.FloatingIP
 	ch <- c.ServerBackup
 	ch <- c.Volume
+	ch <- c.FloatingIP
+	ch <- c.PrimaryIP
 	ch <- c.Servers
 	ch <- c.ServersTraffic
 	ch <- c.LoadBalancers
@@ -172,38 +181,6 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
-	if gross, err := strconv.ParseFloat(pricing.FloatingIP.Monthly.Gross, 64); err != nil {
-		c.logger.Error("Failed to parse floating IP costs",
-			"err", err,
-		)
-
-		c.failures.WithLabelValues("pricing").Inc()
-	} else {
-		ch <- prometheus.MustNewConstMetric(
-			c.FloatingIP,
-			prometheus.GaugeValue,
-			gross,
-			pricing.FloatingIP.Monthly.Currency,
-			"gross",
-		)
-	}
-
-	if net, err := strconv.ParseFloat(pricing.FloatingIP.Monthly.Net, 64); err != nil {
-		c.logger.Error("Failed to parse floating IP costs",
-			"err", err,
-		)
-
-		c.failures.WithLabelValues("pricing").Inc()
-	} else {
-		ch <- prometheus.MustNewConstMetric(
-			c.FloatingIP,
-			prometheus.GaugeValue,
-			net,
-			pricing.FloatingIP.Monthly.Currency,
-			"net",
-		)
-	}
-
 	if backup, err := strconv.ParseFloat(pricing.ServerBackup.Percentage, 64); err != nil {
 		c.logger.Error("Failed to parse server backup costs",
 			"err", err,
@@ -248,6 +225,88 @@ func (c *PricingCollector) Collect(ch chan<- prometheus.Metric) {
 			pricing.Volume.PerGBMonthly.Currency,
 			"net",
 		)
+	}
+
+	for _, floatingType := range pricing.FloatingIPs {
+		for _, floatingPricing := range floatingType.Pricings {
+			if gross, err := strconv.ParseFloat(floatingPricing.Monthly.Gross, 64); err != nil {
+				c.logger.Error("Failed to parse floating IP costs",
+					"err", err,
+				)
+
+				c.failures.WithLabelValues("pricing").Inc()
+			} else {
+				ch <- prometheus.MustNewConstMetric(
+					c.FloatingIP,
+					prometheus.GaugeValue,
+					gross,
+					floatingPricing.Monthly.Currency,
+					"gross",
+					string(floatingType.Type),
+					floatingPricing.Location.Name,
+				)
+			}
+
+			if net, err := strconv.ParseFloat(floatingPricing.Monthly.Net, 64); err != nil {
+				c.logger.Error("Failed to parse floating IP costs",
+					"err", err,
+				)
+
+				c.failures.WithLabelValues("pricing").Inc()
+			} else {
+				ch <- prometheus.MustNewConstMetric(
+					c.FloatingIP,
+					prometheus.GaugeValue,
+					net,
+					floatingPricing.Monthly.Currency,
+					"net",
+					string(floatingType.Type),
+					floatingPricing.Location.Name,
+				)
+			}
+
+		}
+	}
+
+	for _, primaryType := range pricing.PrimaryIPs {
+		for _, primaryPricing := range primaryType.Pricings {
+			if gross, err := strconv.ParseFloat(primaryPricing.Monthly.Gross, 64); err != nil {
+				c.logger.Error("Failed to parse primary IP costs",
+					"err", err,
+				)
+
+				c.failures.WithLabelValues("pricing").Inc()
+			} else {
+				ch <- prometheus.MustNewConstMetric(
+					c.PrimaryIP,
+					prometheus.GaugeValue,
+					gross,
+					"",
+					"gross",
+					string(primaryType.Type),
+					primaryPricing.Location,
+				)
+			}
+
+			if net, err := strconv.ParseFloat(primaryPricing.Monthly.Net, 64); err != nil {
+				c.logger.Error("Failed to parse primary IP costs",
+					"err", err,
+				)
+
+				c.failures.WithLabelValues("pricing").Inc()
+			} else {
+				ch <- prometheus.MustNewConstMetric(
+					c.PrimaryIP,
+					prometheus.GaugeValue,
+					net,
+					"",
+					"net",
+					string(primaryType.Type),
+					primaryPricing.Location,
+				)
+			}
+
+		}
 	}
 
 	for _, serverType := range pricing.ServerTypes {
