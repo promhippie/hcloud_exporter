@@ -11,7 +11,7 @@ import (
 
 	"github.com/promhippie/hcloud_exporter/pkg/command"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 type flag struct {
@@ -31,15 +31,15 @@ func main() {
 			flags = append(flags, flag{
 				Flag:    v.Name,
 				Default: v.Value,
-				Envs:    v.EnvVars,
+				Envs:    v.Sources.EnvKeys(),
 				Help:    v.Usage,
 				List:    false,
 			})
 		case *cli.IntFlag:
 			flags = append(flags, flag{
 				Flag:    v.Name,
-				Default: strconv.Itoa(v.Value),
-				Envs:    v.EnvVars,
+				Default: strconv.FormatInt(v.Value, 10),
+				Envs:    v.Sources.EnvKeys(),
 				Help:    v.Usage,
 				List:    false,
 			})
@@ -47,7 +47,7 @@ func main() {
 			flags = append(flags, flag{
 				Flag:    v.Name,
 				Default: fmt.Sprintf("%+v", v.Value),
-				Envs:    v.EnvVars,
+				Envs:    v.Sources.EnvKeys(),
 				Help:    v.Usage,
 				List:    false,
 			})
@@ -55,15 +55,15 @@ func main() {
 			flags = append(flags, flag{
 				Flag:    v.Name,
 				Default: v.Value.String(),
-				Envs:    v.EnvVars,
+				Envs:    v.Sources.EnvKeys(),
 				Help:    v.Usage,
 				List:    false,
 			})
 		case *cli.StringSliceFlag:
 			flags = append(flags, flag{
 				Flag:    v.Name,
-				Default: strings.Join(v.Value.Value(), ", "),
-				Envs:    v.EnvVars,
+				Default: strings.Join(v.Value, ", "),
+				Envs:    v.Sources.EnvKeys(),
 				Help:    v.Usage,
 				List:    true,
 			})
