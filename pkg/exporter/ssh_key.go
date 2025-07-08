@@ -38,7 +38,7 @@ func NewSSHKeyCollector(logger *slog.Logger, client *hcloud.Client, failures *pr
 
 		Key: prometheus.NewDesc(
 			"hcloud_ssh_key",
-			"Information about SSH keys in your HetznerCloud project",
+			"Information about SSH keys in your Hetzner Cloud project",
 			labels,
 			nil,
 		),

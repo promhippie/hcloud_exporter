@@ -1,4 +1,7 @@
-# Changelog for 2.1.0
+# Changelog
+
+
+## 2.1.0
 
 The following sections list the changes for 2.1.0.
 
@@ -27,7 +30,7 @@ The following sections list the changes for 2.1.0.
    https://github.com/promhippie/hcloud_exporter/pull/272
 
 
-# Changelog for 2.0.0
+## 2.0.0
 
 The following sections list the changes for 2.0.0.
 
@@ -65,7 +68,7 @@ The following sections list the changes for 2.0.0.
    https://github.com/promhippie/hcloud_exporter/pull/240
 
 
-# Changelog for 1.3.0
+## 1.3.0
 
 The following sections list the changes for 1.3.0.
 
@@ -104,7 +107,7 @@ The following sections list the changes for 1.3.0.
    https://github.com/promhippie/hcloud_exporter/pull/193
 
 
-# Changelog for 1.2.3
+## 1.2.3
 
 The following sections list the changes for 1.2.3.
 
@@ -123,7 +126,7 @@ The following sections list the changes for 1.2.3.
    https://github.com/promhippie/hcloud_exporter/issues/175
 
 
-# Changelog for 1.2.2
+## 1.2.2
 
 The following sections list the changes for 1.2.2.
 
@@ -151,7 +154,7 @@ The following sections list the changes for 1.2.2.
    https://github.com/promhippie/hcloud_exporter/issues/74
 
 
-# Changelog for 1.2.1
+## 1.2.1
 
 The following sections list the changes for 1.2.1.
 
@@ -169,7 +172,7 @@ The following sections list the changes for 1.2.1.
    https://github.com/promhippie/hcloud_exporter/issues/70
 
 
-# Changelog for 1.2.0
+## 1.2.0
 
 The following sections list the changes for 1.2.0.
 
@@ -197,7 +200,7 @@ The following sections list the changes for 1.2.0.
    https://github.com/promhippie/hcloud_exporter/pull/67
 
 
-# Changelog for 1.1.0
+## 1.1.0
 
 The following sections list the changes for 1.1.0.
 
@@ -239,7 +242,7 @@ The following sections list the changes for 1.1.0.
    https://github.com/promhippie/hcloud_exporter/issues/39
 
 
-# Changelog for 1.0.0
+## 1.0.0
 
 The following sections list the changes for 1.0.0.
 
@@ -258,7 +261,7 @@ The following sections list the changes for 1.0.0.
    https://github.com/promhippie/hcloud_exporter/pull/19
 
 
-# Changelog for 0.2.0
+## 0.2.0
 
 The following sections list the changes for 0.2.0.
 
@@ -288,7 +291,7 @@ The following sections list the changes for 0.2.0.
    https://github.com/promhippie/hcloud_exporter/pull/18
 
 
-# Changelog for 0.1.1
+## 0.1.1
 
 The following sections list the changes for 0.1.1.
 
@@ -315,7 +318,7 @@ The following sections list the changes for 0.1.1.
    https://github.com/promhippie/hcloud_exporter/pull/13
 
 
-# Changelog for 0.1.0
+## 0.1.0
 
 The following sections list the changes for 0.1.0.
 

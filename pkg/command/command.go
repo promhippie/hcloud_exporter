@@ -19,7 +19,7 @@ func Run() error {
 	app := &cli.Command{
 		Name:    "hcloud_exporter",
 		Version: version.String,
-		Usage:   "HetznerCloud Exporter",
+		Usage:   "Hetzner Cloud Exporter",
 		Authors: []any{
 			"Thomas Boerger <thomas@webhippie.de>",
 		},
@@ -116,7 +116,7 @@ func RootFlags(cfg *config.Config) []cli.Flag {
 		&cli.StringFlag{
 			Name:        "hcloud.token",
 			Value:       "",
-			Usage:       "Access token for the HetznerCloud API",
+			Usage:       "Access token for the Hetzner Cloud API",
 			Sources:     cli.EnvVars("HCLOUD_EXPORTER_TOKEN"),
 			Destination: &cfg.Target.Token,
 		},

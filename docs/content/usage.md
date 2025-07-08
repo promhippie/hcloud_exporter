@@ -68,7 +68,7 @@ like this to the `docker-compose.yml` file:
 {{< highlight diff >}}
   hcloud_exporter:
 -   image: promhippie/hcloud-exporter:latest
-+   image: promhippie/hcloud-exporter:1.0.0
++   image: promhippie/hcloud-exporter:x.x.x
     restart: always
     environment:
       - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb

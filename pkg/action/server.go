@@ -22,7 +22,7 @@ import (
 
 // Server handles the server sub-command.
 func Server(cfg *config.Config, logger *slog.Logger) error {
-	logger.Info("Launching HetznerCloud Exporter",
+	logger.Info("Launching Hetzner Cloud Exporter",
 		"version", version.String,
 		"revision", version.Revision,
 		"date", version.Date,
@@ -235,14 +235,14 @@ func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *ch
 			w.Header().Set("Content-Type", "text/plain")
 			w.WriteHeader(http.StatusOK)
 
-			io.WriteString(w, http.StatusText(http.StatusOK))
+			_, _ = io.WriteString(w, http.StatusText(http.StatusOK))
 		})
 
 		root.Get("/readyz", func(w http.ResponseWriter, _ *http.Request) {
 			w.Header().Set("Content-Type", "text/plain")
 			w.WriteHeader(http.StatusOK)
 
-			io.WriteString(w, http.StatusText(http.StatusOK))
+			_, _ = io.WriteString(w, http.StatusText(http.StatusOK))
 		})
 	})
 
