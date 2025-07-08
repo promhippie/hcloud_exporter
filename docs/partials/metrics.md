@@ -110,7 +110,7 @@ hcloud_server_running{id, name, datacenter}
 : If 1 the server is running, 0 otherwise
 
 hcloud_ssh_key{id, name, fingerprint}
-: Information about SSH keys in your HetznerCloud project
+: Information about SSH keys in your Hetzner Cloud project
 
 hcloud_volume_created{id, server, location, name}
 : Timestamp when the volume have been created

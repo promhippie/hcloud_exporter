@@ -23,7 +23,7 @@ HCLOUD_EXPORTER_REQUEST_TIMEOUT
 : Request timeout as duration, defaults to `10s`
 
 HCLOUD_EXPORTER_TOKEN
-: Access token for the HetznerCloud API
+: Access token for the Hetzner Cloud API
 
 HCLOUD_EXPORTER_COLLECTOR_FLOATING_IPS
 : Enable collector for floating IPs, defaults to `true`
