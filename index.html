@@ -638,6 +638,32 @@ take a look at the <a href="https://github.com/prometheus/client_golang/blob/mas
 <dd>If 1 the server is running, 0 otherwise</dd>
 <dt>hcloud_ssh_key{id, name, fingerprint}</dt>
 <dd>Information about SSH keys in your Hetzner Cloud project</dd>
+<dt>hcloud_storagebox_active{}</dt>
+<dd>If 1 the storagebox have been active, 0 otherwise</dd>
+<dt>hcloud_storagebox_created{}</dt>
+<dd>Timestamp when the storagebox have been created</dd>
+<dt>hcloud_storagebox_data_size{}</dt>
+<dd>Data size for the storagebox in bytes</dd>
+<dt>hcloud_storagebox_external{}</dt>
+<dd>If 1 the storagebox can be accessed from external, 0 otherwise</dd>
+<dt>hcloud_storagebox_general_size{}</dt>
+<dd>Overall size for the storagebox in bytes</dd>
+<dt>hcloud_storagebox_locked{}</dt>
+<dd>If 1 the storagebox have been locked, 0 otherwise</dd>
+<dt>hcloud_storagebox_protection{}</dt>
+<dd>If 1 the storagebox is protected, 0 otherwise</dd>
+<dt>hcloud_storagebox_quota{}</dt>
+<dd>Available storage for the storagebox in bytes</dd>
+<dt>hcloud_storagebox_samba{}</dt>
+<dd>If 1 the storagebox can be accessed via samba, 0 otherwise</dd>
+<dt>hcloud_storagebox_snapshot_size{}</dt>
+<dd>Snapshot size for the storagebox in bytes</dd>
+<dt>hcloud_storagebox_ssh{}</dt>
+<dd>If 1 the storagebox can be accessed via ssh, 0 otherwise</dd>
+<dt>hcloud_storagebox_webdav{}</dt>
+<dd>If 1 the storagebox can be accessed via webdav, 0 otherwise</dd>
+<dt>hcloud_storagebox_zfs{}</dt>
+<dd>If 1 the zfs directory is visible, 0 otherwise</dd>
 <dt>hcloud_volume_created{id, server, location, name}</dt>
 <dd>Timestamp when the volume have been created</dd>
 <dt>hcloud_volume_protection{id, server, location, name}</dt>
