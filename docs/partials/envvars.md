@@ -48,3 +48,9 @@ HCLOUD_EXPORTER_COLLECTOR_SSH_KEYS
 
 HCLOUD_EXPORTER_COLLECTOR_VOLUMES
 : Enable collector for volumes, defaults to `false`
+
+HCLOUD_EXPORTER_COLLECTOR_STORAGEBOXES
+: Enable collector for storage boxes, defaults to `false`
+
+HCLOUD_EXPORTER_STORAGEBOXES_LABELS
+: List of labels used for storageboxes, comma-separated list, defaults to `id, name, location`
