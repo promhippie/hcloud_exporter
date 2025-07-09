@@ -112,43 +112,43 @@ hcloud_server_running{id, name, datacenter}
 hcloud_ssh_key{id, name, fingerprint}
 : Information about SSH keys in your Hetzner Cloud project
 
-hcloud_storagebox_active{}
+hcloud_storagebox_active{id, name, location}
 : If 1 the storagebox have been active, 0 otherwise
 
-hcloud_storagebox_created{}
+hcloud_storagebox_created{id, name, location}
 : Timestamp when the storagebox have been created
 
-hcloud_storagebox_data_size{}
+hcloud_storagebox_data_size{id, name, location}
 : Data size for the storagebox in bytes
 
-hcloud_storagebox_external{}
+hcloud_storagebox_external{id, name, location}
 : If 1 the storagebox can be accessed from external, 0 otherwise
 
-hcloud_storagebox_general_size{}
+hcloud_storagebox_general_size{id, name, location}
 : Overall size for the storagebox in bytes
 
-hcloud_storagebox_locked{}
+hcloud_storagebox_locked{id, name, location}
 : If 1 the storagebox have been locked, 0 otherwise
 
-hcloud_storagebox_protection{}
+hcloud_storagebox_protection{id, name, location}
 : If 1 the storagebox is protected, 0 otherwise
 
-hcloud_storagebox_quota{}
+hcloud_storagebox_quota{id, name, location}
 : Available storage for the storagebox in bytes
 
-hcloud_storagebox_samba{}
+hcloud_storagebox_samba{id, name, location}
 : If 1 the storagebox can be accessed via samba, 0 otherwise
 
-hcloud_storagebox_snapshot_size{}
+hcloud_storagebox_snapshot_size{id, name, location}
 : Snapshot size for the storagebox in bytes
 
-hcloud_storagebox_ssh{}
+hcloud_storagebox_ssh{id, name, location}
 : If 1 the storagebox can be accessed via ssh, 0 otherwise
 
-hcloud_storagebox_webdav{}
+hcloud_storagebox_webdav{id, name, location}
 : If 1 the storagebox can be accessed via webdav, 0 otherwise
 
-hcloud_storagebox_zfs{}
+hcloud_storagebox_zfs{id, name, location}
 : If 1 the zfs directory is visible, 0 otherwise
 
 hcloud_volume_created{id, server, location, name}
