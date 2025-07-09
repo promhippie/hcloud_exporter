@@ -638,31 +638,31 @@ take a look at the <a href="https://github.com/prometheus/client_golang/blob/mas
 <dd>If 1 the server is running, 0 otherwise</dd>
 <dt>hcloud_ssh_key{id, name, fingerprint}</dt>
 <dd>Information about SSH keys in your Hetzner Cloud project</dd>
-<dt>hcloud_storagebox_active{}</dt>
+<dt>hcloud_storagebox_active{id, name, location}</dt>
 <dd>If 1 the storagebox have been active, 0 otherwise</dd>
-<dt>hcloud_storagebox_created{}</dt>
+<dt>hcloud_storagebox_created{id, name, location}</dt>
 <dd>Timestamp when the storagebox have been created</dd>
-<dt>hcloud_storagebox_data_size{}</dt>
+<dt>hcloud_storagebox_data_size{id, name, location}</dt>
 <dd>Data size for the storagebox in bytes</dd>
-<dt>hcloud_storagebox_external{}</dt>
+<dt>hcloud_storagebox_external{id, name, location}</dt>
 <dd>If 1 the storagebox can be accessed from external, 0 otherwise</dd>
-<dt>hcloud_storagebox_general_size{}</dt>
+<dt>hcloud_storagebox_general_size{id, name, location}</dt>
 <dd>Overall size for the storagebox in bytes</dd>
-<dt>hcloud_storagebox_locked{}</dt>
+<dt>hcloud_storagebox_locked{id, name, location}</dt>
 <dd>If 1 the storagebox have been locked, 0 otherwise</dd>
-<dt>hcloud_storagebox_protection{}</dt>
+<dt>hcloud_storagebox_protection{id, name, location}</dt>
 <dd>If 1 the storagebox is protected, 0 otherwise</dd>
-<dt>hcloud_storagebox_quota{}</dt>
+<dt>hcloud_storagebox_quota{id, name, location}</dt>
 <dd>Available storage for the storagebox in bytes</dd>
-<dt>hcloud_storagebox_samba{}</dt>
+<dt>hcloud_storagebox_samba{id, name, location}</dt>
 <dd>If 1 the storagebox can be accessed via samba, 0 otherwise</dd>
-<dt>hcloud_storagebox_snapshot_size{}</dt>
+<dt>hcloud_storagebox_snapshot_size{id, name, location}</dt>
 <dd>Snapshot size for the storagebox in bytes</dd>
-<dt>hcloud_storagebox_ssh{}</dt>
+<dt>hcloud_storagebox_ssh{id, name, location}</dt>
 <dd>If 1 the storagebox can be accessed via ssh, 0 otherwise</dd>
-<dt>hcloud_storagebox_webdav{}</dt>
+<dt>hcloud_storagebox_webdav{id, name, location}</dt>
 <dd>If 1 the storagebox can be accessed via webdav, 0 otherwise</dd>
-<dt>hcloud_storagebox_zfs{}</dt>
+<dt>hcloud_storagebox_zfs{id, name, location}</dt>
 <dd>If 1 the zfs directory is visible, 0 otherwise</dd>
 <dt>hcloud_volume_created{id, server, location, name}</dt>
 <dd>Timestamp when the volume have been created</dd>
@@ -673,6 +673,17 @@ take a look at the <a href="https://github.com/prometheus/client_golang/blob/mas
 <dt>hcloud_volume_status{id, server, location, name}</dt>
 <dd>If 1 the volume is availabel, 0 otherwise</dd>
 </dl>
+<h2 id="labels">Labels</h2>
+<p>For some collectors we have defined a dynamic option for the labeling of the
+metrics. That way it&rsquo;s up to you to write high-cardinality labels to
+<a href="https://prometheus.io">Prometheus</a> or not. You can see some lists below for collectors
+that can be customized.</p>
+<h3 id="storagebox-labels">StorageBox Labels</h3>
+<ul>
+<li>id</li>
+<li>name</li>
+<li>location</li>
+</ul>
 
 			</section>
 		
