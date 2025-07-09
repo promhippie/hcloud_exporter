@@ -112,6 +112,45 @@ hcloud_server_running{id, name, datacenter}
 hcloud_ssh_key{id, name, fingerprint}
 : Information about SSH keys in your Hetzner Cloud project
 
+hcloud_storagebox_active{}
+: If 1 the storagebox have been active, 0 otherwise
+
+hcloud_storagebox_created{}
+: Timestamp when the storagebox have been created
+
+hcloud_storagebox_data_size{}
+: Data size for the storagebox in bytes
+
+hcloud_storagebox_external{}
+: If 1 the storagebox can be accessed from external, 0 otherwise
+
+hcloud_storagebox_general_size{}
+: Overall size for the storagebox in bytes
+
+hcloud_storagebox_locked{}
+: If 1 the storagebox have been locked, 0 otherwise
+
+hcloud_storagebox_protection{}
+: If 1 the storagebox is protected, 0 otherwise
+
+hcloud_storagebox_quota{}
+: Available storage for the storagebox in bytes
+
+hcloud_storagebox_samba{}
+: If 1 the storagebox can be accessed via samba, 0 otherwise
+
+hcloud_storagebox_snapshot_size{}
+: Snapshot size for the storagebox in bytes
+
+hcloud_storagebox_ssh{}
+: If 1 the storagebox can be accessed via ssh, 0 otherwise
+
+hcloud_storagebox_webdav{}
+: If 1 the storagebox can be accessed via webdav, 0 otherwise
+
+hcloud_storagebox_zfs{}
+: If 1 the zfs directory is visible, 0 otherwise
+
 hcloud_volume_created{id, server, location, name}
 : Timestamp when the volume have been created
 
