@@ -23,10 +23,16 @@ type Logs struct {
 	Pretty bool
 }
 
+// StorageBoxes defines the storagebox specific configuration.
+type StorageBoxes struct {
+	Labels []string
+}
+
 // Target defines the target specific configuration.
 type Target struct {
-	Token   string
-	Timeout time.Duration
+	Token        string
+	Timeout      time.Duration
+	StorageBoxes StorageBoxes
 }
 
 // Collector defines the collector specific configuration.
@@ -39,6 +45,7 @@ type Collector struct {
 	LoadBalancers bool
 	SSHKeys       bool
 	Volumes       bool
+	StorageBoxes  bool
 }
 
 // Config is a combination of all available configurations.
@@ -52,6 +59,15 @@ type Config struct {
 // Load initializes a default configuration struct.
 func Load() *Config {
 	return &Config{}
+}
+
+// StorageBoxLabels defines the default labels used by storagebox collector.
+func StorageBoxLabels() []string {
+	return []string{
+		"id",
+		"name",
+		"location",
+	}
 }
 
 // Value returns the config value based on a DSN.

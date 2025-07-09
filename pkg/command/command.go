@@ -176,5 +176,19 @@ func RootFlags(cfg *config.Config) []cli.Flag {
 			Sources:     cli.EnvVars("HCLOUD_EXPORTER_COLLECTOR_VOLUMES"),
 			Destination: &cfg.Collector.Volumes,
 		},
+		&cli.BoolFlag{
+			Name:        "collector.storageboxes",
+			Value:       false,
+			Usage:       "Enable collector for storage boxes",
+			Sources:     cli.EnvVars("HCLOUD_EXPORTER_COLLECTOR_STORAGEBOXES"),
+			Destination: &cfg.Collector.StorageBoxes,
+		},
+		&cli.StringSliceFlag{
+			Name:        "collector.storageboxes.labels",
+			Value:       config.StorageBoxLabels(),
+			Usage:       "List of labels used for storageboxes",
+			Sources:     cli.EnvVars("HCLOUD_EXPORTER_STORAGEBOXES_LABELS"),
+			Destination: &cfg.Target.StorageBoxes.Labels,
+		},
 	}
 }

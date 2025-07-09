@@ -60,6 +60,11 @@ func main() {
 		exporter.NewVolumeCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
 	)
 
+	collectors = append(
+		collectors,
+		exporter.NewStorageBoxCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
+	)
+
 	metrics := make([]metric, 0)
 
 	metrics = append(metrics, metric{

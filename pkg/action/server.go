@@ -16,6 +16,7 @@ import (
 	"github.com/prometheus/exporter-toolkit/web"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
 	"github.com/promhippie/hcloud_exporter/pkg/exporter"
+	"github.com/promhippie/hcloud_exporter/pkg/internal/hetzner"
 	"github.com/promhippie/hcloud_exporter/pkg/middleware"
 	"github.com/promhippie/hcloud_exporter/pkg/version"
 )
@@ -39,7 +40,7 @@ func Server(cfg *config.Config, logger *slog.Logger) error {
 		return err
 	}
 
-	client := hcloud.NewClient(
+	cloudClient := hcloud.NewClient(
 		hcloud.WithToken(
 			token,
 		),
@@ -49,12 +50,18 @@ func Server(cfg *config.Config, logger *slog.Logger) error {
 		),
 	)
 
+	hetznerClient := hetzner.NewClient(
+		hetzner.WithToken(
+			token,
+		),
+	)
+
 	var gr run.Group
 
 	{
 		server := &http.Server{
 			Addr:         cfg.Server.Addr,
-			Handler:      handler(cfg, logger, client),
+			Handler:      handler(cfg, logger, cloudClient, hetznerClient),
 			ReadTimeout:  5 * time.Second,
 			WriteTimeout: cfg.Server.Timeout,
 		}
@@ -108,7 +115,7 @@ func Server(cfg *config.Config, logger *slog.Logger) error {
 	return gr.Run()
 }
 
-func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *chi.Mux {
+func handler(cfg *config.Config, logger *slog.Logger, cloudClient *hcloud.Client, hetznerClient *hetzner.Client) *chi.Mux {
 	mux := chi.NewRouter()
 	mux.Use(middleware.Recoverer(logger))
 	mux.Use(middleware.RealIP)
@@ -124,7 +131,7 @@ func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *ch
 
 		registry.MustRegister(exporter.NewFloatingIPCollector(
 			logger,
-			client,
+			cloudClient,
 			requestFailures,
 			requestDuration,
 			cfg.Target,
@@ -136,7 +143,7 @@ func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *ch
 
 		registry.MustRegister(exporter.NewImageCollector(
 			logger,
-			client,
+			cloudClient,
 			requestFailures,
 			requestDuration,
 			cfg.Target,
@@ -148,7 +155,7 @@ func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *ch
 
 		registry.MustRegister(exporter.NewPricingCollector(
 			logger,
-			client,
+			cloudClient,
 			requestFailures,
 			requestDuration,
 			cfg.Target,
@@ -160,7 +167,7 @@ func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *ch
 
 		registry.MustRegister(exporter.NewServerCollector(
 			logger,
-			client,
+			cloudClient,
 			requestFailures,
 			requestDuration,
 			cfg.Target,
@@ -172,7 +179,7 @@ func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *ch
 
 		registry.MustRegister(exporter.NewServerMetricsCollector(
 			logger,
-			client,
+			cloudClient,
 			requestFailures,
 			requestDuration,
 			cfg.Target,
@@ -184,7 +191,7 @@ func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *ch
 
 		registry.MustRegister(exporter.NewLoadBalancerCollector(
 			logger,
-			client,
+			cloudClient,
 			requestFailures,
 			requestDuration,
 			cfg.Target,
@@ -196,7 +203,7 @@ func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *ch
 
 		registry.MustRegister(exporter.NewSSHKeyCollector(
 			logger,
-			client,
+			cloudClient,
 			requestFailures,
 			requestDuration,
 			cfg.Target,
@@ -208,7 +215,19 @@ func handler(cfg *config.Config, logger *slog.Logger, client *hcloud.Client) *ch
 
 		registry.MustRegister(exporter.NewVolumeCollector(
 			logger,
-			client,
+			cloudClient,
+			requestFailures,
+			requestDuration,
+			cfg.Target,
+		))
+	}
+
+	if cfg.Collector.StorageBoxes {
+		logger.Debug("StorageBoxes collector registered")
+
+		registry.MustRegister(exporter.NewStorageBoxCollector(
+			logger,
+			hetznerClient,
 			requestFailures,
 			requestDuration,
 			cfg.Target,
