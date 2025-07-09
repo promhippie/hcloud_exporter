@@ -102,4 +102,9 @@ tasks:
     cmds:
       - go run hack/generate-metrics-docs.go
 
+  labels:
+    desc: Generate labels partial for docs
+    cmds:
+      - go run hack/generate-labels-docs.go
+
 ...

@@ -25,44 +25,47 @@ type metric struct {
 func main() {
 	collectors := make([]*prometheus.Desc, 0)
 
+	cfg := config.Load().Target
+	cfg.StorageBoxes.Labels = config.StorageBoxLabels()
+
 	collectors = append(
 		collectors,
-		exporter.NewFloatingIPCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewFloatingIPCollector(slog.Default(), nil, nil, nil, cfg).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewImageCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewImageCollector(slog.Default(), nil, nil, nil, cfg).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewPricingCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewPricingCollector(slog.Default(), nil, nil, nil, cfg).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewServerCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewServerCollector(slog.Default(), nil, nil, nil, cfg).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewServerMetricsCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewServerMetricsCollector(slog.Default(), nil, nil, nil, cfg).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewSSHKeyCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewSSHKeyCollector(slog.Default(), nil, nil, nil, cfg).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewVolumeCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewVolumeCollector(slog.Default(), nil, nil, nil, cfg).Metrics()...,
 	)
 
 	collectors = append(
 		collectors,
-		exporter.NewStorageBoxCollector(slog.Default(), nil, nil, nil, config.Load().Target).Metrics()...,
+		exporter.NewStorageBoxCollector(slog.Default(), nil, nil, nil, cfg).Metrics()...,
 	)
 
 	metrics := make([]metric, 0)

@@ -93,4 +93,43 @@ jobs:
           push: true
           commit: --signoff
 
+  labels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        if: github.event_name != 'pull_request'
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_ACCESS_TOKEN }}
+
+      - name: PR checkout
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v4
+
+      - name: Setup golang
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Setup task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate labels
+        run: task labels
+
+      - name: Commit changes
+        if: github.event_name != 'pull_request'
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: GitHub Actions
+          author_email: github@webhippie.de
+          add: docs/partials/labels.md
+          message: "docs: automated labels update"
+          push: true
+          commit: --signoff
+
 ...
