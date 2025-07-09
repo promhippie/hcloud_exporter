@@ -407,7 +407,7 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 				hcloud.LoadBalancerMetricRequestsPerSecond,
 				hcloud.LoadBalancerMetricBandwidth,
 			},
-			Start: now,
+			Start: now.Add(-1 * time.Second),
 			End:   now,
 			Step:  1,
 		})
