@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.1.0](https://github.com/promhippie/hcloud_exporter/compare/v3.0.0...v3.1.0) (2025-07-14)
+
+
+### Features
+
+* **deps:** update module github.com/hetznercloud/hcloud-go/v2 to v2.22.0 ([32c19b6](https://github.com/promhippie/hcloud_exporter/commit/32c19b6fbdd5941858663fdab41f372dd20718fc))
+* **deps:** update module github.com/mgechev/revive to v1.11.0 ([af01d6b](https://github.com/promhippie/hcloud_exporter/commit/af01d6b48e36228083670dd63035463dc39a9271))
+
+
+### Bugfixes
+
+* **deps:** update golang docker tag to v1.24.5 ([8de3160](https://github.com/promhippie/hcloud_exporter/commit/8de3160bfdafecd713458ed8d9dae02cfb3875a8))
+* **deps:** update module github.com/golangci/golangci-lint/v2 to v2.2.2 ([8cae410](https://github.com/promhippie/hcloud_exporter/commit/8cae410c13eb5be3851d0a352457be84592c4e15))
+
 ## [3.0.0](https://github.com/promhippie/hcloud_exporter/compare/v2.1.0...v3.0.0) (2025-07-09)
 
 
