@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.2.0](https://github.com/promhippie/hcloud_exporter/compare/v3.1.0...v3.2.0) (2025-07-28)
+
+
+### Features
+
+* **deps:** update module github.com/golangci/golangci-lint/v2 to v2.3.0 ([b17c126](https://github.com/promhippie/hcloud_exporter/commit/b17c1262c63ce8d42e3e07d34b2964d898f97861))
+
+
+### Miscellaneous
+
+* **deps:** update docker digests ([7775dc8](https://github.com/promhippie/hcloud_exporter/commit/7775dc8a137338666372470df0b6a1bb35468589))
+* **deps:** update golang:1.24.5-alpine3.21 docker digest to 6edc205 ([036d59d](https://github.com/promhippie/hcloud_exporter/commit/036d59d316958b923956b4e7e56ee47aac3079a3))
+* **deps:** update golang:1.24.5-alpine3.21 docker digest to 72ff633 ([27219dd](https://github.com/promhippie/hcloud_exporter/commit/27219dde46f8426145a1df77316b808fb914e931))
+
 ## [3.1.0](https://github.com/promhippie/hcloud_exporter/compare/v3.0.0...v3.1.0) (2025-07-14)
 
 
