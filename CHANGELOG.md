@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.2.1](https://github.com/promhippie/hcloud_exporter/compare/v3.2.0...v3.2.1) (2025-08-04)
+
+
+### Bugfixes
+
+* **deps:** update module github.com/golangci/golangci-lint/v2 to v2.3.1 ([3d04c1f](https://github.com/promhippie/hcloud_exporter/commit/3d04c1f447e8fa05f9024c67c84deb3ffb6fabb3))
+* **deps:** update module github.com/prometheus/client_golang to v1.23.0 ([b75eaf4](https://github.com/promhippie/hcloud_exporter/commit/b75eaf46f452b3bef9933990665f39e476124a04))
+
 ## [3.2.0](https://github.com/promhippie/hcloud_exporter/compare/v3.1.0...v3.2.0) (2025-07-28)
 
 
