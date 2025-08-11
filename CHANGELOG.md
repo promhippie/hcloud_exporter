@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.2](https://github.com/promhippie/hcloud_exporter/compare/v3.2.1...v3.2.2) (2025-08-11)
+
+
+### Bugfixes
+
+* **deps:** update golang docker tag to v1.24.6 ([7049a51](https://github.com/promhippie/hcloud_exporter/commit/7049a517dd44e29c9278a3c145400d2ee225ce88))
+
 ## [3.2.1](https://github.com/promhippie/hcloud_exporter/compare/v3.2.0...v3.2.1) (2025-08-04)
 
 
