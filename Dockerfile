@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM golang:1.24.6-alpine3.21@sha256:50f8a10a46c0c26b5b816a80314f1999196c44c3e3571f41026b061339c29db6 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.25.0-alpine3.21@sha256:382d1a77317f5dc0ea2af2c132af50aa579cbc6ad07f8fd2dba08e318adf677b AS builder
 
 RUN apk add --no-cache -U git curl
 RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
