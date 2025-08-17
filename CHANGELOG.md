@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.2.3](https://github.com/promhippie/hcloud_exporter/compare/v3.2.2...v3.2.3) (2025-08-17)
+
+
+### Bugfixes
+
+* correctly hand over goos/goarch to build task ([269c65f](https://github.com/promhippie/hcloud_exporter/commit/269c65f63212e0b91ed5a6511689648feda29db8))
+* **deps:** update golang docker tag to v1.25.0 ([4669b15](https://github.com/promhippie/hcloud_exporter/commit/4669b15e69861d17a0e4c91d96c637f4bd0a82a0))
+* **deps:** update golang:1.25.0-alpine3.21 docker digest to a92c1ab ([0cc61ee](https://github.com/promhippie/hcloud_exporter/commit/0cc61ee75952effb0098b954a47f25a0b855421e))
+* **deps:** update module github.com/golangci/golangci-lint/v2 to v2.4.0 ([995bb4a](https://github.com/promhippie/hcloud_exporter/commit/995bb4aab394a5d7fd70deb2667b72f2c415ecfc))
+* **deps:** update module github.com/urfave/cli/v3 to v3.3.9 ([b511b81](https://github.com/promhippie/hcloud_exporter/commit/b511b81d419d774d591ae64fbbf548a79c8175ed))
+* **deps:** update module github.com/urfave/cli/v3 to v3.4.1 ([cbd7f5e](https://github.com/promhippie/hcloud_exporter/commit/cbd7f5e6ad6b4f2816180acbce71b890f66d8b02))
+
 ## [3.2.2](https://github.com/promhippie/hcloud_exporter/compare/v3.2.1...v3.2.2) (2025-08-11)
 
 
