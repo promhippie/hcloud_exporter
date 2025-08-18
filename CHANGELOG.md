@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.4](https://github.com/promhippie/hcloud_exporter/compare/v3.2.3...v3.2.4) (2025-08-18)
+
+
+### Bugfixes
+
+* **deps:** update golang:1.25.0-alpine3.21 docker digest to c8e1680 ([bee8d28](https://github.com/promhippie/hcloud_exporter/commit/bee8d28a632dc92316151645650b9cadfae2f412))
+
 ## [3.2.3](https://github.com/promhippie/hcloud_exporter/compare/v3.2.2...v3.2.3) (2025-08-17)
 
 
