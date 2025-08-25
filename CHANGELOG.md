@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.2.5](https://github.com/promhippie/hcloud_exporter/compare/v3.2.4...v3.2.5) (2025-08-25)
+
+
+### Bugfixes
+
+* **deps:** update module github.com/stretchr/testify to v1.11.0 ([19273e6](https://github.com/promhippie/hcloud_exporter/commit/19273e63fd899a3004d5c83c555477fdd5e76b0e))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([9eb058d](https://github.com/promhippie/hcloud_exporter/commit/9eb058d0b15533eef70aaa99244f650079ac5ae0))
+* **flake:** updated lockfile [skip ci] ([bac77ea](https://github.com/promhippie/hcloud_exporter/commit/bac77eab29980add6447e3da985d4522573a359a))
+
 ## [3.2.4](https://github.com/promhippie/hcloud_exporter/compare/v3.2.3...v3.2.4) (2025-08-18)
 
 
