@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.2.6](https://github.com/promhippie/hcloud_exporter/compare/v3.2.5...v3.2.6) (2025-09-01)
+
+
+### Bugfixes
+
+* **deps:** update module github.com/go-chi/chi/v5 to v5.2.3 ([d1e68c8](https://github.com/promhippie/hcloud_exporter/commit/d1e68c8b08786382d47ce69fe00b794887312649))
+* **deps:** update module github.com/mgechev/revive to v1.12.0 ([b9e09b0](https://github.com/promhippie/hcloud_exporter/commit/b9e09b074969af1a2bface504956a09faa5c3e1b))
+* **deps:** update module github.com/stretchr/testify to v1.11.1 ([8e0f2ad](https://github.com/promhippie/hcloud_exporter/commit/8e0f2ad9fefc8c8e3158cbe855930af4bc7cf988))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([4561b40](https://github.com/promhippie/hcloud_exporter/commit/4561b40606c95bc5ab9b0d28f7967b43a20836df))
+
 ## [3.2.5](https://github.com/promhippie/hcloud_exporter/compare/v3.2.4...v3.2.5) (2025-08-25)
 
 
