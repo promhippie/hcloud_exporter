@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.2.7](https://github.com/promhippie/hcloud_exporter/compare/v3.2.6...v3.2.7) (2025-09-08)
+
+
+### Bugfixes
+
+* **deps:** update golang docker tag to v1.25.1 ([97ea197](https://github.com/promhippie/hcloud_exporter/commit/97ea197a04f5b4273b78da290fa6ec5556dc1563))
+* **deps:** update golang:1.25.1-alpine3.21 docker digest to 331bde4 ([afcc16e](https://github.com/promhippie/hcloud_exporter/commit/afcc16eee4bc69c681f3614d357a6643780b3df1))
+* **deps:** update golang:1.25.1-alpine3.21 docker digest to a887c10 ([3fc7251](https://github.com/promhippie/hcloud_exporter/commit/3fc7251c2bd8de909be3eed770dd7dfab47e8a6a))
+* **deps:** update module github.com/prometheus/client_golang to v1.23.1 ([9e9839b](https://github.com/promhippie/hcloud_exporter/commit/9e9839b8577ac06eb77a143903d6e6d0e1cbbe46))
+* **deps:** update module github.com/prometheus/client_golang to v1.23.2 ([23084d5](https://github.com/promhippie/hcloud_exporter/commit/23084d5aca778ab5acd24cdd960fcf06e73ba796))
+* **deps:** update module github.com/prometheus/exporter-toolkit to v0.14.1 ([bbbf9e1](https://github.com/promhippie/hcloud_exporter/commit/bbbf9e11b37b7ccc905043f595d44149a3563d52))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([76a4cc8](https://github.com/promhippie/hcloud_exporter/commit/76a4cc8d22d12774606ee4fa277ba53728f93f4f))
+
 ## [3.2.6](https://github.com/promhippie/hcloud_exporter/compare/v3.2.5...v3.2.6) (2025-09-01)
 
 
