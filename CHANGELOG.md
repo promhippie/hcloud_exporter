@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.2.8](https://github.com/promhippie/hcloud_exporter/compare/v3.2.7...v3.2.8) (2025-09-15)
+
+
+### Bugfixes
+
+* **deps:** update module github.com/hetznercloud/hcloud-go/v2 to v2.23.0 ([d5ef76e](https://github.com/promhippie/hcloud_exporter/commit/d5ef76e930c9ae9aea8df497139ccda1c4c34738))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([9fa3ab2](https://github.com/promhippie/hcloud_exporter/commit/9fa3ab2a79adcd4330e9002803db50dbe599d9cf))
+* move from baltorepo to cloudsmith ([e5d687a](https://github.com/promhippie/hcloud_exporter/commit/e5d687a15c15fa5d9f4dd26cafa2138ace9e732b))
+
 ## [3.2.7](https://github.com/promhippie/hcloud_exporter/compare/v3.2.6...v3.2.7) (2025-09-08)
 
 
