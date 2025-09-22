@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.2.9](https://github.com/promhippie/hcloud_exporter/compare/v3.2.8...v3.2.9) (2025-09-22)
+
+
+### Bugfixes
+
+* **deps:** update module github.com/golangci/golangci-lint/v2 to v2.5.0 ([057ce4e](https://github.com/promhippie/hcloud_exporter/commit/057ce4ef2f00dd0bb2f3a150f9c0fb30250c2028))
+* **deps:** update module github.com/hetznercloud/hcloud-go/v2 to v2.24.0 ([0da30ba](https://github.com/promhippie/hcloud_exporter/commit/0da30bacfda25953e2fcc12fa2c1ea45d6676454))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([6b4cf7e](https://github.com/promhippie/hcloud_exporter/commit/6b4cf7ecc2276fcd8c04f4caa47f4fb22d6b4876))
+
 ## [3.2.8](https://github.com/promhippie/hcloud_exporter/compare/v3.2.7...v3.2.8) (2025-09-15)
 
 
