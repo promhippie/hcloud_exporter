@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.2.11](https://github.com/promhippie/hcloud_exporter/compare/v3.2.10...v3.2.11) (2025-10-06)
+
+
+### Bugfixes
+
+* **deps:** update module github.com/hetznercloud/hcloud-go/v2 to v2.25.1 ([0ad439a](https://github.com/promhippie/hcloud_exporter/commit/0ad439a9d4d673f98242add4c9d2329f5234505f))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([5598302](https://github.com/promhippie/hcloud_exporter/commit/55983029841903409b89cf1f176769e2f9ba7342))
+
 ## [3.2.10](https://github.com/promhippie/hcloud_exporter/compare/v3.2.9...v3.2.10) (2025-09-29)
 
 
