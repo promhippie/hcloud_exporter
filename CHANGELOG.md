@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.2.12](https://github.com/promhippie/hcloud_exporter/compare/v3.2.11...v3.2.12) (2025-10-13)
+
+
+### Bugfixes
+
+* **deps:** update alpine:3.22 docker digest to 4b7ce07 ([851e70d](https://github.com/promhippie/hcloud_exporter/commit/851e70d43d55b2c31e3ef326a9b018d55e29d0cf))
+* **deps:** update golang docker tag to v1.25.2 ([2c43d58](https://github.com/promhippie/hcloud_exporter/commit/2c43d582014b9dcbd6dbf54d99de8dede1c4872c))
+* **deps:** update golang:1.25.2-alpine3.21 docker digest to 0134653 ([6655f23](https://github.com/promhippie/hcloud_exporter/commit/6655f2366f8a57cba687786e8d9d1a23232f99fc))
+* **deps:** update golang:1.25.2-alpine3.21 docker digest to 0ae17b3 ([5cf7dad](https://github.com/promhippie/hcloud_exporter/commit/5cf7dad6d4b6983a26fa8b37107d0f3edf6e5fcf))
+* **deps:** update golang:1.25.2-alpine3.21 docker digest to 7300a8d ([a4869de](https://github.com/promhippie/hcloud_exporter/commit/a4869de706880bab0acaeb12447529cb3a6cb6e5))
+* **deps:** update golang:1.25.2-alpine3.21 docker digest to e51523f ([acb9f52](https://github.com/promhippie/hcloud_exporter/commit/acb9f52d7dcb46c53e74ad564edbb90d7b84a66c))
+* **deps:** update module github.com/hetznercloud/hcloud-go/v2 to v2.26.0 ([161f683](https://github.com/promhippie/hcloud_exporter/commit/161f683be35ac8cfda133a5577fffba8305e6eec))
+* **deps:** update module github.com/hetznercloud/hcloud-go/v2 to v2.27.0 ([238cad7](https://github.com/promhippie/hcloud_exporter/commit/238cad7f2db33718bc5e51ba56c7b2e3a9cf67ef))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([15c6de0](https://github.com/promhippie/hcloud_exporter/commit/15c6de0ba3d5612cdf1ff11e6bdce6f6a08d230b))
+
 ## [3.2.11](https://github.com/promhippie/hcloud_exporter/compare/v3.2.10...v3.2.11) (2025-10-06)
 
 
