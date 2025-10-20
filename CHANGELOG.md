@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.2.13](https://github.com/promhippie/hcloud_exporter/compare/v3.2.12...v3.2.13) (2025-10-20)
+
+
+### Bugfixes
+
+* **deps:** update golang docker tag to v1.25.3 ([4082dfd](https://github.com/promhippie/hcloud_exporter/commit/4082dfdafe2a40e36fa135ffe5403abf1c3dac83))
+* **deps:** update golang:1.25.3-alpine3.21 docker digest to 0c9f3e0 ([8f0f173](https://github.com/promhippie/hcloud_exporter/commit/8f0f173302483224a6c76e7143e9b8b8f359f649))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([87dd510](https://github.com/promhippie/hcloud_exporter/commit/87dd51075fd9c3945b2673bda835fee6904f9f2c))
+
 ## [3.2.12](https://github.com/promhippie/hcloud_exporter/compare/v3.2.11...v3.2.12) (2025-10-13)
 
 
