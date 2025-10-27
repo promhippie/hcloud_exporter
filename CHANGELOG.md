@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.2.14](https://github.com/promhippie/hcloud_exporter/compare/v3.2.13...v3.2.14) (2025-10-27)
+
+
+### Bugfixes
+
+* **deps:** update module github.com/hetznercloud/hcloud-go/v2 to v2.28.0 ([e2b9adf](https://github.com/promhippie/hcloud_exporter/commit/e2b9adf47eb6fb62b902cd754e20bf974bfeff68))
+* **deps:** update module github.com/prometheus/exporter-toolkit to v0.15.0 ([af1d6ce](https://github.com/promhippie/hcloud_exporter/commit/af1d6ce0bed9ca2b492076e9a1f94dd0a027e897))
+* **deps:** update module github.com/urfave/cli/v3 to v3.5.0 ([b608d5c](https://github.com/promhippie/hcloud_exporter/commit/b608d5cb3f7a1542499cd5ef307fad7623f8b707))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([52c3808](https://github.com/promhippie/hcloud_exporter/commit/52c3808548e9d86d4f0a961099084295330b1c82))
+
 ## [3.2.13](https://github.com/promhippie/hcloud_exporter/compare/v3.2.12...v3.2.13) (2025-10-20)
 
 
