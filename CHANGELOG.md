@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.2.16](https://github.com/promhippie/hcloud_exporter/compare/v3.2.15...v3.2.16) (2025-11-10)
+
+
+### Bugfixes
+
+* **deps:** update golang docker tag to v1.25.4 ([78c1142](https://github.com/promhippie/hcloud_exporter/commit/78c1142dfdc1cf30902d08e48426dff40165c091))
+* **deps:** update golang:1.25.4-alpine3.21 docker digest to 3289aac ([7bec25c](https://github.com/promhippie/hcloud_exporter/commit/7bec25c24e6f0c1e09e66f18a0697016638db2de))
+* **deps:** update module github.com/golangci/golangci-lint/v2 to v2.6.1 ([d2d7767](https://github.com/promhippie/hcloud_exporter/commit/d2d77677c0d1c8adb9f636cb8cac8cd875d1146b))
+* **deps:** update module github.com/urfave/cli/v3 to v3.6.0 ([2b3041c](https://github.com/promhippie/hcloud_exporter/commit/2b3041cb755caa37037d6215454eb2d0fed00090))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([a430722](https://github.com/promhippie/hcloud_exporter/commit/a4307222e1ee80309c9dc013f1a83506f0e43278))
+
 ## [3.2.15](https://github.com/promhippie/hcloud_exporter/compare/v3.2.14...v3.2.15) (2025-11-03)
 
 
