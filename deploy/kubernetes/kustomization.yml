@@ -18,6 +18,6 @@ secretGenerator:
 images:
   - name: hcloud-exporter
     newName: quay.io/promhippie/hcloud-exporter
-    newTag: latest@sha256:3ed07bf11259c77dd3b252bae03ed8424fe5d1a06490c81450c1b0806a97722d
+    newTag: latest@sha256:94c30391dd81d4531e08332aefd39fbfbc86bf72c944f9f7422291da10d31823
 
 ...
