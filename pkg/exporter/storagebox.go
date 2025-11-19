@@ -6,14 +6,14 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
-	"github.com/promhippie/hcloud_exporter/pkg/internal/hetzner"
 )
 
 // StorageBoxCollector collects metrics about the SSH keys.
 type StorageBoxCollector struct {
-	client   *hetzner.Client
+	client   *hcloud.Client
 	logger   *slog.Logger
 	failures *prometheus.CounterVec
 	duration *prometheus.HistogramVec
@@ -35,7 +35,7 @@ type StorageBoxCollector struct {
 }
 
 // NewStorageBoxCollector returns a new StorageBoxCollector.
-func NewStorageBoxCollector(logger *slog.Logger, client *hetzner.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *StorageBoxCollector {
+func NewStorageBoxCollector(logger *slog.Logger, client *hcloud.Client, failures *prometheus.CounterVec, duration *prometheus.HistogramVec, cfg config.Target) *StorageBoxCollector {
 	if failures != nil {
 		failures.WithLabelValues("storagebox").Add(0)
 	}
@@ -230,21 +230,21 @@ func (c *StorageBoxCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(
 			c.DataSize,
 			prometheus.GaugeValue,
-			float64(record.Stats.Data),
+			float64(record.Stats.SizeData),
 			labels...,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.SnapshotSize,
 			prometheus.GaugeValue,
-			float64(record.Stats.Snapshots),
+			float64(record.Stats.SizeSnapshots),
 			labels...,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.Quota,
 			prometheus.GaugeValue,
-			record.Type.Size,
+			float64(record.StorageBoxType.Size),
 			labels...,
 		)
 
@@ -298,7 +298,7 @@ func (c *StorageBoxCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 }
 
-func (c *StorageBoxCollector) byLabel(record *hetzner.StorageBox, label string) string {
+func (c *StorageBoxCollector) byLabel(record *hcloud.StorageBox, label string) string {
 	switch label {
 	case "id":
 		return strconv.FormatInt(record.ID, 10)
@@ -311,7 +311,7 @@ func (c *StorageBoxCollector) byLabel(record *hetzner.StorageBox, label string) 
 	case "system":
 		return record.System
 	case "type":
-		return record.Type.Name
+		return record.StorageBoxType.Name
 	case "username":
 		return record.Username
 	default:
