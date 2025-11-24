@@ -1,5 +1,36 @@
 # Changelog
 
+## [3.3.0](https://github.com/promhippie/hcloud_exporter/compare/v3.2.17...v3.3.0) (2025-11-24)
+
+
+### Features
+
+* use official hcloud client for storage boxes ([83d2801](https://github.com/promhippie/hcloud_exporter/commit/83d280182a67d7062bd445d88f3e8a1bb777202d))
+
+
+### Bugfixes
+
+* **deps:** pin quay.io/promhippie/hcloud-exporter docker tag to 3ed07bf ([00384d9](https://github.com/promhippie/hcloud_exporter/commit/00384d935f44278707253c10c0e6cc265dc52bea))
+* **deps:** update module github.com/hetznercloud/hcloud-go/v2 to v2.31.0 ([477fb37](https://github.com/promhippie/hcloud_exporter/commit/477fb37fb3a2535c28ef59d376137c3665932929))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to 0853505 ([9de58d7](https://github.com/promhippie/hcloud_exporter/commit/9de58d7d4eaf245a38382e8a3bebc5d88eeee8d8))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to 21b20c6 ([5a1616e](https://github.com/promhippie/hcloud_exporter/commit/5a1616eb9aaa42fdaf058cd9886f5549089e9795))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to 4b0b402 ([4fe8c13](https://github.com/promhippie/hcloud_exporter/commit/4fe8c136fa86005941a6e31fc5c1f8015407e4c3))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to 683ec3d ([b8641af](https://github.com/promhippie/hcloud_exporter/commit/b8641af9f8d6beee88080e50d51c3c4627ade70a))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to 6e0fdce ([f6245f1](https://github.com/promhippie/hcloud_exporter/commit/f6245f1847ba0b1539f8c4a20a3fb02bdd059cd9))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to 764a807 ([db5b934](https://github.com/promhippie/hcloud_exporter/commit/db5b93432d0bfea36c4f1ebb97a0aa5dbb8c5b18))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to 79d3fe7 ([c2d5c8f](https://github.com/promhippie/hcloud_exporter/commit/c2d5c8f6ee329f555aeca5e861ee9eadd6224061))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to 94c3039 ([eb15d01](https://github.com/promhippie/hcloud_exporter/commit/eb15d014df591c8cc7ae73bb2af828f6e1c106c0))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to a830e41 ([71fd52f](https://github.com/promhippie/hcloud_exporter/commit/71fd52f95653312d2a1fe3838b2ba50454c5b173))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to e259a6f ([3c3c1e7](https://github.com/promhippie/hcloud_exporter/commit/3c3c1e77d8857363a84787a3a7fa0cfb7d261736))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to e9e9604 ([b3170ff](https://github.com/promhippie/hcloud_exporter/commit/b3170ff9b1b87e96a5870601ee7c1d7194ba4a3b))
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to fad85c6 ([543f416](https://github.com/promhippie/hcloud_exporter/commit/543f416bef1e7ae96a03a56090497321553c7298))
+
+
+### Miscellaneous
+
+* **deps:** bump golang.org/x/crypto from 0.44.0 to 0.45.0 ([c3158ab](https://github.com/promhippie/hcloud_exporter/commit/c3158abb129acb19c066548bda332b37065b6c84))
+* **flake:** updated lockfile [skip ci] ([92d87d4](https://github.com/promhippie/hcloud_exporter/commit/92d87d44d455c48f3f311b857e2c6a8919d81760))
+
 ## [3.2.17](https://github.com/promhippie/hcloud_exporter/compare/v3.2.16...v3.2.17) (2025-11-17)
 
 
