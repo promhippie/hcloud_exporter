@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.4.0](https://github.com/promhippie/hcloud_exporter/compare/v3.3.0...v3.4.0) (2025-12-01)
+
+
+### Features
+
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.32.0 ([ea304ec](https://github.com/promhippie/hcloud_exporter/commit/ea304ec6291f3a27c1574d03c7cac5f0d355d346))
+
+
+### Bugfixes
+
+* **deps:** update quay.io/promhippie/hcloud-exporter:latest docker digest to ff23c71 ([59a5f8c](https://github.com/promhippie/hcloud_exporter/commit/59a5f8ce52804b0bf0034936727b63330e145ffc))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([352c9cd](https://github.com/promhippie/hcloud_exporter/commit/352c9cd0703ec2c0dec81f80316052f001a26c61))
+
 ## [3.3.0](https://github.com/promhippie/hcloud_exporter/compare/v3.2.17...v3.3.0) (2025-11-24)
 
 
