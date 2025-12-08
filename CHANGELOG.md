@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.5.0](https://github.com/promhippie/hcloud_exporter/compare/v3.4.0...v3.5.0) (2025-12-08)
+
+
+### Features
+
+* **minor:** update alpine docker tag to v3.23 ([#408](https://github.com/promhippie/hcloud_exporter/issues/408)) ([5afe09c](https://github.com/promhippie/hcloud_exporter/commit/5afe09ca371be643300a0be586cc3b468a88f93d))
+
+
+### Bugfixes
+
+* **patch:** update golang docker tag to v1.25.5 ([#407](https://github.com/promhippie/hcloud_exporter/issues/407)) ([15dc912](https://github.com/promhippie/hcloud_exporter/commit/15dc9125b99f2e3d8c140962d7e55c378d3c6a42))
+
+
+### Miscellaneous
+
+* drop issue and pull request template ([8247a17](https://github.com/promhippie/hcloud_exporter/commit/8247a176ab1b3b2855b74c2073b41269520f3615))
+* **flake:** updated lockfile [skip ci] ([84c8367](https://github.com/promhippie/hcloud_exporter/commit/84c83677fc1ff6ca86023604da66c9246fb4cffc))
+* just format some yaml comment ([ce94351](https://github.com/promhippie/hcloud_exporter/commit/ce94351f97edc03bb9fb858f468c8f6aeea43998))
+
 ## [3.4.0](https://github.com/promhippie/hcloud_exporter/compare/v3.3.0...v3.4.0) (2025-12-01)
 
 
