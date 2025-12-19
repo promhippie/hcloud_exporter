@@ -173,7 +173,7 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 		labels := []string{
 			strconv.FormatInt(server.ID, 10),
 			server.Name,
-			server.Datacenter.Name,
+			server.Location.Name,
 		}
 
 		wg.Add(1)
