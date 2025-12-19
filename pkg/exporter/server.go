@@ -177,7 +177,7 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 		labels := []string{
 			strconv.FormatInt(server.ID, 10),
 			server.Name,
-			server.Datacenter.Name,
+			server.Location.Name,
 		}
 
 		if server.Status == "running" {
@@ -256,7 +256,7 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 		labelsGross := append(labels, "gross")
 
 		for _, pricing := range server.ServerType.Pricings {
-			if server.Datacenter.Location.Name == pricing.Location.Name {
+			if server.Location.Name == pricing.Location.Name {
 				if net, err := strconv.ParseFloat(pricing.Hourly.Net, 64); err != nil {
 					c.logger.Error("Failed to parse hourly server type net costs",
 						"name", server.Name,
