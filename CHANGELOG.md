@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.6.0](https://github.com/promhippie/hcloud_exporter/compare/v3.5.0...v3.6.0) (2025-12-22)
+
+
+### Features
+
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.33.0 ([#420](https://github.com/promhippie/hcloud_exporter/issues/420)) ([9a9bc2b](https://github.com/promhippie/hcloud_exporter/commit/9a9bc2b2e723a21886e64d6dc70a09ad773e3c04))
+
+
+### Bugfixes
+
+* **deps:** update alpine:3.23 docker digest to 865b95f ([#418](https://github.com/promhippie/hcloud_exporter/issues/418)) ([50e8010](https://github.com/promhippie/hcloud_exporter/commit/50e801072001f78cd7cdf7aa33d5b4ae4d98f0c8))
+* **deps:** update alpine:3.23 docker digest to be171b5 ([#417](https://github.com/promhippie/hcloud_exporter/issues/417)) ([8329c47](https://github.com/promhippie/hcloud_exporter/commit/8329c4708d9fd288d3d006a4e755f3b1d98033a2))
+
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([c87d00b](https://github.com/promhippie/hcloud_exporter/commit/c87d00b87e42d7fc222918d22171460b05a7f6f7))
+* **flake:** updated lockfile [skip ci] ([fae0455](https://github.com/promhippie/hcloud_exporter/commit/fae0455a30a984ee5d12127f907e161ed5c9f88d))
+
 ## [3.5.0](https://github.com/promhippie/hcloud_exporter/compare/v3.4.0...v3.5.0) (2025-12-08)
 
 
