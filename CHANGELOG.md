@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.7.0](https://github.com/promhippie/hcloud_exporter/compare/v3.6.0...v3.7.0) (2026-01-12)
+
+### Features
+
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.34.0 ([#426](https://github.com/promhippie/hcloud_exporter/issues/426)) ([058b79e](https://github.com/promhippie/hcloud_exporter/commit/058b79e43e57b5f2dfbdac15463dfe30a59ca97e))
+
+### Bugfixes
+
+* **patch:** update module github.com/prometheus/exporter-toolkit to v0.15.1 ([#424](https://github.com/promhippie/hcloud_exporter/issues/424)) ([175d1ca](https://github.com/promhippie/hcloud_exporter/commit/175d1ca09bf124a30e5803672ed2cf8640d90e20))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([5935a07](https://github.com/promhippie/hcloud_exporter/commit/5935a0708d3b3e97064d60a7fc0363875fc64354))
+* **flake:** updated lockfile [skip ci] ([0f4eebe](https://github.com/promhippie/hcloud_exporter/commit/0f4eebe8bb0504f000e26c76d9260a52fa8d736a))
+* **flake:** updated lockfile [skip ci] ([d669e21](https://github.com/promhippie/hcloud_exporter/commit/d669e213d20e09dd1625aef25d22b1a335a3a707))
+
 ## [3.6.0](https://github.com/promhippie/hcloud_exporter/compare/v3.5.0...v3.6.0) (2025-12-22)
 
 
