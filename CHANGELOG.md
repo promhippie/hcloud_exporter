@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.8.0](https://github.com/promhippie/hcloud_exporter/compare/v3.7.0...v3.8.0) (2026-01-19)
+
+### Features
+
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.35.0 ([#431](https://github.com/promhippie/hcloud_exporter/issues/431)) ([3d08ee9](https://github.com/promhippie/hcloud_exporter/commit/3d08ee9bc0a935ac68121496fdd7ad3f8c3badc3))
+
+### Bugfixes
+
+* **patch:** update module github.com/go-chi/chi/v5 to v5.2.4 ([#429](https://github.com/promhippie/hcloud_exporter/issues/429)) ([62d049d](https://github.com/promhippie/hcloud_exporter/commit/62d049d1e43cd5a528d3d267ca81b92fb252b6b1))
+* **patch:** update module github.com/urfave/cli/v3 to v3.6.2 ([#432](https://github.com/promhippie/hcloud_exporter/issues/432)) ([302844a](https://github.com/promhippie/hcloud_exporter/commit/302844a3846f96c0643c5c67429ae3227b363940))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([d0b7be1](https://github.com/promhippie/hcloud_exporter/commit/d0b7be11e89adfcf43213f8d784be4f688b18b3d))
+
 ## [3.7.0](https://github.com/promhippie/hcloud_exporter/compare/v3.6.0...v3.7.0) (2026-01-12)
 
 ### Features
