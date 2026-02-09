@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.9.2](https://github.com/promhippie/hcloud_exporter/compare/v3.9.1...v3.9.2) (2026-02-09)
+
+### Bugfixes
+
+* **patch:** update module github.com/go-chi/chi/v5 to v5.2.5 ([#436](https://github.com/promhippie/hcloud_exporter/issues/436)) ([ded1c33](https://github.com/promhippie/hcloud_exporter/commit/ded1c33a796fd4eae1176ae25e34993120e4c596))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([d811f90](https://github.com/promhippie/hcloud_exporter/commit/d811f906dbc9145eeb555acc48c3cd7611b5f66c))
+
 ## [3.9.1](https://github.com/promhippie/hcloud_exporter/compare/v3.9.0...v3.9.1) (2026-02-02)
 
 ### Bugfixes
