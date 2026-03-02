@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.10.0](https://github.com/promhippie/hcloud_exporter/compare/v3.9.2...v3.10.0) (2026-03-02)
+
+### Features
+
+* **minor:** update module github.com/urfave/cli/v3 to v3.7.0 ([#438](https://github.com/promhippie/hcloud_exporter/issues/438)) ([a7316d7](https://github.com/promhippie/hcloud_exporter/commit/a7316d71279675d810485a92fcfcf09ec13cec8d))
+
+### Miscellaneous
+
+* enable skip-package-name-collision-with-go-std for revive ([a1f604a](https://github.com/promhippie/hcloud_exporter/commit/a1f604a70cbc5d7ee60ea8305d14f27386dbe2bb))
+* **flake:** updated lockfile [skip ci] ([a94176b](https://github.com/promhippie/hcloud_exporter/commit/a94176b48d4384b04930e1822b7640dccac17a6b))
+* **flake:** updated lockfile [skip ci] ([ba55a11](https://github.com/promhippie/hcloud_exporter/commit/ba55a118558efdf21b27a42e476e5afb81a36eb9))
+* **flake:** updated lockfile [skip ci] ([fdf1da2](https://github.com/promhippie/hcloud_exporter/commit/fdf1da2cda0640d5f91d1329ab7f78ca4086e236))
+* replace nixfmt package ([3b88a7e](https://github.com/promhippie/hcloud_exporter/commit/3b88a7e0ee37dda17888f75229cca7a87c7b2f7c))
+
 ## [3.9.2](https://github.com/promhippie/hcloud_exporter/compare/v3.9.1...v3.9.2) (2026-02-09)
 
 ### Bugfixes
