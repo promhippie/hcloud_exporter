@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.11.0](https://github.com/promhippie/hcloud_exporter/compare/v3.10.0...v3.11.0) (2026-03-30)
+
+### Features
+
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.37.0 ([#446](https://github.com/promhippie/hcloud_exporter/issues/446)) ([e814615](https://github.com/promhippie/hcloud_exporter/commit/e8146158079ebae98c1a633d46d6301074deaddb))
+* **minor:** update module github.com/urfave/cli/v3 to v3.8.0 ([#445](https://github.com/promhippie/hcloud_exporter/issues/445)) ([374b3ec](https://github.com/promhippie/hcloud_exporter/commit/374b3ec93d9659cd50d728ce6fb349277154698a))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([a6d3497](https://github.com/promhippie/hcloud_exporter/commit/a6d3497fad685aa5b87f32cb881621b1423d2f14))
+* **flake:** updated lockfile [skip ci] ([53f50a4](https://github.com/promhippie/hcloud_exporter/commit/53f50a40a23d0d129d57ffaba04f4cf0e37b6308))
+* **flake:** updated lockfile [skip ci] ([8710c37](https://github.com/promhippie/hcloud_exporter/commit/8710c3724e48d4f0d44fd8871df59c28c91e127d))
+* **flake:** updated lockfile [skip ci] ([80f2478](https://github.com/promhippie/hcloud_exporter/commit/80f2478c2a278129d5152c7f5f9bf0997bed9d85))
+
 ## [3.10.0](https://github.com/promhippie/hcloud_exporter/compare/v3.9.2...v3.10.0) (2026-03-02)
 
 ### Features
