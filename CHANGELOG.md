@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.12.0](https://github.com/promhippie/hcloud_exporter/compare/v3.11.0...v3.12.0) (2026-04-06)
+
+### Features
+
+* **minor:** update module github.com/prometheus/exporter-toolkit to v0.16.0 ([#448](https://github.com/promhippie/hcloud_exporter/issues/448)) ([23573cc](https://github.com/promhippie/hcloud_exporter/commit/23573cc3c998042909d0087614bee7fdab3f2424))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([7de4961](https://github.com/promhippie/hcloud_exporter/commit/7de496109e18fbc4c55dea14392de1a051b7b729))
+
 ## [3.11.0](https://github.com/promhippie/hcloud_exporter/compare/v3.10.0...v3.11.0) (2026-03-30)
 
 ### Features
