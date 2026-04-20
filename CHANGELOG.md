@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.12.1](https://github.com/promhippie/hcloud_exporter/compare/v3.12.0...v3.12.1) (2026-04-20)
+
+### Bugfixes
+
+* **deps:** update alpine:3.23 docker digest to 5b10f43 ([#450](https://github.com/promhippie/hcloud_exporter/issues/450)) ([35a330d](https://github.com/promhippie/hcloud_exporter/commit/35a330d5ac5536c23271d75732b5193cc8eba363))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([206eb38](https://github.com/promhippie/hcloud_exporter/commit/206eb386dc5b73fb8b0eb3bfe3a03c01e9ab8da4))
+* **flake:** updated lockfile [skip ci] ([5e1aeff](https://github.com/promhippie/hcloud_exporter/commit/5e1aeff3651e2f6894f6567dc7de4d817161ee2d))
+
 ## [3.12.0](https://github.com/promhippie/hcloud_exporter/compare/v3.11.0...v3.12.0) (2026-04-06)
 
 ### Features
