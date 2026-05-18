@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.16.0](https://github.com/promhippie/hcloud_exporter/compare/v3.15.0...v3.16.0) (2026-05-18)
+
+### Features
+
+* **minor:** update module github.com/urfave/cli/v3 to v3.9.0 ([#459](https://github.com/promhippie/hcloud_exporter/issues/459)) ([527be00](https://github.com/promhippie/hcloud_exporter/commit/527be006325b6d988a8fb3296d0e8a78140ab451))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([379b801](https://github.com/promhippie/hcloud_exporter/commit/379b8018aca8b9ad4354f862671163adf8f2d69c))
+
 ## [3.15.0](https://github.com/promhippie/hcloud_exporter/compare/v3.14.0...v3.15.0) (2026-05-11)
 
 ### Features
