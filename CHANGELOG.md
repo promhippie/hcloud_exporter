@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.17.0](https://github.com/promhippie/hcloud_exporter/compare/v3.16.0...v3.17.0) (2026-05-25)
+
+### Features
+
+* **minor:** update module github.com/go-chi/chi/v5 to v5.3.0 ([#462](https://github.com/promhippie/hcloud_exporter/issues/462)) ([f844c25](https://github.com/promhippie/hcloud_exporter/commit/f844c2584d518b431427bddc4b89f0f1bd270bcf))
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.41.1 ([#460](https://github.com/promhippie/hcloud_exporter/issues/460)) ([4f50c32](https://github.com/promhippie/hcloud_exporter/commit/4f50c32f7230b15bf0bfd98a50c1f13927e4127e))
+* upgrade required go version to 1.26 ([62d4ae3](https://github.com/promhippie/hcloud_exporter/commit/62d4ae3f583e11606780ad0dd8b5c334bea19979))
+
+### Bugfixes
+
+* **deps:** pin golang docker tag to 91eda97 ([#463](https://github.com/promhippie/hcloud_exporter/issues/463)) ([ae1d204](https://github.com/promhippie/hcloud_exporter/commit/ae1d20472adaaa5a103bc631ffad448f97c46616))
+* enforce 1.26.3 for docker image ([bb83ed1](https://github.com/promhippie/hcloud_exporter/commit/bb83ed19d971fd8c44e0088b2628b7ba503cc191))
+* **patch:** update module github.com/hetznercloud/hcloud-go/v2 to v2.41.2 ([#461](https://github.com/promhippie/hcloud_exporter/issues/461)) ([cca3977](https://github.com/promhippie/hcloud_exporter/commit/cca39772b2d8ffb7fb74b1b3defdf442e6c75a00))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([518fb16](https://github.com/promhippie/hcloud_exporter/commit/518fb16739db3581de738badf63c384367b4bad4))
+* switch flake input to 25.11 release ([bfff176](https://github.com/promhippie/hcloud_exporter/commit/bfff176a33a8d1eb523961a78eed96730163b01c))
+
 ## [3.16.0](https://github.com/promhippie/hcloud_exporter/compare/v3.15.0...v3.16.0) (2026-05-18)
 
 ### Features
