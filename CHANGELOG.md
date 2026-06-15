@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.19.0](https://github.com/promhippie/hcloud_exporter/compare/v3.18.0...v3.19.0) (2026-06-15)
+
+### Features
+
+* **minor:** update alpine docker tag to v3.24 ([#466](https://github.com/promhippie/hcloud_exporter/issues/466)) ([10bc7ea](https://github.com/promhippie/hcloud_exporter/commit/10bc7ea5acd1c6c7114d936d3fde49c0b712a806))
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.43.0 ([#471](https://github.com/promhippie/hcloud_exporter/issues/471)) ([7652f26](https://github.com/promhippie/hcloud_exporter/commit/7652f26a5ea0c68092bf0bbf4c6adbfd0ac59186))
+* **minor:** update module github.com/urfave/cli/v3 to v3.10.0 ([#472](https://github.com/promhippie/hcloud_exporter/issues/472)) ([cfb24c2](https://github.com/promhippie/hcloud_exporter/commit/cfb24c201ccc94976165dc8c4d5bc436e4867cde))
+
+### Bugfixes
+
+* **deps:** update docker digests ([7b231df](https://github.com/promhippie/hcloud_exporter/commit/7b231df8ee43733183b7032c6464359c1bb5ed0b))
+* **deps:** update docker digests ([#467](https://github.com/promhippie/hcloud_exporter/issues/467)) ([3a10883](https://github.com/promhippie/hcloud_exporter/commit/3a108836532639e4e92b766a2f1ab4b96c578839))
+* **deps:** update docker digests ([#470](https://github.com/promhippie/hcloud_exporter/issues/470)) ([af1b397](https://github.com/promhippie/hcloud_exporter/commit/af1b39742949e3fa28009d9e8e932d167afb21c2))
+* **patch:** update module github.com/urfave/cli/v3 to v3.9.1 ([#468](https://github.com/promhippie/hcloud_exporter/issues/468)) ([41f5a7a](https://github.com/promhippie/hcloud_exporter/commit/41f5a7a8bc9d55b9c284c493b3f1c7f75d88dbcd))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([89254a4](https://github.com/promhippie/hcloud_exporter/commit/89254a4e0a5095233fa668f58243e81c8a11f9f4))
+
 ## [3.18.0](https://github.com/promhippie/hcloud_exporter/compare/v3.17.0...v3.18.0) (2026-06-08)
 
 ### Features
