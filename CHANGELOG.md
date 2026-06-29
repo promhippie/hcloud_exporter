@@ -1,5 +1,7 @@
 # Changelog
 
+## [3.20.1](https://github.com/promhippie/hcloud_exporter/compare/v3.20.0...v3.20.1) (2026-06-29)
+
 ## [3.20.0](https://github.com/promhippie/hcloud_exporter/compare/v3.19.0...v3.20.0) (2026-06-22)
 
 ### Features
