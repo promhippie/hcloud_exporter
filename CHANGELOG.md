@@ -1,5 +1,7 @@
 # Changelog
 
+## [3.21.1](https://github.com/promhippie/hcloud_exporter/compare/v3.21.0...v3.21.1) (2026-07-13)
+
 ## [3.21.0](https://github.com/promhippie/hcloud_exporter/compare/v3.20.1...v3.21.0) (2026-07-06)
 
 ## [3.20.1](https://github.com/promhippie/hcloud_exporter/compare/v3.20.0...v3.20.1) (2026-06-29)
