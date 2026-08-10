@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.24.0](https://github.com/promhippie/hcloud_exporter/compare/v3.23.0...v3.24.0) (2026-08-10)
+
+### Features
+
+* **minor:** update dependency github:cloudsmith-io/cloudsmith-cli to v1.21.0 ([#494](https://github.com/promhippie/hcloud_exporter/issues/494)) ([72a82fb](https://github.com/promhippie/hcloud_exporter/commit/72a82fbc7cc425bce8bf7b6cfe9ff87245ba71e6))
+* **minor:** update dependency golangci-lint to v2.12.2 ([2abf8d2](https://github.com/promhippie/hcloud_exporter/commit/2abf8d2b456d7a50ddd81240dd600980c775c656))
+* restructure repo and build processes ([d3686f9](https://github.com/promhippie/hcloud_exporter/commit/d3686f9b374a6cbf4e9df83e0c5779c3f820aef2))
+
+### Bugfixes
+
+* **patch:** update dependency cosign to v3.1.3 ([#496](https://github.com/promhippie/hcloud_exporter/issues/496)) ([17eec62](https://github.com/promhippie/hcloud_exporter/commit/17eec62bde5db392c1b3ffd4d86f750bdb7ec726))
+
 ## [3.23.0](https://github.com/promhippie/hcloud_exporter/compare/v3.22.0...v3.23.0) (2026-08-03)
 
 ## [3.22.0](https://github.com/promhippie/hcloud_exporter/compare/v3.21.1...v3.22.0) (2026-07-27)
