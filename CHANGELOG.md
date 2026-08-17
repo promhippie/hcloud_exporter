@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.25.0](https://github.com/promhippie/hcloud_exporter/compare/v3.24.0...v3.25.0) (2026-08-17)
+
+### Features
+
+* **minor:** update dependency github:cloudsmith-io/cloudsmith-cli to v1.22.0 ([#499](https://github.com/promhippie/hcloud_exporter/issues/499)) ([d279693](https://github.com/promhippie/hcloud_exporter/commit/d279693a946e30e32d1379aa3b7b3d27e1242599))
+* **minor:** update dependency github:cloudsmith-io/cloudsmith-cli to v1.23.0 ([#503](https://github.com/promhippie/hcloud_exporter/issues/503)) ([8391fd8](https://github.com/promhippie/hcloud_exporter/commit/8391fd84dcbddedcff21678823b18d4f59571322))
+* **minor:** update dependency hugo-extended to v0.165.0 ([#500](https://github.com/promhippie/hcloud_exporter/issues/500)) ([e61371c](https://github.com/promhippie/hcloud_exporter/commit/e61371c7577cd0d8bc1ed299d58bab2efa37483c))
+* **minor:** update module github.com/urfave/cli/v3 to v3.11.0 ([#504](https://github.com/promhippie/hcloud_exporter/issues/504)) ([0830382](https://github.com/promhippie/hcloud_exporter/commit/0830382b460f84e7bcbac2e4a5230de192c087d0))
+
+### Bugfixes
+
+* **deps:** update golang:1.26.6-alpine docker digest to 3889b42 ([#505](https://github.com/promhippie/hcloud_exporter/issues/505)) ([bb09e58](https://github.com/promhippie/hcloud_exporter/commit/bb09e58c076d682c0c3452d112928b9d32760922))
+* **patch:** update dependency go to v1.26.6 ([#501](https://github.com/promhippie/hcloud_exporter/issues/501)) ([305198e](https://github.com/promhippie/hcloud_exporter/commit/305198e9bf79dd87eb6efa9e320c54e49b897495))
+* **patch:** update dependency pre-commit to v4.6.2 ([#498](https://github.com/promhippie/hcloud_exporter/issues/498)) ([7af100e](https://github.com/promhippie/hcloud_exporter/commit/7af100e081393689c11975b76bb3ba05958c5c38))
+* **patch:** update golang docker tag to v1.26.6 ([#502](https://github.com/promhippie/hcloud_exporter/issues/502)) ([83dab58](https://github.com/promhippie/hcloud_exporter/commit/83dab58631184f4dfd4d5c9663bf0bfc3f7f7eac))
+
 ## [3.24.0](https://github.com/promhippie/hcloud_exporter/compare/v3.23.0...v3.24.0) (2026-08-10)
 
 ### Features
