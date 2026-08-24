@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.26.0](https://github.com/promhippie/hcloud_exporter/compare/v3.25.0...v3.26.0) (2026-08-24)
+
+### Features
+
+* **minor:** update dependency github:cloudsmith-io/cloudsmith-cli to v1.24.0 ([#507](https://github.com/promhippie/hcloud_exporter/issues/507)) ([f1c54be](https://github.com/promhippie/hcloud_exporter/commit/f1c54bec4c329ceb1b4744774bad68384fc8ec91))
+* **minor:** update dependency golangci-lint to v2.13.0 ([#512](https://github.com/promhippie/hcloud_exporter/issues/512)) ([bc7816e](https://github.com/promhippie/hcloud_exporter/commit/bc7816e40fab683fc4949c5cb2a0d78af0e17790))
+* **minor:** update dependency task to v3.53.1 ([#508](https://github.com/promhippie/hcloud_exporter/issues/508)) ([019036e](https://github.com/promhippie/hcloud_exporter/commit/019036e45e390f50760f83c23ef4387ea8c34033))
+* **minor:** update golang docker tag to v1.27.0 ([#511](https://github.com/promhippie/hcloud_exporter/issues/511)) ([bb837d5](https://github.com/promhippie/hcloud_exporter/commit/bb837d5126d65eeb3dc95f6cab3e2aeba3e73462))
+* **minor:** update module github.com/stretchr/testify to v1.12.0 ([#506](https://github.com/promhippie/hcloud_exporter/issues/506)) ([e02c9f4](https://github.com/promhippie/hcloud_exporter/commit/e02c9f49c1d0434b5f51ce720e2a29d03bd40b24))
+
+### Bugfixes
+
+* **patch:** update dependency golangci-lint to v2.13.1 ([#514](https://github.com/promhippie/hcloud_exporter/issues/514)) ([5455001](https://github.com/promhippie/hcloud_exporter/commit/545500191dcce1cce18cc7efc4bb6f6ff8e3cc72))
+* **patch:** update module github.com/go-chi/chi/v5 to v5.3.2 ([#513](https://github.com/promhippie/hcloud_exporter/issues/513)) ([c96843b](https://github.com/promhippie/hcloud_exporter/commit/c96843bf2223a39b6a1b5ba194945af8ff8a96c6))
+* **patch:** update module github.com/stretchr/testify to v1.12.1 ([#509](https://github.com/promhippie/hcloud_exporter/issues/509)) ([0c2351e](https://github.com/promhippie/hcloud_exporter/commit/0c2351ee68b0bcec0734b9a9b026f86fbbad813b))
+
 ## [3.25.0](https://github.com/promhippie/hcloud_exporter/compare/v3.24.0...v3.25.0) (2026-08-17)
 
 ### Features
