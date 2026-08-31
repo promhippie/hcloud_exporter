@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.27.0](https://github.com/promhippie/hcloud_exporter/compare/v3.26.0...v3.27.0) (2026-08-31)
+
+### Features
+
+* **minor:** update dependency github:cloudsmith-io/cloudsmith-cli to v1.25.0 ([566baea](https://github.com/promhippie/hcloud_exporter/commit/566baead40884994a28f8b08c41493519d84f011))
+* **minor:** update dependency github:cloudsmith-io/cloudsmith-cli to v1.26.0 ([#519](https://github.com/promhippie/hcloud_exporter/issues/519)) ([deb34ce](https://github.com/promhippie/hcloud_exporter/commit/deb34ce64761218508fea2e101b9f33a59073d49))
+* **minor:** update dependency go to v1.27.0 ([#510](https://github.com/promhippie/hcloud_exporter/issues/510)) ([1f1b308](https://github.com/promhippie/hcloud_exporter/commit/1f1b3082845647a8f1f82042728ca62f961169ee))
+* **minor:** update dependency goreleaser to v2.18.0 ([#515](https://github.com/promhippie/hcloud_exporter/issues/515)) ([1d80ffd](https://github.com/promhippie/hcloud_exporter/commit/1d80ffd5088052fc5533d8e7f3753c37c397eb47))
+* **minor:** update module github.com/prometheus/exporter-toolkit to v0.19.0 ([#518](https://github.com/promhippie/hcloud_exporter/issues/518)) ([be8d089](https://github.com/promhippie/hcloud_exporter/commit/be8d089dd0131e3169cd0e6c6f5834bc04a3b003))
+
+### Bugfixes
+
+* **patch:** update dependency golangci-lint to v2.13.2 ([#520](https://github.com/promhippie/hcloud_exporter/issues/520)) ([0019075](https://github.com/promhippie/hcloud_exporter/commit/001907539f0f643b00ee296f189292df7eefbd34))
+
 ## [3.26.0](https://github.com/promhippie/hcloud_exporter/compare/v3.25.0...v3.26.0) (2026-08-24)
 
 ### Features
