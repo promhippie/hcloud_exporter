@@ -105,6 +105,20 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 		"count", len(volumes),
 	)
 
+	var names map[int64]string
+
+	for _, volume := range volumes {
+		if volume.Server != nil && volume.Server.Name == "" {
+			if names, err = resolveServerNames(ctx, c.client); err != nil {
+				c.logger.Warn("Failed to resolve server names",
+					"err", err,
+				)
+			}
+
+			break
+		}
+	}
+
 	for _, volume := range volumes {
 		var (
 			status     float64
@@ -114,6 +128,10 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 
 		if volume.Server != nil {
 			name = volume.Server.Name
+
+			if name == "" {
+				name = names[volume.Server.ID]
+			}
 		}
 
 		labels := []string{

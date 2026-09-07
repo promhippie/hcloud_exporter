@@ -78,6 +78,20 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 		"count", len(ips),
 	)
 
+	var names map[int64]string
+
+	for _, ip := range ips {
+		if ip.Server != nil && ip.Server.Name == "" {
+			if names, err = resolveServerNames(ctx, c.client); err != nil {
+				c.logger.Warn("Failed to resolve server names",
+					"err", err,
+				)
+			}
+
+			break
+		}
+	}
+
 	for _, ip := range ips {
 		var (
 			active float64
@@ -87,6 +101,10 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 		if ip.Server != nil {
 			active = 1.0
 			name = ip.Server.Name
+
+			if name == "" {
+				name = names[ip.Server.ID]
+			}
 		}
 
 		labels := []string{
