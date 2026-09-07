@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.27.1](https://github.com/promhippie/hcloud_exporter/compare/v3.27.0...v3.27.1) (2026-09-07)
+
+### Bugfixes
+
+* **deps:** update golang:1.27.1-alpine docker digest to cf6fca6 ([#524](https://github.com/promhippie/hcloud_exporter/issues/524)) ([acdc4c5](https://github.com/promhippie/hcloud_exporter/commit/acdc4c51a316d2cd1ada9a7df66fbe67df6b975a))
+* **patch:** update dependency go to v1.27.1 ([#522](https://github.com/promhippie/hcloud_exporter/issues/522)) ([c1e7570](https://github.com/promhippie/hcloud_exporter/commit/c1e7570199704980f24d3af63bf2a8a1270a5c90))
+* **patch:** update dependency goreleaser to v2.18.1 ([#525](https://github.com/promhippie/hcloud_exporter/issues/525)) ([0674bf7](https://github.com/promhippie/hcloud_exporter/commit/0674bf7f6f3d2175eb8e47ab8308d1c7ba6cd2e0))
+* **patch:** update golang docker tag to v1.27.1 ([#523](https://github.com/promhippie/hcloud_exporter/issues/523)) ([699725b](https://github.com/promhippie/hcloud_exporter/commit/699725b5c2ca2bc3591f432b0557d3e0f04fe549))
+
 ## [3.27.0](https://github.com/promhippie/hcloud_exporter/compare/v3.26.0...v3.27.0) (2026-08-31)
 
 ### Features
