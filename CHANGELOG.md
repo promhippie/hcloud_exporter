@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.27.2](https://github.com/promhippie/hcloud_exporter/compare/v3.27.1...v3.27.2) (2026-09-11)
+
+### Bugfixes
+
+* resolve the server name for volumes and floating IPs ([01ade25](https://github.com/promhippie/hcloud_exporter/commit/01ade259eea94f3b04c9c493e96dbd72029ca906))
+
 ## [3.27.1](https://github.com/promhippie/hcloud_exporter/compare/v3.27.0...v3.27.1) (2026-09-07)
 
 ### Bugfixes
