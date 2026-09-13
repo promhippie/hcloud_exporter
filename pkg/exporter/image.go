@@ -167,8 +167,8 @@ func (c *ImageCollector) Collect(ch chan<- prometheus.Metric) {
 			labels...,
 		)
 
-		if !image.Deprecated.IsZero() {
-			deprecated = float64(image.Deprecated.Unix())
+		if image.IsDeprecated() {
+			deprecated = float64(image.UnavailableAfter().Unix())
 		}
 
 		ch <- prometheus.MustNewConstMetric(
