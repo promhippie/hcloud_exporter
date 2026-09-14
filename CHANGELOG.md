@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.28.0](https://github.com/promhippie/hcloud_exporter/compare/v3.27.2...v3.28.0) (2026-09-14)
+
+### Features
+
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.48.0 ([#529](https://github.com/promhippie/hcloud_exporter/issues/529)) ([ec8194c](https://github.com/promhippie/hcloud_exporter/commit/ec8194cd00558e3e6506afe10448fb0479f71025))
+
 ## [3.27.2](https://github.com/promhippie/hcloud_exporter/compare/v3.27.1...v3.27.2) (2026-09-11)
 
 ### Bugfixes
