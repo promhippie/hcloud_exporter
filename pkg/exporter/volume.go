@@ -31,7 +31,7 @@ func NewVolumeCollector(logger *slog.Logger, client *hcloud.Client, failures *pr
 		failures.WithLabelValues("volume").Add(0)
 	}
 
-	labels := []string{"id", "server", "location", "name"}
+	labels := cfg.Volumes.Labels
 	return &VolumeCollector{
 		client:   client,
 		logger:   logger.With("collector", "volume"),
@@ -134,11 +134,13 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 		}
 
-		labels := []string{
-			strconv.FormatInt(volume.ID, 10),
-			name,
-			volume.Location.Name,
-			volume.Name,
+		labels := []string{}
+
+		for _, label := range c.config.Volumes.Labels {
+			labels = append(
+				labels,
+				c.byLabel(volume, name, label),
+			)
 		}
 
 		if volume.Status == "available" {
@@ -183,4 +185,23 @@ func (c *VolumeCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 
 	c.duration.WithLabelValues("volume").Observe(time.Since(now).Seconds())
+}
+
+func (c *VolumeCollector) byLabel(record *hcloud.Volume, server, label string) string {
+	switch label {
+	case "id":
+		return strconv.FormatInt(record.ID, 10)
+	case "server":
+		return server
+	case "location":
+		return record.Location.Name
+	case "name":
+		return record.Name
+	default:
+		if val, ok := record.Labels[label]; ok {
+			return val
+		}
+
+		return ""
+	}
 }

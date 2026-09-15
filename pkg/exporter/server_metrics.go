@@ -3,6 +3,7 @@ package exporter
 import (
 	"context"
 	"log/slog"
+	"slices"
 	"strconv"
 	"sync"
 	"time"
@@ -37,9 +38,9 @@ func NewServerMetricsCollector(logger *slog.Logger, client *hcloud.Client, failu
 		failures.WithLabelValues("server_metrics").Add(0)
 	}
 
-	labels := []string{"id", "name", "datacenter"}
-	diskLabels := append(labels, "disk")
-	networkLabels := append(labels, "interface")
+	labels := cfg.ServerMetrics.Labels
+	diskLabels := slices.Concat(labels, []string{"disk"})
+	networkLabels := slices.Concat(labels, []string{"interface"})
 	return &ServerMetricsCollector{
 		client:   client,
 		logger:   logger.With("collector", "server-metrics"),
@@ -170,10 +171,13 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 
 	for _, server := range servers {
-		labels := []string{
-			strconv.FormatInt(server.ID, 10),
-			server.Name,
-			server.Location.Name,
+		labels := []string{}
+
+		for _, label := range c.config.ServerMetrics.Labels {
+			labels = append(
+				labels,
+				c.byLabel(server, label),
+			)
 		}
 
 		wg.Add(1)
@@ -205,8 +209,8 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 				return
 			}
 
-			diskLabels := append(labels, "0")
-			networkLabels := append(labels, "0")
+			diskLabels := slices.Concat(labels, []string{"0"})
+			networkLabels := slices.Concat(labels, []string{"0"})
 
 			if len(metrics.TimeSeries["cpu"]) > 0 {
 				cpuUsage, _ := strconv.ParseFloat(metrics.TimeSeries["cpu"][len(metrics.TimeSeries["cpu"])-1].Value, 64)
@@ -307,4 +311,21 @@ func (c *ServerMetricsCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 
 	c.duration.WithLabelValues("server_metrics").Observe(time.Since(now).Seconds())
+}
+
+func (c *ServerMetricsCollector) byLabel(record *hcloud.Server, label string) string {
+	switch label {
+	case "id":
+		return strconv.FormatInt(record.ID, 10)
+	case "name":
+		return record.Name
+	case "datacenter":
+		return record.Location.Name
+	default:
+		if val, ok := record.Labels[label]; ok {
+			return val
+		}
+
+		return ""
+	}
 }

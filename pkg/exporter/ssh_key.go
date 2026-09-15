@@ -28,7 +28,7 @@ func NewSSHKeyCollector(logger *slog.Logger, client *hcloud.Client, failures *pr
 		failures.WithLabelValues("ssh_key").Add(0)
 	}
 
-	labels := []string{"id", "name", "fingerprint"}
+	labels := cfg.SSHKeys.Labels
 	return &SSHKeyCollector{
 		client:   client,
 		logger:   logger.With("collector", "ssh-key"),
@@ -79,10 +79,13 @@ func (c *SSHKeyCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 
 	for _, key := range keys {
-		labels := []string{
-			strconv.FormatInt(key.ID, 10),
-			key.Name,
-			key.Fingerprint,
+		labels := []string{}
+
+		for _, label := range c.config.SSHKeys.Labels {
+			labels = append(
+				labels,
+				c.byLabel(key, label),
+			)
 		}
 
 		ch <- prometheus.MustNewConstMetric(
@@ -98,4 +101,21 @@ func (c *SSHKeyCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 
 	c.duration.WithLabelValues("ssh_key").Observe(time.Since(now).Seconds())
+}
+
+func (c *SSHKeyCollector) byLabel(record *hcloud.SSHKey, label string) string {
+	switch label {
+	case "id":
+		return strconv.FormatInt(record.ID, 10)
+	case "name":
+		return record.Name
+	case "fingerprint":
+		return record.Fingerprint
+	default:
+		if val, ok := record.Labels[label]; ok {
+			return val
+		}
+
+		return ""
+	}
 }

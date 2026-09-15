@@ -46,7 +46,7 @@ func NewLoadBalancerCollector(logger *slog.Logger, client *hcloud.Client, failur
 		failures.WithLabelValues("load_balancer").Add(0)
 	}
 
-	labels := []string{"id", "name", "datacenter"}
+	labels := cfg.LoadBalancers.Labels
 	return &LoadBalancerCollector{
 		client:   client,
 		logger:   logger.With("collector", "load-balancer"),
@@ -248,10 +248,13 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 			assignedCertificates int
 		)
 
-		labels := []string{
-			strconv.FormatInt(lb.ID, 10),
-			lb.Name,
-			lb.Location.Name,
+		labels := []string{}
+
+		for _, label := range c.config.LoadBalancers.Labels {
+			labels = append(
+				labels,
+				c.byLabel(lb, label),
+			)
 		}
 
 		ch <- prometheus.MustNewConstMetric(
@@ -473,6 +476,23 @@ func (c *LoadBalancerCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 
 	c.duration.WithLabelValues("load_balancer").Observe(time.Since(now).Seconds())
+}
+
+func (c *LoadBalancerCollector) byLabel(record *hcloud.LoadBalancer, label string) string {
+	switch label {
+	case "id":
+		return strconv.FormatInt(record.ID, 10)
+	case "name":
+		return record.Name
+	case "datacenter":
+		return record.Location.Name
+	default:
+		if val, ok := record.Labels[label]; ok {
+			return val
+		}
+
+		return ""
+	}
 }
 
 func (c *LoadBalancerCollector) addTimeSeries(
