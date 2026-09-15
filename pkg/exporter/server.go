@@ -3,6 +3,7 @@ package exporter
 import (
 	"context"
 	"log/slog"
+	"slices"
 	"strconv"
 	"time"
 
@@ -38,8 +39,8 @@ func NewServerCollector(logger *slog.Logger, client *hcloud.Client, failures *pr
 		failures.WithLabelValues("server").Add(0)
 	}
 
-	labels := []string{"id", "name", "datacenter"}
-	pricingLabels := append(labels, "vat")
+	labels := cfg.Servers.Labels
+	pricingLabels := slices.Concat(labels, []string{"vat"})
 	return &ServerCollector{
 		client:   client,
 		logger:   logger.With("collector", "server"),
@@ -174,10 +175,13 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 			running float64
 		)
 
-		labels := []string{
-			strconv.FormatInt(server.ID, 10),
-			server.Name,
-			server.Location.Name,
+		labels := []string{}
+
+		for _, label := range c.config.Servers.Labels {
+			labels = append(
+				labels,
+				c.byLabel(server, label),
+			)
 		}
 
 		if server.Status == "running" {
@@ -252,8 +256,8 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 			labels...,
 		)
 
-		labelsNet := append(labels, "net")
-		labelsGross := append(labels, "gross")
+		labelsNet := slices.Concat(labels, []string{"net"})
+		labelsGross := slices.Concat(labels, []string{"gross"})
 
 		for _, pricing := range server.ServerType.Pricings {
 			if server.Location.Name == pricing.Location.Name {
@@ -329,4 +333,21 @@ func (c *ServerCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 
 	c.duration.WithLabelValues("server").Observe(time.Since(now).Seconds())
+}
+
+func (c *ServerCollector) byLabel(record *hcloud.Server, label string) string {
+	switch label {
+	case "id":
+		return strconv.FormatInt(record.ID, 10)
+	case "name":
+		return record.Name
+	case "datacenter":
+		return record.Location.Name
+	default:
+		if val, ok := record.Labels[label]; ok {
+			return val
+		}
+
+		return ""
+	}
 }

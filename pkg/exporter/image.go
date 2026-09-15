@@ -32,7 +32,7 @@ func NewImageCollector(logger *slog.Logger, client *hcloud.Client, failures *pro
 		failures.WithLabelValues("image").Add(0)
 	}
 
-	labels := []string{"id", "name", "type", "server", "flavor", "version"}
+	labels := cfg.Images.Labels
 	return &ImageCollector{
 		client:   client,
 		logger:   logger.With("collector", "image"),
@@ -130,13 +130,13 @@ func (c *ImageCollector) Collect(ch chan<- prometheus.Metric) {
 			name = image.BoundTo.Name
 		}
 
-		labels := []string{
-			strconv.FormatInt(image.ID, 10),
-			image.Name,
-			string(image.Type),
-			name,
-			image.OSFlavor,
-			image.OSVersion,
+		labels := []string{}
+
+		for _, label := range c.config.Images.Labels {
+			labels = append(
+				labels,
+				c.byLabel(image, name, label),
+			)
 		}
 
 		ch <- prometheus.MustNewConstMetric(
@@ -184,4 +184,27 @@ func (c *ImageCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 
 	c.duration.WithLabelValues("image").Observe(time.Since(now).Seconds())
+}
+
+func (c *ImageCollector) byLabel(record *hcloud.Image, server, label string) string {
+	switch label {
+	case "id":
+		return strconv.FormatInt(record.ID, 10)
+	case "name":
+		return record.Name
+	case "type":
+		return string(record.Type)
+	case "server":
+		return server
+	case "flavor":
+		return record.OSFlavor
+	case "version":
+		return record.OSVersion
+	default:
+		if val, ok := record.Labels[label]; ok {
+			return val
+		}
+
+		return ""
+	}
 }

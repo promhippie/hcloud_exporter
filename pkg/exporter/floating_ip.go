@@ -28,7 +28,7 @@ func NewFloatingIPCollector(logger *slog.Logger, client *hcloud.Client, failures
 		failures.WithLabelValues("floating_ip").Add(0)
 	}
 
-	labels := []string{"id", "server", "location", "type", "ip"}
+	labels := cfg.FloatingIPs.Labels
 	return &FloatingIPCollector{
 		client:   client,
 		logger:   logger.With("collector", "floating-ip"),
@@ -107,12 +107,13 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 		}
 
-		labels := []string{
-			strconv.FormatInt(ip.ID, 10),
-			name,
-			ip.HomeLocation.Name,
-			string(ip.Type),
-			ip.IP.String(),
+		labels := []string{}
+
+		for _, label := range c.config.FloatingIPs.Labels {
+			labels = append(
+				labels,
+				c.byLabel(ip, name, label),
+			)
 		}
 
 		ch <- prometheus.MustNewConstMetric(
@@ -128,4 +129,25 @@ func (c *FloatingIPCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 
 	c.duration.WithLabelValues("floating_ip").Observe(time.Since(now).Seconds())
+}
+
+func (c *FloatingIPCollector) byLabel(record *hcloud.FloatingIP, server, label string) string {
+	switch label {
+	case "id":
+		return strconv.FormatInt(record.ID, 10)
+	case "server":
+		return server
+	case "location":
+		return record.HomeLocation.Name
+	case "type":
+		return string(record.Type)
+	case "ip":
+		return record.IP.String()
+	default:
+		if val, ok := record.Labels[label]; ok {
+			return val
+		}
+
+		return ""
+	}
 }
