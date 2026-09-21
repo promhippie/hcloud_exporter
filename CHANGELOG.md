@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.29.0](https://github.com/promhippie/hcloud_exporter/compare/v3.28.0...v3.29.0) (2026-09-21)
+
+### Features
+
+* **minor:** update module github.com/urfave/cli/v3 to v3.12.0 ([#534](https://github.com/promhippie/hcloud_exporter/issues/534)) ([84428d3](https://github.com/promhippie/hcloud_exporter/commit/84428d3b0bcea225836711f3784ebf7257cde457))
+* **minor:** update module github.com/urfave/cli/v3 to v3.13.0 ([#535](https://github.com/promhippie/hcloud_exporter/issues/535)) ([64c3501](https://github.com/promhippie/hcloud_exporter/commit/64c35010952aafbfd105256ebac05abb95df9ec1))
+
+### Bugfixes
+
+* **deps:** update docker digests ([#532](https://github.com/promhippie/hcloud_exporter/issues/532)) ([9dec1d0](https://github.com/promhippie/hcloud_exporter/commit/9dec1d0b647d3c84e7ebc4f8833a809fb1240413))
+
 ## [3.28.0](https://github.com/promhippie/hcloud_exporter/compare/v3.27.2...v3.28.0) (2026-09-14)
 
 ### Features
