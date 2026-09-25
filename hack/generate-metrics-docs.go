@@ -26,6 +26,13 @@ func main() {
 	collectors := make([]*prometheus.Desc, 0)
 
 	cfg := config.Load().Target
+	cfg.FloatingIPs.Labels = config.FloatingIPLabels()
+	cfg.Images.Labels = config.ImageLabels()
+	cfg.Servers.Labels = config.ServerLabels()
+	cfg.ServerMetrics.Labels = config.ServerMetricsLabels()
+	cfg.LoadBalancers.Labels = config.LoadBalancerLabels()
+	cfg.SSHKeys.Labels = config.SSHKeyLabels()
+	cfg.Volumes.Labels = config.VolumeLabels()
 	cfg.StorageBoxes.Labels = config.StorageBoxLabels()
 
 	collectors = append(

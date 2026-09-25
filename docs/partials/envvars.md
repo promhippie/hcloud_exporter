@@ -28,8 +28,14 @@ HCLOUD_EXPORTER_TOKEN
 HCLOUD_EXPORTER_COLLECTOR_FLOATING_IPS
 : Enable collector for floating IPs, defaults to `true`
 
+HCLOUD_EXPORTER_FLOATING_IPS_LABELS
+: List of labels used for floating IPs, comma-separated list, defaults to `id, server, location, type, ip`
+
 HCLOUD_EXPORTER_COLLECTOR_IMAGES
 : Enable collector for images, defaults to `true`
+
+HCLOUD_EXPORTER_IMAGES_LABELS
+: List of labels used for images, comma-separated list, defaults to `id, name, type, server, flavor, version`
 
 HCLOUD_EXPORTER_COLLECTOR_PRICING
 : Enable collector for pricing, defaults to `true`
@@ -37,17 +43,32 @@ HCLOUD_EXPORTER_COLLECTOR_PRICING
 HCLOUD_EXPORTER_COLLECTOR_SERVERS
 : Enable collector for servers, defaults to `true`
 
+HCLOUD_EXPORTER_SERVERS_LABELS
+: List of labels used for servers, comma-separated list, defaults to `id, name, datacenter`
+
 HCLOUD_EXPORTER_COLLECTOR_SERVER_METRICS
 : Enable collector for server metrics, defaults to `false`
+
+HCLOUD_EXPORTER_SERVER_METRICS_LABELS
+: List of labels used for server metrics, comma-separated list, defaults to `id, name, datacenter`
 
 HCLOUD_EXPORTER_COLLECTOR_LOAD_BALANCERS
 : Enable collector for load balancers, defaults to `true`
 
+HCLOUD_EXPORTER_LOAD_BALANCERS_LABELS
+: List of labels used for load balancers, comma-separated list, defaults to `id, name, datacenter`
+
 HCLOUD_EXPORTER_COLLECTOR_SSH_KEYS
 : Enable collector for SSH keys, defaults to `true`
 
+HCLOUD_EXPORTER_SSH_KEYS_LABELS
+: List of labels used for SSH keys, comma-separated list, defaults to `id, name, fingerprint`
+
 HCLOUD_EXPORTER_COLLECTOR_VOLUMES
 : Enable collector for volumes, defaults to `false`
+
+HCLOUD_EXPORTER_VOLUMES_LABELS
+: List of labels used for volumes, comma-separated list, defaults to `id, server, location, name`
 
 HCLOUD_EXPORTER_COLLECTOR_STORAGEBOXES
 : Enable collector for storage boxes, defaults to `false`

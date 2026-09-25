@@ -1,18 +1,12 @@
 package exporter
 
 import (
-	"io"
-	"log/slog"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 	"time"
 
-	"github.com/hetznercloud/hcloud-go/v2/hcloud"
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/promhippie/hcloud_exporter/pkg/config"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 // The volumes endpoint embeds the attached server as a bare ID, so the name has
@@ -27,6 +21,7 @@ const volumesPayload = `{
       "status": "available",
       "location": {"name": "nbg1"},
       "protection": {"delete": false},
+      "labels": {"environment": "production"},
       "created": "2024-01-01T00:00:00+00:00"
     },
     {
@@ -37,6 +32,7 @@ const volumesPayload = `{
       "status": "available",
       "location": {"name": "nbg1"},
       "protection": {"delete": false},
+      "labels": {},
       "created": "2024-01-01T00:00:00+00:00"
     }
   ],
@@ -57,70 +53,45 @@ const serversPayload = `{
   "meta": {"pagination": {"page": 1, "per_page": 50, "total_entries": 1}}
 }`
 
-func volumeServerLabels(t *testing.T, handler http.HandlerFunc) map[string]string {
+func volumesAPI(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	switch r.URL.Path {
+	case "/volumes":
+		_, _ = w.Write([]byte(volumesPayload))
+	case "/servers":
+		_, _ = w.Write([]byte(serversPayload))
+	default:
+		w.WriteHeader(http.StatusNotFound)
+	}
+}
+
+// volumeLabels maps the name of every volume to the value of the given label.
+func volumeLabels(t *testing.T, labels []string, key string, handler http.HandlerFunc) map[string]string {
 	t.Helper()
 
-	server := httptest.NewServer(handler)
-	t.Cleanup(server.Close)
-
-	client := hcloud.NewClient(
-		hcloud.WithEndpoint(server.URL),
-		hcloud.WithToken("token"),
-	)
-
 	collector := NewVolumeCollector(
-		slog.New(slog.NewTextHandler(io.Discard, nil)),
-		client,
-		prometheus.NewCounterVec(prometheus.CounterOpts{Name: "failures"}, []string{"collector"}),
-		prometheus.NewHistogramVec(prometheus.HistogramOpts{Name: "duration"}, []string{"collector"}),
-		config.Target{Timeout: 5 * time.Second},
+		testLogger(),
+		testClient(t, handler),
+		testFailures(),
+		testDuration(),
+		config.Target{
+			Timeout: 5 * time.Second,
+			Volumes: config.Volumes{Labels: labels},
+		},
 	)
 
-	registry := prometheus.NewPedanticRegistry()
-	require.NoError(t, registry.Register(collector))
+	result := make(map[string]string)
 
-	families, err := registry.Gather()
-	require.NoError(t, err)
-
-	labels := make(map[string]string)
-
-	for _, family := range families {
-		if family.GetName() != "hcloud_volume_size" {
-			continue
-		}
-
-		for _, metric := range family.GetMetric() {
-			var name, srv string
-
-			for _, label := range metric.GetLabel() {
-				switch label.GetName() {
-				case "name":
-					name = label.GetValue()
-				case "server":
-					srv = label.GetValue()
-				}
-			}
-
-			labels[name] = srv
-		}
+	for _, series := range gatherLabels(t, collector, "hcloud_volume_size") {
+		result[series["name"]] = series[key]
 	}
 
-	return labels
+	return result
 }
 
 func TestVolumeCollectorResolvesServerName(t *testing.T) {
-	labels := volumeServerLabels(t, func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-
-		switch r.URL.Path {
-		case "/volumes":
-			_, _ = w.Write([]byte(volumesPayload))
-		case "/servers":
-			_, _ = w.Write([]byte(serversPayload))
-		default:
-			w.WriteHeader(http.StatusNotFound)
-		}
-	})
+	labels := volumeLabels(t, config.VolumeLabels(), "server", volumesAPI)
 
 	assert.Equal(t, "example-server", labels["attached-volume"],
 		"an attached volume should carry the name of its server")
@@ -129,7 +100,7 @@ func TestVolumeCollectorResolvesServerName(t *testing.T) {
 }
 
 func TestVolumeCollectorKeepsCollectingWhenServersFail(t *testing.T) {
-	labels := volumeServerLabels(t, func(w http.ResponseWriter, r *http.Request) {
+	labels := volumeLabels(t, config.VolumeLabels(), "server", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
 		switch r.URL.Path {
@@ -142,4 +113,13 @@ func TestVolumeCollectorKeepsCollectingWhenServersFail(t *testing.T) {
 
 	assert.Len(t, labels, 2, "volume metrics should still be exported")
 	assert.Empty(t, labels["attached-volume"])
+}
+
+func TestVolumeCollectorResolvesResourceLabels(t *testing.T) {
+	labels := volumeLabels(t, []string{"name", "server", "environment"}, "environment", volumesAPI)
+
+	assert.Equal(t, "production", labels["attached-volume"],
+		"a label of the volume should be exported with its value")
+	assert.Empty(t, labels["unattached-volume"],
+		"a volume without that label should carry an empty value")
 }

@@ -155,10 +155,29 @@ take a look at the [process collector][proccollector] and the
 
 ## Labels
 
-For some collectors we have defined a dynamic option for the labeling of the
+For most collectors we have defined a dynamic option for the labeling of the
 metrics. That way it's up to you to write high-cardinality labels to
 [Prometheus][prometheus] or not. You can see some lists below for collectors
 that can be customized.
+
+Any name within these lists which is not a built-in label gets resolved from the
+labels of the resource within Hetzner Cloud, resources without such a label get
+an empty value. The following example adds the `environment` label of your
+volumes to the volume metrics:
+
+{{< highlight diff >}}
+  hcloud_exporter:
+    image: promhippie/hcloud-exporter:latest
+    restart: always
+    environment:
+      - HCLOUD_EXPORTER_TOKEN=bldyecdtysdahs76ygtbw51w3oeo6a4cvjwoitmb
+      - HCLOUD_EXPORTER_COLLECTOR_VOLUMES=true
++     - HCLOUD_EXPORTER_VOLUMES_LABELS=id,server,location,name,environment
+{{< / highlight >}}
+
+Label keys within Hetzner Cloud may contain dots, dashes or slashes. They are
+exported unchanged to scrapers which support UTF-8 label names, while older
+scrapers receive them escaped with underscores, e.g. `app_kubernetes_io_name`.
 
 {{< partial "labels.md" >}}
 
