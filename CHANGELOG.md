@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.30.0](https://github.com/promhippie/hcloud_exporter/compare/v3.29.0...v3.30.0) (2026-10-05)
+
+### Features
+
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.49.0 ([#537](https://github.com/promhippie/hcloud_exporter/issues/537)) ([853e65f](https://github.com/promhippie/hcloud_exporter/commit/853e65fd5db9699a8d5b3085b39b799f52d838d8))
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.50.0 ([#546](https://github.com/promhippie/hcloud_exporter/issues/546)) ([f2128f4](https://github.com/promhippie/hcloud_exporter/commit/f2128f4a38de7a821e330b0850713679c277be19))
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.51.0 ([#548](https://github.com/promhippie/hcloud_exporter/issues/548)) ([9b8d901](https://github.com/promhippie/hcloud_exporter/commit/9b8d901a0e7599541c46413347302de242fcc32b))
+* **minor:** update module github.com/prometheus/exporter-toolkit to v0.20.0 ([#538](https://github.com/promhippie/hcloud_exporter/issues/538)) ([0af194b](https://github.com/promhippie/hcloud_exporter/commit/0af194b9207944c7b09e3f521de44a032d0369ee))
+* **minor:** update module github.com/urfave/cli/v3 to v3.14.0 ([#545](https://github.com/promhippie/hcloud_exporter/issues/545)) ([fc5f699](https://github.com/promhippie/hcloud_exporter/commit/fc5f69954788c1b065fe056f3787b8614419ce9b))
+
+### Bugfixes
+
+* **deps:** update golang:1.27.1-alpine docker digest to 8a5910f ([#536](https://github.com/promhippie/hcloud_exporter/issues/536)) ([111a884](https://github.com/promhippie/hcloud_exporter/commit/111a884914e2a1232255f66c08ea55fd8eddb7dc))
+
 ## [3.29.0](https://github.com/promhippie/hcloud_exporter/compare/v3.28.0...v3.29.0) (2026-09-21)
 
 ### Features
