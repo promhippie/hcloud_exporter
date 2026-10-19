@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.31.0](https://github.com/promhippie/hcloud_exporter/compare/v3.30.0...v3.31.0) (2026-10-19)
+
+### Features
+
+* **minor:** update module github.com/go-chi/chi/v5 to v5.4.0 ([#556](https://github.com/promhippie/hcloud_exporter/issues/556)) ([7d05998](https://github.com/promhippie/hcloud_exporter/commit/7d05998d7f759b66457633ddb9166338ec59e970))
+* **minor:** update module github.com/go-chi/chi/v5 to v5.5.0 ([#559](https://github.com/promhippie/hcloud_exporter/issues/559)) ([1084598](https://github.com/promhippie/hcloud_exporter/commit/10845982195d93facea6be74e55759cd87c4b0ab))
+* **minor:** update module github.com/hetznercloud/hcloud-go/v2 to v2.52.0 ([#549](https://github.com/promhippie/hcloud_exporter/issues/549)) ([4af8f1a](https://github.com/promhippie/hcloud_exporter/commit/4af8f1a38a3dd9933e7f88feb0b43f5dc1edeb8e))
+* **minor:** update module github.com/prometheus/client_golang to v1.25.0 ([#551](https://github.com/promhippie/hcloud_exporter/issues/551)) ([93db8a8](https://github.com/promhippie/hcloud_exporter/commit/93db8a8a82ee9fca594a64619ca9ab66a59ae6b4))
+
+### Bugfixes
+
+* **deps:** update golang:1.27.2-alpine docker digest to f92b6ef ([#555](https://github.com/promhippie/hcloud_exporter/issues/555)) ([e87aa69](https://github.com/promhippie/hcloud_exporter/commit/e87aa69cd851f2a074eca2b720f00ba89b4def15))
+* **patch:** update golang docker tag to v1.27.2 ([#553](https://github.com/promhippie/hcloud_exporter/issues/553)) ([06795d6](https://github.com/promhippie/hcloud_exporter/commit/06795d615010a38fe9b3b9ce0981976fdddae433))
+
 ## [3.30.0](https://github.com/promhippie/hcloud_exporter/compare/v3.29.0...v3.30.0) (2026-10-05)
 
 ### Features
