@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.32.1](https://github.com/promhippie/hcloud_exporter/compare/v3.32.0...v3.32.1) (2026-11-02)
+
+### Bugfixes
+
+* **deps:** update golang:1.27.3-alpine docker digest to d200d2d ([#576](https://github.com/promhippie/hcloud_exporter/issues/576)) ([f68913b](https://github.com/promhippie/hcloud_exporter/commit/f68913b6053c907f337b70afd9083bd54339e729))
+
 ## [3.32.0](https://github.com/promhippie/hcloud_exporter/compare/v3.31.0...v3.32.0) (2026-10-26)
 
 ### Features
