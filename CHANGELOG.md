@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.32.2](https://github.com/promhippie/hcloud_exporter/compare/v3.32.1...v3.32.2) (2026-11-09)
+
+### Bugfixes
+
+* **deps:** update alpine:3.24 docker digest to f59abe6 ([#584](https://github.com/promhippie/hcloud_exporter/issues/584)) ([e6a320f](https://github.com/promhippie/hcloud_exporter/commit/e6a320f91d75f6773598b459bec04f96dec9c9f7))
+* **deps:** update docker digests ([#582](https://github.com/promhippie/hcloud_exporter/issues/582)) ([2c406c0](https://github.com/promhippie/hcloud_exporter/commit/2c406c094a0372c38679ab512ded0803b7642125))
+* **deps:** update docker digests ([#583](https://github.com/promhippie/hcloud_exporter/issues/583)) ([16b97f7](https://github.com/promhippie/hcloud_exporter/commit/16b97f78810fcb4883084350f480a11ed38db883))
+
 ## [3.32.1](https://github.com/promhippie/hcloud_exporter/compare/v3.32.0...v3.32.1) (2026-11-02)
 
 ### Bugfixes
