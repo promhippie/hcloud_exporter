@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.32.3](https://github.com/promhippie/hcloud_exporter/compare/v3.32.2...v3.32.3) (2026-11-16)
+
+### Bugfixes
+
+* **deps:** update golang:1.27.4-alpine docker digest to 70bd7dd ([#591](https://github.com/promhippie/hcloud_exporter/issues/591)) ([bd0b184](https://github.com/promhippie/hcloud_exporter/commit/bd0b184f5ea01d1026e0b48e3aea049ff704089c))
+* **patch:** update golang docker tag to v1.27.4 ([412d701](https://github.com/promhippie/hcloud_exporter/commit/412d7017a06894008d53f43ce7c352eca6aa502c))
+
 ## [3.32.2](https://github.com/promhippie/hcloud_exporter/compare/v3.32.1...v3.32.2) (2026-11-09)
 
 ### Bugfixes
