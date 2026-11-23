@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.33.0](https://github.com/promhippie/hcloud_exporter/compare/v3.32.3...v3.33.0) (2026-11-23)
+
+### Features
+
+* **minor:** update module github.com/prometheus/exporter-toolkit to v0.21.0 ([#596](https://github.com/promhippie/hcloud_exporter/issues/596)) ([319aa64](https://github.com/promhippie/hcloud_exporter/commit/319aa641b8e7d1bbd35a465db901f2fca7b38e45))
+* switch to plain hugo and resolve deprecations ([95fabdd](https://github.com/promhippie/hcloud_exporter/commit/95fabdd8d7a535b34fbd7931befdae9e78c03f64))
+
 ## [3.32.3](https://github.com/promhippie/hcloud_exporter/compare/v3.32.2...v3.32.3) (2026-11-16)
 
 ### Bugfixes
